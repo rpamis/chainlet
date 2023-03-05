@@ -7,6 +7,7 @@ import java.util.List;
  * 泛型责任链Handler接口
  *
  * @param <T> <T>
+ * @author benym
  */
 public interface ChainHandler<T> {
 

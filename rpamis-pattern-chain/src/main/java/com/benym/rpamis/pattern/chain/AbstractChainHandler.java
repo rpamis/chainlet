@@ -9,6 +9,7 @@ import static com.benym.rpamis.pattern.chain.AbstractChainPipeline.CHECK_RESULT;
  * 抽象化责任链处理类Handler
  *
  * @param <T> <T>
+ * @author benym
  */
 public abstract class AbstractChainHandler<T> implements ChainHandler<T> {
 

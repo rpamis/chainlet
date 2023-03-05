@@ -13,6 +13,7 @@ import java.util.List;
  * Servlet Filter {@link javax.servlet.FilterChain,javax.servlet.Filter}
  *
  * @param <T> <T>
+ * @author benym
  */
 public abstract class AbstractChainPipeline<T> implements ChainPipline<T> {
 

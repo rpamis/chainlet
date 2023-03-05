@@ -6,6 +6,7 @@ import java.io.IOException;
  * 泛型责任链流水线接口
  *
  * @param <T> <T>
+ * @author benym
  */
 public interface ChainPipline<T> {
 
