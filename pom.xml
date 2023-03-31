@@ -9,6 +9,7 @@
     <packaging>pom</packaging>
     <version>1.0.0</version>
     <name>cn.rpamis:rpamis-pattern</name>
+    <description>rpamis-pattern</description>
     <modules>
         <module>rpamis-pattern-chain</module>
     </modules>
