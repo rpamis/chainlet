@@ -46,19 +46,28 @@
                 <plugins>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-release-plugin</artifactId>
-                        <version>2.5.3</version>
+                        <artifactId>maven-compiler-plugin</artifactId>
+                        <version>3.5.1</version>
                         <configuration>
-                            <autoVersionSubmodules>true</autoVersionSubmodules>
-                            <useReleaseProfile>false</useReleaseProfile>
-                            <releaseProfiles>release</releaseProfiles>
-                            <goals>deploy</goals>
+                            <source>1.8</source>
+                            <target>1.8</target>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <version>2.18.1</version>
+                        <configuration>
+                            <skipTests>true</skipTests>
                         </configuration>
                     </plugin>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-source-plugin</artifactId>
                         <version>2.4</version>
+                        <configuration>
+                            <attach>true</attach>
+                        </configuration>
                         <executions>
                             <execution>
                                 <phase>package</phase>
@@ -70,17 +79,34 @@
                     </plugin>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-compiler-plugin</artifactId>
-                        <version>3.0</version>
-                        <configuration>
-                            <source>1.8</source>
-                            <target>1.8</target>
-                        </configuration>
+                        <artifactId>maven-site-plugin</artifactId>
+                        <version>3.7.1</version>
                     </plugin>
+                    <!-- Javadoc -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>3.0.1</version>
+                        <configuration>
+                            <javadocExecutable>${java.home}/bin/javadoc</javadocExecutable>
+                            <additionalJOptions>
+                                <additionalJOption>-Xdoclint:none</additionalJOption>
+                            </additionalJOptions>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <!-- Gpg Signature -->
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-gpg-plugin</artifactId>
-                        <version>1.5</version>
+                        <version>3.0.1</version>
                         <executions>
                             <execution>
                                 <id>sign-artifacts</id>
@@ -91,35 +117,29 @@
                             </execution>
                         </executions>
                     </plugin>
+
                     <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-source-plugin</artifactId>
-                        <version>3.0.1</version>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>flatten-maven-plugin</artifactId>
+                        <version>1.2.7</version>
+                        <configuration>
+                            <updatePomFile>true</updatePomFile>
+                            <flattenMode>resolveCiFriendliesOnly</flattenMode>
+                        </configuration>
                         <executions>
                             <execution>
-                                <id>attach-sources</id>
+                                <id>flatten</id>
+                                <phase>process-resources</phase>
                                 <goals>
-                                    <goal>jar-no-fork</goal>
+                                    <goal>flatten</goal>
                                 </goals>
                             </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>3.0.0</version>
-                        <executions>
                             <execution>
-                                <id>attach-javadocs</id>
-                                <phase>package</phase>
+                                <id>flatten.clean</id>
+                                <phase>clean</phase>
                                 <goals>
-                                    <goal>jar</goal>
+                                    <goal>clean</goal>
                                 </goals>
-                                <!-- java8版本导致javadoc打包编译失败时候，添加-->
-                                <configuration>
-                                    <failOnError>false</failOnError>
-                                    <doclint>none</doclint>
-                                </configuration>
                             </execution>
                         </executions>
                     </plugin>
@@ -130,10 +150,15 @@
 
     <!--url中配自己的项目地址,connection配自己项目地址加git,最后配自己对应账号主页-->
     <scm>
-        <url>https://github.com/benym/rpamis-pattern</url>
-        <connection>https://github.com/benym/rpamis-pattern.git</connection>
+        <url>git@github.com:benym/rpamis-pattern.git</url>
+        <connection>scm:git@github.com:benym/rpamis-pattern.git</connection>
         <developerConnection>https://github.com/benym</developerConnection>
     </scm>
+
+    <issueManagement>
+        <system>Github Issue</system>
+        <url>https://github.com/benym/rpamis-pattern/issues</url>
+    </issueManagement>
 
     <!--开发者信息-->
     <developers>
