@@ -23,7 +23,7 @@ Rpamis-pattern项目旨在提供快速的开箱即用的设计模式框架
 ```xml
 <dependency>
     <groupId>cn.rpamis</groupId>
-    <artifactId>rpamis-pattern</artifactId>
+    <artifactId>rpamis-pattern-chain</artifactId>
     <version>1.0.0</version>
 </dependency>
 ```
