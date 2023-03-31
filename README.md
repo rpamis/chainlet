@@ -6,6 +6,16 @@ Rpamis-pattern项目旨在提供快速的开箱即用的设计模式框架
 
 提供0依赖的责任链模式框架
 
+<p align="center">
+  <a href="https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.baomidou%22%20AND%20a%3A%22mybatis-plus%22">
+    <img alt="maven" src="https://img.shields.io/maven-central/v/cn.rpamis/rpamis-pattern-chain?style=flat-square">
+  </a>
+
+  <a href="https://www.apache.org/licenses/LICENSE-2.0">
+    <img alt="code style" src="https://img.shields.io/badge/license-Apache%202-4EB1BA.svg?style=flat-square">
+  </a>
+</p>
+
 #### 快速开始
 
 - 引入依赖

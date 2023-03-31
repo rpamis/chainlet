@@ -10,6 +10,7 @@
     <version>1.0.0</version>
     <name>cn.rpamis:rpamis-pattern</name>
     <description>rpamis-pattern</description>
+    <url>https://github.com/benym/rpamis-pattern</url>
     <modules>
         <module>rpamis-pattern-chain</module>
     </modules>
@@ -85,10 +86,13 @@
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <version>3.0.1</version>
                 <configuration>
-                    <javadocExecutable>${java.home}/bin/javadoc</javadocExecutable>
                     <additionalJOptions>
                         <additionalJOption>-Xdoclint:none</additionalJOption>
                     </additionalJOptions>
+                    <!-- 解决控制台乱码 -->
+                    <charset>UTF-8</charset>
+                    <encoding>UTF-8</encoding>
+                    <docencoding>UTF-8</docencoding>
                 </configuration>
                 <executions>
                     <execution>
@@ -103,39 +107,13 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-gpg-plugin</artifactId>
-                <version>3.0.1</version>
+                <version>1.6</version>
                 <executions>
                     <execution>
                         <id>sign-artifacts</id>
                         <phase>verify</phase>
                         <goals>
                             <goal>sign</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>flatten-maven-plugin</artifactId>
-                <version>1.2.7</version>
-                <configuration>
-                    <updatePomFile>true</updatePomFile>
-                    <flattenMode>resolveCiFriendliesOnly</flattenMode>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>flatten</id>
-                        <phase>process-resources</phase>
-                        <goals>
-                            <goal>flatten</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>flatten.clean</id>
-                        <phase>clean</phase>
-                        <goals>
-                            <goal>clean</goal>
                         </goals>
                     </execution>
                 </executions>
