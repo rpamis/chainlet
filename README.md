@@ -10,11 +10,9 @@ Rpamis-pattern项目旨在提供快速的开箱即用的设计模式框架
 
 - 引入依赖
 
-上传中央仓库 todo
-
 ```xml
 <dependency>
-    <groupId>com.benym.rpamis</groupId>
+    <groupId>cn.rpamis</groupId>
     <artifactId>rpamis-pattern</artifactId>
     <version>1.0.0</version>
 </dependency>
