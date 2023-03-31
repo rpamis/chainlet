@@ -1,10 +1,10 @@
-package com.benym.rpamis.pattern.chain;
+package com.benym.rpamis.pattern.chain.entity;
 
 /**
  * 责任链Handler处理异常
  *
- * @author benym
  * @date 2023/3/5 17:40
+ * @author benym
  */
 public class ChainException extends Exception {
 

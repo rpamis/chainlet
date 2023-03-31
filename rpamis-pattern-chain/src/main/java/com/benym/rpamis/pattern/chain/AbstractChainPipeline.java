@@ -1,8 +1,22 @@
 package com.benym.rpamis.pattern.chain;
 
+
+import com.benym.rpamis.pattern.chain.entity.ChainException;
+import com.benym.rpamis.pattern.chain.entity.ChainResult;
+import com.benym.rpamis.pattern.chain.entity.CompleteChainResult;
+import com.benym.rpamis.pattern.chain.entity.UniqueList;
+import com.benym.rpamis.pattern.chain.interfaces.ChainHandler;
+import com.benym.rpamis.pattern.chain.interfaces.ChainPipeline;
+import com.benym.rpamis.pattern.chain.interfaces.ChainStrategy;
+import com.benym.rpamis.pattern.chain.strategy.FastFailedStrategy;
+import com.benym.rpamis.pattern.chain.strategy.FastReturnStrategy;
+import com.benym.rpamis.pattern.chain.strategy.FullExecutionStrategy;
+
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 抽象化责任链流水线
@@ -13,9 +27,10 @@ import java.util.List;
  * Servlet Filter {@link javax.servlet.FilterChain,javax.servlet.Filter}
  *
  * @param <T> <T>
+ * @date 2023/2/1 17:33
  * @author benym
  */
-public abstract class AbstractChainPipeline<T> implements ChainPipline<T> {
+public abstract class AbstractChainPipeline<T> implements ChainPipeline<T> {
 
     /**
      * 记录当前Handler位置
@@ -29,39 +44,46 @@ public abstract class AbstractChainPipeline<T> implements ChainPipline<T> {
     /**
      * 执行策略
      */
-    private ChainStrategy chainStrategy = ChainStrategy.ALL;
+    private ChainStrategy<T> chainStrategy = new FullExecutionStrategy<>();
 
     /**
      * 存储所有需要执行的handler实现
      */
-    private final List<ChainHandler<T>> handlerList = new ArrayList<>();
+    private final UniqueList<ChainHandler<T>> handlerList = new UniqueList<>();
 
     /**
      * 存储所有责任链校验结果
      */
-    public static final ThreadLocal<List<Boolean>> CHECK_RESULT = ThreadLocal.withInitial(ArrayList::new);
+    public static final ThreadLocal<List<ChainResult>> CHECK_RESULT = ThreadLocal.withInitial(ArrayList::new);
 
 
-    public final AbstractChainPipeline<T> strategy(ChainStrategy chainStrategyEnum) {
-        this.chainStrategy = chainStrategyEnum;
+    /**
+     * 设置执行策略，不可子类覆写
+     *
+     * @param strategy strategy
+     * @return ChainPipeline
+     */
+    @Override
+    public final ChainPipeline<T> strategy(ChainStrategy<T> strategy) {
+        this.chainStrategy = strategy;
         return this;
     }
 
     /**
-     * 添加handler实现到责任链流水线中
+     * 添加handler实现到责任链流水线中，可子类覆写
      *
      * @param handler handler
-     * @return AbstractChainPipeline<T>
+     * @return ChainPipeline<T>
      */
     @Override
-    public AbstractChainPipeline<T> addHandler(AbstractChainHandler<T> handler) {
+    public ChainPipeline<T> addHandler(ChainHandler<T> handler) {
         this.handlerList.add(handler);
         this.n++;
         return this;
     }
 
     /**
-     * 执行责任链
+     * 执行责任链，可子类覆写
      *
      * @param handlerData handlerData
      */
@@ -70,33 +92,51 @@ public abstract class AbstractChainPipeline<T> implements ChainPipline<T> {
         // 如果当前的handler的位置小于链上所有handler数量，则说明还没执行完，继续向前推进handler
         if (this.pos < this.n) {
             ChainHandler<T> chainHandler = handlerList.get(this.pos++);
-            boolean handleResult = chainHandler.handle(handlerData, this, this.chainStrategy, CHECK_RESULT);
-            if (handleResult) {
+            chainHandler.handle(handlerData, this, this.chainStrategy);
+            if (this.chainStrategy instanceof FastReturnStrategy
+                    || this.chainStrategy instanceof FastFailedStrategy
+                    || this.chainStrategy instanceof FullExecutionStrategy) {
                 this.pos = this.n;
             }
         }
     }
 
     /**
-     * 执行后逻辑
+     * 执行后逻辑，可子类覆写
      */
     @Override
     public void afterHandler() {
-
+        CHECK_RESULT.remove();
     }
 
-    public boolean start(T handlerData) throws ChainException {
+    /**
+     * 开启整个pipeline执行，并构建返回结果，可子类覆写
+     *
+     * @param handlerData handlerData
+     * @return CompleteChainResult
+     * @throws ChainException ChainException
+     */
+    @Override
+    public CompleteChainResult start(T handlerData) throws ChainException {
         try {
             this.doHandler(handlerData);
-            return buildSuccess(CHECK_RESULT.get());
+            List<ChainResult> chainResults = CHECK_RESULT.get();
+            return new CompleteChainResult(buildSuccess(chainResults), Collections.unmodifiableList(chainResults));
         } catch (Exception e) {
             throw new ChainException("chain unexpected exception", e);
         } finally {
-            CHECK_RESULT.remove();
+            this.afterHandler();
         }
     }
 
-    private boolean buildSuccess(List<Boolean> checkResult) {
-        return !checkResult.contains(Boolean.FALSE);
+    /**
+     * 构建整个链执行结果，如果存在false则整体为false
+     *
+     * @param checkResult checkResult
+     * @return boolean
+     */
+    private boolean buildSuccess(List<ChainResult> checkResult) {
+        return !checkResult.stream().map(ChainResult::isProcessResult)
+                .collect(Collectors.toList()).contains(Boolean.FALSE);
     }
 }
