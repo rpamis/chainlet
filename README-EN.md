@@ -126,13 +126,13 @@ try {
 - `isAllow`：Gets the execution result of the entire chain. If there is a failure, it is judged as a failure and returns a `boolean`
 - `get(Class cls)`：Gets the result of some `Handler` processing according to the `Handler` class and returns a `boolean`
 
-#### 内置策略
+#### Inner Strategy
 
 - `FullExecutionStrategy`： The full execution strategy, the chain of responsibility default policy, will execute all processing on the chain regardless of whether a `Handler` succeeds or not
 - `FastReturnStrategy`：The fast return strategy, when a `Hander` has a success returns the result immediately, the subsequent `Handler` does not execute
 - `FastFailedStrategy`：Fast failure strategy, when a `Hander` failure is returned immediately, the subsequent `Handler` does not execute
 
-#### 策略扩展
+#### Strategy Extension
 
 You can expand your chain of responsibility handling strategy by following two steps
 
