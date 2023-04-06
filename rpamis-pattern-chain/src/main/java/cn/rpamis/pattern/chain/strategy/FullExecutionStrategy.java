@@ -1,11 +1,11 @@
-package com.benym.rpamis.pattern.chain.strategy;
+package cn.rpamis.pattern.chain.strategy;
 
 
-import com.benym.rpamis.pattern.chain.AbstractChainPipeline;
-import com.benym.rpamis.pattern.chain.entity.ChainException;
-import com.benym.rpamis.pattern.chain.entity.ChainResult;
-import com.benym.rpamis.pattern.chain.interfaces.ChainPipeline;
-import com.benym.rpamis.pattern.chain.interfaces.ChainStrategy;
+import cn.rpamis.pattern.chain.AbstractChainPipeline;
+import cn.rpamis.pattern.chain.entity.ChainException;
+import cn.rpamis.pattern.chain.entity.ChainResult;
+import cn.rpamis.pattern.chain.interfaces.ChainPipeline;
+import cn.rpamis.pattern.chain.interfaces.ChainStrategy;
 
 import java.io.IOException;
 

@@ -1,4 +1,4 @@
-package com.benym.rpamis.pattern.chain.entity;
+package cn.rpamis.pattern.chain.entity;
 
 /**
  * 责任链Handler处理异常

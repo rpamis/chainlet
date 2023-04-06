@@ -1,8 +1,8 @@
-package com.benym.rpamis.pattern.chain.interfaces;
+package cn.rpamis.pattern.chain.interfaces;
 
 
-import com.benym.rpamis.pattern.chain.entity.ChainException;
-import com.benym.rpamis.pattern.chain.entity.ChainResult;
+import cn.rpamis.pattern.chain.entity.ChainException;
+import cn.rpamis.pattern.chain.entity.ChainResult;
 
 import java.io.IOException;
 
