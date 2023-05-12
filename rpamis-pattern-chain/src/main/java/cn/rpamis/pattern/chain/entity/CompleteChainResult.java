@@ -47,7 +47,7 @@ public class CompleteChainResult implements Serializable {
         return chainResults;
     }
 
-    public <T> boolean get(Class<T> cls) {
+    public <T> Boolean get(Class<T> cls) {
         return CHAINRESULT_MAP.get(cls);
     }
 }

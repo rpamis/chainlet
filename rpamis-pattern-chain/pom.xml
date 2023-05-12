@@ -5,12 +5,11 @@
     <parent>
         <groupId>cn.rpamis</groupId>
         <artifactId>rpamis-pattern</artifactId>
-        <version>1.0.1</version>
+        <version>1.0.2</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <version>1.0.1</version>
     <artifactId>rpamis-pattern-chain</artifactId>
     <description>rpamis-pattern-chain</description>
 
