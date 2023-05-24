@@ -7,8 +7,8 @@
     <groupId>cn.rpamis</groupId>
     <artifactId>rpamis-pattern</artifactId>
     <packaging>pom</packaging>
-    <version>1.0.2</version>
-    <name>cn.rpamis:rpamis-pattern</name>
+    <version>1.0.3</version>
+    <name>rpamis-pattern</name>
     <description>rpamis-pattern</description>
     <url>https://github.com/benym/rpamis-pattern</url>
     <modules>
@@ -29,6 +29,9 @@
     </properties>
 
     <distributionManagement>
+        <relocation>
+            <groupId>com.rpamis</groupId>
+        </relocation>
         <!--这两个id需要和setting.xml文件中的server字段的id进行对应-->
         <snapshotRepository>
             <id>sonatype</id>
