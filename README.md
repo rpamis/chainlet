@@ -3,8 +3,8 @@
 🌱Rpamis-pattern项目是一组设计模式框架集合，为开发者带来开箱即用的设计模式
 
 <p align="center">
-  <a href="https://central.sonatype.com/artifact/cn.rpamis/rpamis-pattern-chain/1.0.0">
-    <img alt="maven" src="https://img.shields.io/maven-central/v/cn.rpamis/rpamis-pattern-chain?style=flat-square">
+  <a href="https://central.sonatype.com/artifact/com.rpamis/rpamis-pattern-chain/1.0.0">
+    <img alt="maven" src="https://img.shields.io/maven-central/v/com.rpamis/rpamis-pattern-chain?style=flat-square">
   </a>
 
   <a href="https://www.apache.org/licenses/LICENSE-2.0">
@@ -27,9 +27,9 @@
 
 ```xml
 <dependency>
-    <groupId>cn.rpamis</groupId>
+    <groupId>com.rpamis</groupId>
     <artifactId>rpamis-pattern-chain</artifactId>
-    <version>1.0.2</version>
+    <version>1.0.3</version>
 </dependency>
 ```
 

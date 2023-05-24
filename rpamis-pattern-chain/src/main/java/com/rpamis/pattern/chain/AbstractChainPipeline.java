@@ -1,16 +1,16 @@
-package cn.rpamis.pattern.chain;
+package com.rpamis.pattern.chain;
 
 
-import cn.rpamis.pattern.chain.entity.ChainResult;
-import cn.rpamis.pattern.chain.entity.UniqueList;
-import cn.rpamis.pattern.chain.strategy.FastFailedStrategy;
-import cn.rpamis.pattern.chain.strategy.FastReturnStrategy;
-import cn.rpamis.pattern.chain.entity.ChainException;
-import cn.rpamis.pattern.chain.entity.CompleteChainResult;
-import cn.rpamis.pattern.chain.interfaces.ChainHandler;
-import cn.rpamis.pattern.chain.interfaces.ChainPipeline;
-import cn.rpamis.pattern.chain.interfaces.ChainStrategy;
-import cn.rpamis.pattern.chain.strategy.FullExecutionStrategy;
+import com.rpamis.pattern.chain.entity.ChainResult;
+import com.rpamis.pattern.chain.entity.UniqueList;
+import com.rpamis.pattern.chain.strategy.FastFailedStrategy;
+import com.rpamis.pattern.chain.strategy.FastReturnStrategy;
+import com.rpamis.pattern.chain.entity.ChainException;
+import com.rpamis.pattern.chain.entity.CompleteChainResult;
+import com.rpamis.pattern.chain.interfaces.ChainHandler;
+import com.rpamis.pattern.chain.interfaces.ChainPipeline;
+import com.rpamis.pattern.chain.interfaces.ChainStrategy;
+import com.rpamis.pattern.chain.strategy.FullExecutionStrategy;
 
 import java.io.IOException;
 import java.util.ArrayList;

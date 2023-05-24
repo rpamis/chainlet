@@ -1,4 +1,4 @@
-package cn.rpamis.pattern.chain.entity;
+package com.rpamis.pattern.chain.entity;
 
 import java.io.Serializable;
 import java.util.ArrayList;

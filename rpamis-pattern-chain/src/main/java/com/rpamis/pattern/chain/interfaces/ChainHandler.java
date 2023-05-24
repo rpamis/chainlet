@@ -1,7 +1,7 @@
-package cn.rpamis.pattern.chain.interfaces;
+package com.rpamis.pattern.chain.interfaces;
 
 
-import cn.rpamis.pattern.chain.entity.ChainException;
+import com.rpamis.pattern.chain.entity.ChainException;
 
 import java.io.IOException;
 

@@ -3,8 +3,8 @@
 🌱Rpamis-pattern project is a collection of design pattern frameworks that bring design patterns out of the box to developers
 
 <p align="center">
-  <a href="https://central.sonatype.com/artifact/cn.rpamis/rpamis-pattern-chain/1.0.0">
-    <img alt="maven" src="https://img.shields.io/maven-central/v/cn.rpamis/rpamis-pattern-chain?style=flat-square">
+  <a href="https://central.sonatype.com/artifact/com.rpamis/rpamis-pattern-chain/1.0.0">
+    <img alt="maven" src="https://img.shields.io/maven-central/v/com.rpamis/rpamis-pattern-chain?style=flat-square">
   </a>
 
   <a href="https://www.apache.org/licenses/LICENSE-2.0">
@@ -25,9 +25,9 @@ Provides a framework for the Chain of Responsibility pattern with zero dependenc
 
 ```xml
 <dependency>
-    <groupId>cn.rpamis</groupId>
+    <groupId>com.rpamis</groupId>
     <artifactId>rpamis-pattern-chain</artifactId>
-    <version>1.0.2</version>
+    <version>1.0.3</version>
 </dependency>
 ```
 
