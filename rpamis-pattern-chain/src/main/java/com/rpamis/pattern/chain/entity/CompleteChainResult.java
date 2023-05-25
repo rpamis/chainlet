@@ -22,7 +22,7 @@ public class CompleteChainResult implements Serializable {
     /**
      * 所有处理类->处理结果Map
      */
-    private static final ConcurrentHashMap<Class<?>, Boolean> CHAINRESULT_MAP = new ConcurrentHashMap<>(16);
+    private final ConcurrentHashMap<Class<?>, Boolean> CHAINRESULT_MAP = new ConcurrentHashMap<>(16);
 
     private List<ChainResult> chainResults;
 
