@@ -22,12 +22,12 @@ public class CompleteChainResult implements Serializable {
     /**
      * 所有处理类->处理结果Map
      */
-    private final ConcurrentHashMap<Class<?>, Boolean> CHAINRESULT_MAP = new ConcurrentHashMap<>(16);
+    private final ConcurrentHashMap<Class<?>, Boolean> chainResultMap = new ConcurrentHashMap<>(16);
 
     private List<ChainResult> chainResults;
 
     private void initMap(List<ChainResult> chainResults) {
-        chainResults.forEach(chainResult -> CHAINRESULT_MAP.putIfAbsent(chainResult.getHandlerClass(), chainResult.isProcessResult()));
+        chainResults.forEach(chainResult -> chainResultMap.putIfAbsent(chainResult.getHandlerClass(), chainResult.isProcessResult()));
     }
 
     public CompleteChainResult() {
@@ -48,6 +48,6 @@ public class CompleteChainResult implements Serializable {
     }
 
     public <T> Boolean get(Class<T> cls) {
-        return CHAINRESULT_MAP.get(cls);
+        return chainResultMap.get(cls);
     }
 }
