@@ -1,18 +1,17 @@
 package com.rpamis.pattern.chain;
 
 
-import com.rpamis.pattern.chain.entity.ChainResult;
-import com.rpamis.pattern.chain.entity.UniqueList;
-import com.rpamis.pattern.chain.strategy.FastFailedStrategy;
-import com.rpamis.pattern.chain.strategy.FastReturnStrategy;
 import com.rpamis.pattern.chain.entity.ChainException;
+import com.rpamis.pattern.chain.entity.ChainResult;
 import com.rpamis.pattern.chain.entity.CompleteChainResult;
+import com.rpamis.pattern.chain.entity.UniqueList;
 import com.rpamis.pattern.chain.interfaces.ChainHandler;
 import com.rpamis.pattern.chain.interfaces.ChainPipeline;
 import com.rpamis.pattern.chain.interfaces.ChainStrategy;
+import com.rpamis.pattern.chain.strategy.FastFailedStrategy;
+import com.rpamis.pattern.chain.strategy.FastReturnStrategy;
 import com.rpamis.pattern.chain.strategy.FullExecutionStrategy;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -27,8 +26,8 @@ import java.util.stream.Collectors;
  * Servlet Filter {@link javax.servlet.FilterChain,javax.servlet.Filter}
  *
  * @param <T> <T>
- * @date 2023/2/1 17:33
  * @author benym
+ * @date 2023/2/1 17:33
  */
 public abstract class AbstractChainPipeline<T> implements ChainPipeline<T> {
 
@@ -88,7 +87,7 @@ public abstract class AbstractChainPipeline<T> implements ChainPipeline<T> {
      * @param handlerData handlerData
      */
     @Override
-    public void doHandler(T handlerData) throws IOException, ChainException {
+    public void doHandler(T handlerData) {
         // 如果当前的handler的位置小于链上所有handler数量，则说明还没执行完，继续向前推进handler
         if (this.pos < this.n) {
             ChainHandler<T> chainHandler = handlerList.get(this.pos++);

@@ -4,14 +4,12 @@ package com.rpamis.pattern.chain.interfaces;
 import com.rpamis.pattern.chain.entity.ChainException;
 import com.rpamis.pattern.chain.entity.CompleteChainResult;
 
-import java.io.IOException;
-
 /**
  * 泛型责任链流水线接口
  *
  * @param <T> <T>
- * @date 2023/3/8 18:24
  * @author benym
+ * @date 2023/3/8 18:24
  */
 public interface ChainPipeline<T> {
 
@@ -27,10 +25,8 @@ public interface ChainPipeline<T> {
      * 流水线执行Handler处理
      *
      * @param handlerData 需要处理的数据
-     * @throws IOException    IO异常
-     * @throws ChainException 责任链异常
      */
-    void doHandler(T handlerData) throws IOException, ChainException;
+    void doHandler(T handlerData);
 
     /**
      * 流水线执行Handler后的处理

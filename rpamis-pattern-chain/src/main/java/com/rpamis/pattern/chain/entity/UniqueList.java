@@ -3,6 +3,7 @@ package com.rpamis.pattern.chain.entity;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 /**

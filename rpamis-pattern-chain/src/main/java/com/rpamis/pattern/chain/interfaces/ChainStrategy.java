@@ -1,21 +1,22 @@
 package com.rpamis.pattern.chain.interfaces;
 
 
-import com.rpamis.pattern.chain.entity.ChainException;
 import com.rpamis.pattern.chain.entity.ChainResult;
-
-import java.io.IOException;
 
 /**
  * 责任链策略接口
  *
- * @date 2023/3/7 18:10
  * @author benym
+ * @date 2023/3/7 18:10
  */
 public interface ChainStrategy<T> {
 
     /**
      * 策略接口初始化
+     *
+     * @param handlerClass handlerClass
+     * @param processResult processResult
+     * @return ChainResult
      */
     default ChainResult init(Class<?> handlerClass, boolean processResult) {
         return new ChainResult(handlerClass, processResult);
@@ -27,8 +28,6 @@ public interface ChainStrategy<T> {
      * @param handlerData handlerData
      * @param chain       chain
      * @param chainResult chainResult
-     * @throws IOException    IOException
-     * @throws ChainException ChainException
      */
-    void doStrategy(T handlerData, ChainPipeline<T> chain, ChainResult chainResult) throws IOException, ChainException;
+    void doStrategy(T handlerData, ChainPipeline<T> chain, ChainResult chainResult);
 }
