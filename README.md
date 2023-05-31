@@ -29,7 +29,7 @@
 <dependency>
     <groupId>com.rpamis</groupId>
     <artifactId>rpamis-pattern-chain</artifactId>
-    <version>1.0.2</version>
+    <version>1.0.3</version>
 </dependency>
 ```
 

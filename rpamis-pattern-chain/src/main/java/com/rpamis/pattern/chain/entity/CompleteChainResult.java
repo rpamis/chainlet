@@ -17,20 +17,17 @@ public class CompleteChainResult implements Serializable {
     /**
      * 整个链计算结果，如果有一个false则为false
      */
-    private boolean allow;
+    private final boolean allow;
 
     /**
      * 所有处理类->处理结果Map
      */
     private final ConcurrentHashMap<Class<?>, Boolean> chainResultMap = new ConcurrentHashMap<>(16);
 
-    private List<ChainResult> chainResults;
+    private final List<ChainResult> chainResults;
 
     private void initMap(List<ChainResult> chainResults) {
         chainResults.forEach(chainResult -> chainResultMap.putIfAbsent(chainResult.getHandlerClass(), chainResult.isProcessResult()));
-    }
-
-    public CompleteChainResult() {
     }
 
     public CompleteChainResult(boolean allow, List<ChainResult> chainResults) {

@@ -31,8 +31,7 @@ public interface ChainPipeline<T> {
     /**
      * 流水线执行Handler后的处理
      */
-    default void afterHandler() {
-    }
+    void afterHandler();
 
     /**
      * 责任链执行策略

@@ -22,9 +22,6 @@ public class ChainResult implements Serializable {
      */
     private boolean processResult;
 
-    public ChainResult() {
-    }
-
     public ChainResult(Class<?> handlerClass, boolean processResult) {
         this.handlerClass = handlerClass;
         this.processResult = processResult;

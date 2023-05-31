@@ -8,11 +8,13 @@ import com.rpamis.pattern.chain.handler.ValidateHandler;
 import com.rpamis.pattern.chain.interfaces.ChainPipeline;
 import com.rpamis.pattern.chain.pipeline.DemoChainPipeline;
 import com.rpamis.pattern.chain.strategy.FastFailedStrategy;
+import com.rpamis.pattern.chain.strategy.FastReturnStrategy;
 import com.rpamis.pattern.chain.strategy.FullExecutionStrategy;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import static org.mockito.Mockito.*;
@@ -127,5 +129,65 @@ public class DemoChainPipelineTest {
         Assert.assertFalse(authResult);
         Boolean loginResult = chainResult.get(LoginHandler.class);
         Assert.assertNull(loginResult);
+    }
+
+    @Test
+    public void should_returnTrue_when_isAllow_given_chainInFastReturnStrategy() throws ChainException {
+        // given
+        ChainPipeline<DemoUser> demoChain = new DemoChainPipeline()
+                .addHandler(new ValidateHandler())
+                .addHandler(new AuthHandler())
+                .addHandler(new LoginHandler())
+                .strategy(new FastReturnStrategy<>());
+        // when
+        when(demoUser.getName()).thenReturn("test");
+        when(demoUser.getPwd()).thenReturn("123");
+        when(demoUser.getRole()).thenReturn("normal");
+
+        // then
+        CompleteChainResult chainResult = demoChain.start(demoUser);
+        boolean allow = chainResult.isAllow();
+        Assert.assertTrue(allow);
+        Boolean validResult = chainResult.get(ValidateHandler.class);
+        Assert.assertTrue(validResult);
+        Boolean authResult = chainResult.get(AuthHandler.class);
+        Assert.assertNull(authResult);
+        Boolean loginResult = chainResult.get(LoginHandler.class);
+        Assert.assertNull(loginResult);
+    }
+
+    @Test
+    public void should_returnTrue_when_isAllow_given_chainInFastReturnStrategySwitch() throws ChainException {
+        // given
+        ChainPipeline<DemoUser> demoChain = new DemoChainPipeline()
+                .addHandler(new AuthHandler())
+                .addHandler(new ValidateHandler())
+                .addHandler(new LoginHandler())
+                .strategy(new FastReturnStrategy<>());
+        // when
+        when(demoUser.getName()).thenReturn("test");
+        when(demoUser.getPwd()).thenReturn("123");
+        when(demoUser.getRole()).thenReturn("normal");
+
+        // then
+        CompleteChainResult chainResult = demoChain.start(demoUser);
+        boolean allow = chainResult.isAllow();
+        Assert.assertFalse(allow);
+        Boolean validResult = chainResult.get(ValidateHandler.class);
+        Assert.assertTrue(validResult);
+        Boolean authResult = chainResult.get(AuthHandler.class);
+        Assert.assertFalse(authResult);
+        Boolean loginResult = chainResult.get(LoginHandler.class);
+        Assert.assertNull(loginResult);
+    }
+
+    @Test
+    public void should_throwException_when_addSameHandler_given_anyChain() {
+        // given
+        ChainPipeline<DemoUser> demoChain = spy(new DemoChainPipeline());
+        // when
+        demoChain.addHandler(mock(ValidateHandler.class));
+        // then
+        Assert.assertThrows(IllegalArgumentException.class, () -> demoChain.addHandler(mock(ValidateHandler.class)));
     }
 }
