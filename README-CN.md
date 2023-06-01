@@ -1,6 +1,6 @@
 ## Rpamis-pattern
 
-🌱Rpamis-pattern project is a collection of design pattern frameworks that bring design patterns out of the box to developers
+🌱Rpamis-pattern项目是一组设计模式框架集合，为开发者带来开箱即用的设计模式
 
 <p align="center">
   <a href="https://central.sonatype.com/artifact/com.rpamis/rpamis-pattern-chain/1.0.0">
@@ -8,7 +8,7 @@
   </a>
 
   <a href="https://www.apache.org/licenses/LICENSE-2.0">
-    <img alt="license" src="https://img.shields.io/badge/license-Apache%202-4EB1BA.svg?style=flat-square">
+    <img alt="code style" src="https://img.shields.io/badge/license-Apache%202-4EB1BA.svg?style=flat-square">
   </a>
 
   <a href="https://codecov.io/gh/benym/rpamis-pattern" > 
@@ -17,15 +17,17 @@
 </p>
 
 -------------------------------------------------------------------------------
-[**中文**](README.md)|[**English**](README-EN.md)
+
+[**中文**](README-CN.md)|[**English**](README.md)
+
 -------------------------------------------------------------------------------
 ### Rpamis-pattern-chain
 
-Provides a framework for the Chain of Responsibility pattern with zero dependencies
+提供0依赖的责任链模式框架
 
-#### Get Start
+#### 快速开始
 
-- Import dependence
+- 引入依赖
 
 ```xml
 <dependency>
@@ -35,18 +37,18 @@ Provides a framework for the Chain of Responsibility pattern with zero dependenc
 </dependency>
 ```
 
-- Creates a ChainPipeline by inheriting `AbstractChainPipeline`
+- 继承`AbstractChainPipeline`创建ChainPipeline
 
 ```java
-// Process List<User> type data
+// 处理List<User>类型数据
 public class UserChainPipline extends AbstractChainPipeline<List<User>> {
-    // Inject some necessary information, or other action
+    // 注入一些必要信息，或其他操作
 }
 ```
 
-- Creates ChainHandler by inheriting `AbstractChainHandler`
+- 继承`AbstractChainHandler`创建ChainHandler
 
-The following uses creating three processing classes as an example
+以下以创建3个处理类为例
 
 ```java
 public class ValidateHandler extends AbstractChainHandler<List<User>> {
@@ -55,10 +57,10 @@ public class ValidateHandler extends AbstractChainHandler<List<User>> {
     protected boolean process(List<User> handlerData) {
         return handlerData.stream().anyMatch(user -> {
             if (user.getName() == null || user.getPwd() == null) {
-                System.out.println("The user name or password is empty");
+                System.out.println("用户名或密码为空");
                 return false;
             }
-            System.out.println("The user name or password is verified successfully");
+            System.out.println("用户名或密码校验通过");
             return true;
         });
     }
@@ -74,10 +76,10 @@ public class LoginHandler extends AbstractChainHandler<List<User>> {
             if ("test".equals(user.getName()) && "123".equals(user.getPwd())) {
                 user.setRole("admin");
             } else {
-                System.out.println("User verification failure");
+                System.out.println("用户校验失败");
                 return false;
             }
-            System.out.println("User verification pass");
+            System.out.println("用户校验通过");
             return true;
         });
     }
@@ -91,17 +93,17 @@ public class AuthHandler extends AbstractChainHandler<List<User>> {
     protected boolean process(List<User> handlerData) {
         return handlerData.stream().anyMatch(user -> {
             if (!"admin".equals(user.getRole())) {
-                System.out.println("The supertube check failed");
-                throw new RuntimeException("failure");
+                System.out.println("超管校验失败");
+                throw new RuntimeException("失败");
             }
-            System.out.println("The supertube check is successful");
+            System.out.println("超管校验成功");
             return true;
         });
     }
 }
 ```
 
-- Build chain and start it to get the processing results
+- 构建责任链，并启动，获取处理结果
 
 ```java
 List<User> list = new ArrayList<>();
@@ -114,11 +116,11 @@ ChainPipeline<List<User>> chain = new UserChainPipline()
     .strategy(new FullExecutionStrategy<>());
 try {
     CompleteChainResult result = chain.start(list);
-    // Determines the execution result of the entire chain. If there is one failure by default, it is judged as a failure
+    // 判断整个链执行结果，默认有一个失败则判断为失败
     if (result.isAllow()) {
-        System.out.println("The final execution result of the responsibility chain is" + result.isAllow());
+        System.out.println("责任链最终执行结果为" + result.isAllow());
     }
-    // Gets a single processing class execution result based on the processing class
+    // 根据处理类class获取单个处理类执行结果
     boolean validateHandlerResult = result.get(ValidateHandler.class);
 } catch (ChainException e) {
     e.printStackTrace();
@@ -127,20 +129,20 @@ try {
 
 `CompleteChainResult`
 
-- `isAllow`：Gets the execution result of the entire chain. If there is a failure, it is judged as a failure and returns a `boolean`
-- `get(Class cls)`：Gets the result of some `Handler` processing according to the `Handler` class and returns a `boolean`
+- `isAllow`：获取整个链的执行结果，有一个失败则判断为失败，返回`boolean`
+- `get(Class cls)`：根据`Handler`类`class`获取某个`Handler`处理结果，返回`boolean`
 
-#### Inner Strategy
+#### 内置策略
 
-- `FullExecutionStrategy`： The full execution strategy, the chain of responsibility default policy, will execute all processing on the chain regardless of whether a `Handler` succeeds or not
-- `FastReturnStrategy`：The fast return strategy, when a `Hander` has a success returns the result immediately, the subsequent `Handler` does not execute
-- `FastFailedStrategy`：Fast failure strategy, when a `Hander` failure is returned immediately, the subsequent `Handler` does not execute
+- `FullExecutionStrategy`： 全执行策略，责任链默认策略，无论某个`Handler`是否成功，都会执行完所有链上的处理
+- `FastReturnStrategy`：快速返回策略，当`Hander`中有一个成功就立即返回结果，后续`Handler`不再执行
+- `FastFailedStrategy`：快速失败策略，当`Hander`中有一个失败就立即返回结果，后续`Handler`不再执行
 
-#### Strategy Extension
+#### 策略扩展
 
-You can expand your chain of responsibility handling strategy by following two steps
+你可以通过如下两步拓展责任链处理策略
 
-- Implement the `ChainStrategy` interface
+- 实现`ChainStrategy`接口
 
 ```java
 public class CustomStrategy<T> implements ChainStrategy<T>{
@@ -157,11 +159,11 @@ public class CustomStrategy<T> implements ChainStrategy<T>{
 }
 ```
 
-`init` method: Provides a default wrapper for processing results
+`init`方法：提供了默认的处理结果包装
 
-`doStrategy` method: Used to write your own chain processing strategy, `handlerData` is the data processed by the responsibility chain, `chain` is the responsibility chain context, `chainResult` is the result of a single `Handler` processing
+`doStrategy`方法：用于编写自己的责任链处理策略，`handlerData`为责任链处理的数据，`chain`为责任链上下文，`chainResult`为单次`Handler`处理的结果
 
-- Use this implementation when building chains
+- 构建责任链时使用该实现
 
 ```java
 ChainPipeline<List<User>> chain = new UserChainPipline()
@@ -171,7 +173,7 @@ ChainPipeline<List<User>> chain = new UserChainPipline()
                 .strategy(new CustomStrategy<>());
 ```
 
-#### Reference
+#### 参考实现
 
 - `AOP`:`org.springframework.aop.framework.ReflectiveMethodInvocation` 
 - `Tomcat`: `org.apache.catalina.core.ApplicationFilterChain`
