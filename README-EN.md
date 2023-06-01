@@ -8,7 +8,10 @@
   </a>
 
   <a href="https://www.apache.org/licenses/LICENSE-2.0">
-    <img alt="code style" src="https://img.shields.io/badge/license-Apache%202-4EB1BA.svg?style=flat-square">
+    <img alt="license" src="https://img.shields.io/badge/license-Apache%202-4EB1BA.svg?style=flat-square">
+  </a>
+  <a href="https://codecov.io/gh/benym/rpamis-pattern" > 
+    <img alt="codecov" src="https://img.shields.io/codecov/c/gh/benym/rpamis-pattern?color=%23&style=flat-square"/> 
   </a>
 </p>
 
@@ -27,7 +30,7 @@ Provides a framework for the Chain of Responsibility pattern with zero dependenc
 <dependency>
     <groupId>com.rpamis</groupId>
     <artifactId>rpamis-pattern-chain</artifactId>
-    <version>1.0.3</version>
+    <version>1.0.4</version>
 </dependency>
 ```
 
