@@ -133,8 +133,8 @@ try {
 #### Inner Strategy
 
 - `FullExecutionStrategy`： The full execution strategy, the chain of responsibility default policy, will execute all processing on the chain regardless of whether a `Handler` succeeds or not
-- `FastReturnStrategy`：The fast return strategy, when a `Hander` has a success returns the result immediately, the subsequent `Handler` does not execute
-- `FastFailedStrategy`：Fast failure strategy, when a `Hander` failure is returned immediately, the subsequent `Handler` does not execute
+- `FastReturnStrategy`：The fast return strategy, when a `Handler` has a success returns the result immediately, the subsequent `Handler` does not execute
+- `FastFailedStrategy`：Fast failure strategy, when a `Handler` failure is returned immediately, the subsequent `Handler` does not execute
 
 #### Strategy Extension
 

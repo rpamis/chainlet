@@ -135,8 +135,8 @@ try {
 #### 内置策略
 
 - `FullExecutionStrategy`： 全执行策略，责任链默认策略，无论某个`Handler`是否成功，都会执行完所有链上的处理
-- `FastReturnStrategy`：快速返回策略，当`Hander`中有一个成功就立即返回结果，后续`Handler`不再执行
-- `FastFailedStrategy`：快速失败策略，当`Hander`中有一个失败就立即返回结果，后续`Handler`不再执行
+- `FastReturnStrategy`：快速返回策略，当`Handler`中有一个成功就立即返回结果，后续`Handler`不再执行
+- `FastFailedStrategy`：快速失败策略，当`Handler`中有一个失败就立即返回结果，后续`Handler`不再执行
 
 #### 策略扩展
 
