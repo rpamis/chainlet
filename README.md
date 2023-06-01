@@ -23,7 +23,7 @@
 
 Provides a framework for the Chain of Responsibility pattern with zero dependencies
 
-#### Get Start
+### Usage
 
 - Import dependence
 
@@ -171,7 +171,7 @@ ChainPipeline<List<User>> chain = new UserChainPipline()
                 .strategy(new CustomStrategy<>());
 ```
 
-#### Reference
+### Reference
 
 - `AOP`:`org.springframework.aop.framework.ReflectiveMethodInvocation` 
 - `Tomcat`: `org.apache.catalina.core.ApplicationFilterChain`

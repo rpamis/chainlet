@@ -25,7 +25,7 @@
 
 提供0依赖的责任链模式框架
 
-#### 快速开始
+### 快速开始
 
 - 引入依赖
 
@@ -173,7 +173,7 @@ ChainPipeline<List<User>> chain = new UserChainPipline()
                 .strategy(new CustomStrategy<>());
 ```
 
-#### 参考实现
+### 参考实现
 
 - `AOP`:`org.springframework.aop.framework.ReflectiveMethodInvocation` 
 - `Tomcat`: `org.apache.catalina.core.ApplicationFilterChain`
