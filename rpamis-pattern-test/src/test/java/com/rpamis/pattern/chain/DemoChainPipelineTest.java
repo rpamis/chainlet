@@ -4,6 +4,7 @@ import com.rpamis.pattern.chain.entity.ChainException;
 import com.rpamis.pattern.chain.entity.CompleteChainResult;
 import com.rpamis.pattern.chain.handler.AuthHandler;
 import com.rpamis.pattern.chain.handler.LoginHandler;
+import com.rpamis.pattern.chain.handler.MockExceptionHandler;
 import com.rpamis.pattern.chain.handler.ValidateHandler;
 import com.rpamis.pattern.chain.interfaces.ChainPipeline;
 import com.rpamis.pattern.chain.pipeline.DemoChainPipeline;
@@ -14,8 +15,10 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
+
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 import static org.mockito.Mockito.*;
 
@@ -189,5 +192,64 @@ public class DemoChainPipelineTest {
         demoChain.addHandler(mock(ValidateHandler.class));
         // then
         Assert.assertThrows(IllegalArgumentException.class, () -> demoChain.addHandler(mock(ValidateHandler.class)));
+    }
+
+    @Test
+    public void should_notEquals_when_isAllow_given_multithreadedExecution() throws ExecutionException, InterruptedException {
+        CompletableFuture<Boolean> failedFuture = CompletableFuture.supplyAsync(() -> {
+            try {
+                DemoUser demoUser = mock(DemoUser.class);
+                // when
+                when(demoUser.getName()).thenReturn("test");
+                when(demoUser.getPwd()).thenReturn("123");
+                when(demoUser.getRole()).thenReturn("normal");
+                return executeChain(demoUser);
+            } catch (ChainException e) {
+                throw new RuntimeException(e);
+            }
+        });
+        CompletableFuture<Boolean> successFuture = CompletableFuture.supplyAsync(() -> {
+            try {
+                DemoUser demoUser = mock(DemoUser.class);
+                // when
+                when(demoUser.getName()).thenReturn("test");
+                when(demoUser.getPwd()).thenReturn("123");
+                when(demoUser.getRole()).thenReturn("admin");
+                return executeChain(demoUser);
+            } catch (ChainException e) {
+                throw new RuntimeException(e);
+            }
+        });
+        CompletableFuture<Object> combine = failedFuture.thenCombine(successFuture, (result1, result2) -> {
+            Assert.assertNotEquals(result1, result2);
+            return null;
+        });
+        combine.get();
+    }
+
+    private boolean executeChain(DemoUser demoUser) throws ChainException {
+        // given
+        ChainPipeline<DemoUser> demoChain = new DemoChainPipeline()
+                .addHandler(new AuthHandler())
+                .addHandler(new ValidateHandler())
+                .addHandler(new LoginHandler())
+                .strategy(new FastFailedStrategy<>());
+
+        // then
+        CompleteChainResult chainResult = demoChain.start(demoUser);
+        return chainResult.isAllow();
+    }
+
+    @Test
+    public void should_throwChainException_when_start_given_MockExceptionHandlerInChain() throws ChainException {
+        // given
+        ChainPipeline<DemoUser> demoChain = new DemoChainPipeline()
+                .addHandler(new MockExceptionHandler());
+        // when
+        when(demoUser.getName()).thenReturn("test");
+        when(demoUser.getPwd()).thenReturn("123");
+        when(demoUser.getRole()).thenReturn("normal");
+        // then
+        Assert.assertThrows(ChainException.class, () -> demoChain.start(demoUser));
     }
 }
