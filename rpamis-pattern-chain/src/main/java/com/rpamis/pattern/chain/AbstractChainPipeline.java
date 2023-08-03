@@ -106,6 +106,7 @@ public abstract class AbstractChainPipeline<T> implements ChainPipeline<T> {
     @Override
     public void afterHandler() {
         CHECK_RESULT.remove();
+        this.pos = 0;
     }
 
     /**
