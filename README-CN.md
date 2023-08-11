@@ -46,15 +46,15 @@ public class UserChainPipline extends AbstractChainPipeline<List<User>> {
 }
 ```
 
-- 继承`AbstractChainHandler`创建ChainHandler
+- 实现`ChainHandler`创建ChainHandler
 
 以下以创建3个处理类为例
 
 ```java
-public class ValidateHandler extends AbstractChainHandler<List<User>> {
+public class ValidateHandler implements ChainHandler<List<User>> {
 
     @Override
-    protected boolean process(List<User> handlerData) {
+    public boolean process(List<User> handlerData) {
         return handlerData.stream().anyMatch(user -> {
             if (user.getName() == null || user.getPwd() == null) {
                 System.out.println("用户名或密码为空");
@@ -68,10 +68,10 @@ public class ValidateHandler extends AbstractChainHandler<List<User>> {
 ```
 
 ```java
-public class LoginHandler extends AbstractChainHandler<List<User>> {
+public class LoginHandler implements ChainHandler<List<User>> {
 
     @Override
-    protected boolean process(List<User> handlerData) {
+    public boolean process(List<User> handlerData) {
         return handlerData.stream().anyMatch(user -> {
             if ("test".equals(user.getName()) && "123".equals(user.getPwd())) {
                 user.setRole("admin");
@@ -87,10 +87,10 @@ public class LoginHandler extends AbstractChainHandler<List<User>> {
 ```
 
 ```java
-public class AuthHandler extends AbstractChainHandler<List<User>> {
+public class AuthHandler implements ChainHandler<List<User>> {
 
     @Override
-    protected boolean process(List<User> handlerData) {
+    public boolean process(List<User> handlerData) {
         return handlerData.stream().anyMatch(user -> {
             if (!"admin".equals(user.getRole())) {
                 System.out.println("超管校验失败");

@@ -44,15 +44,15 @@ public class UserChainPipline extends AbstractChainPipeline<List<User>> {
 }
 ```
 
-- Creates ChainHandler by inheriting `AbstractChainHandler`
+- Creates ChainHandler by implements `ChainHandler`
 
 The following uses creating three processing classes as an example
 
 ```java
-public class ValidateHandler extends AbstractChainHandler<List<User>> {
+public class ValidateHandler implements ChainHandler<List<User>> {
 
     @Override
-    protected boolean process(List<User> handlerData) {
+    public boolean process(List<User> handlerData) {
         return handlerData.stream().anyMatch(user -> {
             if (user.getName() == null || user.getPwd() == null) {
                 System.out.println("The user name or password is empty");
@@ -66,10 +66,10 @@ public class ValidateHandler extends AbstractChainHandler<List<User>> {
 ```
 
 ```java
-public class LoginHandler extends AbstractChainHandler<List<User>> {
+public class LoginHandler implements ChainHandler<List<User>> {
 
     @Override
-    protected boolean process(List<User> handlerData) {
+    public boolean process(List<User> handlerData) {
         return handlerData.stream().anyMatch(user -> {
             if ("test".equals(user.getName()) && "123".equals(user.getPwd())) {
                 user.setRole("admin");
@@ -85,10 +85,10 @@ public class LoginHandler extends AbstractChainHandler<List<User>> {
 ```
 
 ```java
-public class AuthHandler extends AbstractChainHandler<List<User>> {
+public class AuthHandler implements ChainHandler<List<User>> {
 
     @Override
-    protected boolean process(List<User> handlerData) {
+    public boolean process(List<User> handlerData) {
         return handlerData.stream().anyMatch(user -> {
             if (!"admin".equals(user.getRole())) {
                 System.out.println("The supertube check failed");

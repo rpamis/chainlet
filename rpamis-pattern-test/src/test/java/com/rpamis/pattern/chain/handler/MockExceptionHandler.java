@@ -1,7 +1,7 @@
 package com.rpamis.pattern.chain.handler;
 
-import com.rpamis.pattern.chain.AbstractChainHandler;
 import com.rpamis.pattern.chain.DemoUser;
+import com.rpamis.pattern.chain.interfaces.ChainHandler;
 
 /**
  * Handler异常模拟类
@@ -9,10 +9,10 @@ import com.rpamis.pattern.chain.DemoUser;
  * @author benym
  * @date 2023/7/11 16:32
  */
-public class MockExceptionHandler extends AbstractChainHandler<DemoUser> {
+public class MockExceptionHandler implements ChainHandler<DemoUser> {
 
     @Override
-    protected boolean process(DemoUser handlerData) {
+    public boolean process(DemoUser handlerData) {
         int i = 1 / 0;
         return false;
     }
