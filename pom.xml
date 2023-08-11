@@ -36,7 +36,7 @@
         <maven-site-plugin.version>3.7.1</maven-site-plugin.version>
         <maven-javadoc-plugin.version>3.0.1</maven-javadoc-plugin.version>
         <maven-gpg-plugin.version>1.6</maven-gpg-plugin.version>
-        <rpamis-pattern-chain.version>1.0.4</rpamis-pattern-chain.version>
+        <rpamis-pattern-chain.version>1.0.5</rpamis-pattern-chain.version>
     </properties>
 
     <distributionManagement>
