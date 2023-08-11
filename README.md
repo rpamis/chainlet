@@ -31,7 +31,7 @@ Provides a framework for the Chain of Responsibility pattern with zero dependenc
 <dependency>
     <groupId>com.rpamis</groupId>
     <artifactId>rpamis-pattern-chain</artifactId>
-    <version>1.0.4</version>
+    <version>1.0.5</version>
 </dependency>
 ```
 
