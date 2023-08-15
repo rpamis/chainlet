@@ -6,7 +6,7 @@ package com.rpamis.pattern.chain.entity;
  * @date 2023/3/5 17:40
  * @author benym
  */
-public class ChainException extends Exception {
+public class ChainException extends RuntimeException {
 
     private static final long serialVersionUID = 1L;
 

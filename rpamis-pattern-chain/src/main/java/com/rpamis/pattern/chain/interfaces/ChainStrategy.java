@@ -16,10 +16,11 @@ public interface ChainStrategy<T> {
      *
      * @param handlerClass handlerClass
      * @param processResult processResult
+     * @param message message
      * @return ChainResult
      */
-    default ChainResult init(Class<?> handlerClass, boolean processResult) {
-        return new ChainResult(handlerClass, processResult);
+    default ChainResult init(Class<?> handlerClass, boolean processResult, String message) {
+        return new ChainResult(handlerClass, processResult, message);
     }
 
     /**

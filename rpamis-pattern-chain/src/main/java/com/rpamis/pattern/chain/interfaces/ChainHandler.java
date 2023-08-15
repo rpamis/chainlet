@@ -23,7 +23,7 @@ public interface ChainHandler<T> {
         // 具体某个handler处理
         boolean processResult = this.process(handlerData);
         // 根据策略进行返回值包装
-        ChainResult chainResult = strategy.init(this.getClass(), processResult);
+        ChainResult chainResult = strategy.init(this.getClass(), processResult, this.message());
         strategy.doStrategy(handlerData, chain, chainResult);
     }
 
@@ -35,4 +35,13 @@ public interface ChainHandler<T> {
      * @return boolean
      */
     boolean process(T handlerData);
+
+    /**
+     * 责任链处理器自定义提示消息
+     *
+     * @return String
+     */
+    default String message(){
+        return "";
+    }
 }

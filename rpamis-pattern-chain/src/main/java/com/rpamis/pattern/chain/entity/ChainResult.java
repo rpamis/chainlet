@@ -22,9 +22,15 @@ public class ChainResult implements Serializable {
      */
     private boolean processResult;
 
-    public ChainResult(Class<?> handlerClass, boolean processResult) {
+    /**
+     * 当前处理类消息
+     */
+    private String message;
+
+    public ChainResult(Class<?> handlerClass, boolean processResult, String message) {
         this.handlerClass = handlerClass;
         this.processResult = processResult;
+        this.message = message;
     }
 
     public Class<?> getHandlerClass() {
@@ -43,11 +49,20 @@ public class ChainResult implements Serializable {
         this.processResult = processResult;
     }
 
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
     @Override
     public String toString() {
         return "ChainResult{" +
                 "handlerClass=" + handlerClass +
                 ", processResult=" + processResult +
+                ", message='" + message + '\'' +
                 '}';
     }
 }
