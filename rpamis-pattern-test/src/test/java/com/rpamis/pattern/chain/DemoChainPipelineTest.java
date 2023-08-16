@@ -191,7 +191,7 @@ public class DemoChainPipelineTest {
         // when
         demoChain.addHandler(mock(ValidateHandler.class));
         // then
-        Assert.assertThrows(IllegalArgumentException.class, () -> demoChain.addHandler(mock(ValidateHandler.class)));
+        Assert.assertThrows(ChainException.class, () -> demoChain.addHandler(mock(ValidateHandler.class)));
     }
 
     @Test

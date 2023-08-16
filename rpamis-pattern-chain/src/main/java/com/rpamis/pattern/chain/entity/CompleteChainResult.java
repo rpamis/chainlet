@@ -67,7 +67,7 @@ public class CompleteChainResult implements Serializable {
      * @param <T>          泛型T
      * @return 处理结果true/false
      */
-    public <T> Boolean getIfFail(Class<T> handlerClass) {
+    public <T> Boolean verifyIfFail(Class<T> handlerClass) {
         Boolean result = this.get(handlerClass);
         return result != null && !result;
     }
@@ -79,7 +79,7 @@ public class CompleteChainResult implements Serializable {
      * @param <T>          泛型T
      * @return 处理结果true/false
      */
-    public <T> Boolean getIfSuccess(Class<T> handlerClass) {
+    public <T> Boolean verifyIfSuccess(Class<T> handlerClass) {
         Boolean result = this.get(handlerClass);
         return result != null && result;
     }
@@ -88,8 +88,33 @@ public class CompleteChainResult implements Serializable {
      * 校验责任链结果，如果为处理不成功则抛出异常
      *
      * @param exceptionClass 任意exception class类
+     * @param handlerClass   责任链处理类
      */
-    public void verifyAndThrow(Class<? extends Throwable> exceptionClass) {
+    public void verifyAndThrow(Class<? extends Throwable> exceptionClass, Class<?> handlerClass) {
+        try {
+            if (!Throwable.class.isAssignableFrom(exceptionClass)) {
+                throw new ChainException("The provided class is not a subclass of Throwable");
+            }
+            Constructor<? extends Throwable> constructor = exceptionClass.getConstructor(String.class);
+            if (Boolean.TRUE.equals(this.verifyIfFail(handlerClass))) {
+                ChainResult chainResult = chainResultMap.get(handlerClass);
+                String message = chainResult.getMessage();
+                throw constructor.newInstance(message);
+            }
+        } catch (NoSuchMethodException | InstantiationException
+                 | IllegalAccessException | InvocationTargetException e) {
+            throw new ChainException("The provided class have no single string constructor or unable to newInstance by reflection", e);
+        } catch (Throwable e) {
+            throw new ChainException("unknown exception in verifyAndThrow", e);
+        }
+    }
+
+    /**
+     * 校验全部责任链结果，如果为处理不成功则抛出异常
+     *
+     * @param exceptionClass 任意exception class类
+     */
+    public void verifyAllAndThrow(Class<? extends Throwable> exceptionClass) {
         try {
             if (!Throwable.class.isAssignableFrom(exceptionClass)) {
                 throw new ChainException("The provided class is not a subclass of Throwable");
@@ -97,7 +122,7 @@ public class CompleteChainResult implements Serializable {
             Constructor<? extends Throwable> constructor = exceptionClass.getConstructor(String.class);
             for (ChainResult chainResult : this.getChainResults()) {
                 Class<?> handlerClass = chainResult.getHandlerClass();
-                if (Boolean.TRUE.equals(this.getIfFail(handlerClass))) {
+                if (Boolean.TRUE.equals(this.verifyIfFail(handlerClass))) {
                     String message = chainResult.getMessage();
                     throw constructor.newInstance(message);
                 }
@@ -106,15 +131,7 @@ public class CompleteChainResult implements Serializable {
                  | IllegalAccessException | InvocationTargetException e) {
             throw new ChainException("The provided class have no single string constructor or unable to newInstance by reflection", e);
         } catch (Throwable e) {
-            throw new ChainException("unknown exception in validAndThrow", e);
+            throw new ChainException("unknown exception in verifyAllAndThrow", e);
         }
-    }
-
-    /**
-     * // todo 这个降级策略是否应该写在start里面
-     * 校验责任链处理结果，如果失败了触发降级策略
-     */
-    public void verifyWithFallback() {
-
     }
 }

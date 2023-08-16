@@ -1,10 +1,8 @@
 package com.rpamis.pattern.chain;
 
 
-import com.rpamis.pattern.chain.entity.ChainException;
-import com.rpamis.pattern.chain.entity.ChainResult;
-import com.rpamis.pattern.chain.entity.CompleteChainResult;
-import com.rpamis.pattern.chain.entity.UniqueList;
+import com.rpamis.pattern.chain.entity.*;
+import com.rpamis.pattern.chain.interfaces.ChainFallBack;
 import com.rpamis.pattern.chain.interfaces.ChainHandler;
 import com.rpamis.pattern.chain.interfaces.ChainPipeline;
 import com.rpamis.pattern.chain.interfaces.ChainStrategy;
@@ -46,6 +44,11 @@ public abstract class AbstractChainPipeline<T> implements ChainPipeline<T> {
     private ChainStrategy<T> chainStrategy = new FullExecutionStrategy<>();
 
     /**
+     * 降级方法
+     */
+    private ChainFallBack<T> chainFallBack;
+
+    /**
      * 存储所有需要执行的handler实现
      */
     private final UniqueList<ChainHandler<T>> handlerList = new UniqueList<>();
@@ -65,6 +68,18 @@ public abstract class AbstractChainPipeline<T> implements ChainPipeline<T> {
     @Override
     public final ChainPipeline<T> strategy(ChainStrategy<T> strategy) {
         this.chainStrategy = strategy;
+        return this;
+    }
+
+    /**
+     * 设置降级处理，不可子类覆写
+     *
+     * @param fallBack fallBack
+     * @return ChainPipeline
+     */
+    @Override
+    public final ChainPipeline<T> fallback(ChainFallBack<T> fallBack) {
+        this.chainFallBack = fallBack;
         return this;
     }
 
@@ -91,7 +106,11 @@ public abstract class AbstractChainPipeline<T> implements ChainPipeline<T> {
         // 如果当前的handler的位置小于链上所有handler数量，则说明还没执行完，继续向前推进handler
         if (this.pos < this.n) {
             ChainHandler<T> chainHandler = handlerList.get(this.pos++);
-            chainHandler.handle(handlerData, this, this.chainStrategy);
+            ChainContext<T> chainContext = new ChainContext<>();
+            chainContext.setHandlerData(handlerData);
+            chainContext.setChain(this);
+            chainContext.setStrategy(this.chainStrategy);
+            chainHandler.handle(chainContext);
             if (this.chainStrategy instanceof FastReturnStrategy
                     || this.chainStrategy instanceof FastFailedStrategy
                     || this.chainStrategy instanceof FullExecutionStrategy) {
@@ -126,6 +145,9 @@ public abstract class AbstractChainPipeline<T> implements ChainPipeline<T> {
             throw new ChainException("chain unexpected exception", e);
         } finally {
             this.afterHandler();
+            if (chainFallBack != null) {
+                chainFallBack.fallBack(handlerData);
+            }
         }
     }
 

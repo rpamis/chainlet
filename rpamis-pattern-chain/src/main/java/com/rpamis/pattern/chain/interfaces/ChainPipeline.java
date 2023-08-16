@@ -42,6 +42,14 @@ public interface ChainPipeline<T> {
     ChainPipeline<T> strategy(ChainStrategy<T> strategy);
 
     /**
+     * 责任链降级策略
+     *
+     * @param fallBack fallBack
+     * @return ChainPipeline
+     */
+    ChainPipeline<T> fallback(ChainFallBack<T> fallBack);
+
+    /**
      * 责任链流水线执行入口
      *
      * @param handlerData handlerData

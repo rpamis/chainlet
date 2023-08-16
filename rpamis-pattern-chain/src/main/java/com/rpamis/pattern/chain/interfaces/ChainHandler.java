@@ -1,6 +1,7 @@
 package com.rpamis.pattern.chain.interfaces;
 
 
+import com.rpamis.pattern.chain.entity.ChainContext;
 import com.rpamis.pattern.chain.entity.ChainResult;
 
 /**
@@ -15,11 +16,12 @@ public interface ChainHandler<T> {
     /**
      * handler链式处理
      *
-     * @param handlerData handlerData
-     * @param chain       chain
-     * @param strategy    strategy
+     * @param chainContext chainContext
      */
-    default void handle(T handlerData, ChainPipeline<T> chain, ChainStrategy<T> strategy) {
+    default void handle(ChainContext<T> chainContext) {
+        ChainStrategy<T> strategy = chainContext.getStrategy();
+        T handlerData = chainContext.getHandlerData();
+        ChainPipeline<T> chain = chainContext.getChain();
         // 具体某个handler处理
         boolean processResult = this.process(handlerData);
         // 根据策略进行返回值包装
@@ -41,7 +43,7 @@ public interface ChainHandler<T> {
      *
      * @return String
      */
-    default String message(){
+    default String message() {
         return "";
     }
 }
