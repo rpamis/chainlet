@@ -153,6 +153,8 @@ public abstract class AbstractChainPipeline<T> implements ChainPipeline<T> {
                 fallBackResolver.handleLocalFallBack(chainHandler, handlerData, this, false);
             }
             return processResult;
+        } catch (ChainException e) {
+            throw e;
         } catch (Exception e) {
             fallBackResolver.handleLocalFallBack(chainHandler, handlerData, this, true);
             throw e;
@@ -197,6 +199,8 @@ public abstract class AbstractChainPipeline<T> implements ChainPipeline<T> {
             completeChainResult = new CompleteChainResult(buildSuccess(chainResults), Collections.unmodifiableList(chainResults));
             fallBackResolver.handleGlobalFallBack(chainFallBack, handlerData, completeChainResult, false);
             return completeChainResult;
+        } catch (ChainException e) {
+            throw e;
         } catch (Exception e) {
             fallBackResolver.handleGlobalFallBack(chainFallBack, handlerData, completeChainResult, true);
             throw e;
