@@ -1,7 +1,6 @@
 package com.rpamis.pattern.chain.interfaces;
 
 
-import com.rpamis.pattern.chain.entity.ChainException;
 import com.rpamis.pattern.chain.entity.CompleteChainResult;
 
 /**
@@ -42,19 +41,18 @@ public interface ChainPipeline<T> {
     ChainPipeline<T> strategy(ChainStrategy<T> strategy);
 
     /**
-     * 责任链降级策略
+     * 责任链全局降级策略
      *
      * @param fallBack fallBack
      * @return ChainPipeline
      */
-    ChainPipeline<T> fallback(ChainFallBack<T> fallBack);
+    ChainPipeline<T> globalFallback(ChainFallBack<T> fallBack);
 
     /**
      * 责任链流水线执行入口
      *
      * @param handlerData handlerData
      * @return boolean
-     * @throws ChainException ChainException
      */
-    CompleteChainResult start(T handlerData) throws ChainException;
+    CompleteChainResult apply(T handlerData);
 }

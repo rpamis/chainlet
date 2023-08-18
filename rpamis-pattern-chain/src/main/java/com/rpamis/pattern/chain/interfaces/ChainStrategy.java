@@ -12,18 +12,6 @@ import com.rpamis.pattern.chain.entity.ChainResult;
 public interface ChainStrategy<T> {
 
     /**
-     * 策略接口初始化
-     *
-     * @param handlerClass handlerClass
-     * @param processResult processResult
-     * @param message message
-     * @return ChainResult
-     */
-    default ChainResult init(Class<?> handlerClass, boolean processResult, String message) {
-        return new ChainResult(handlerClass, processResult, message);
-    }
-
-    /**
      * 执行对应返回策略
      *
      * @param handlerData handlerData

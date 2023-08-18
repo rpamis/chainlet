@@ -1,5 +1,6 @@
 package com.rpamis.pattern.chain.entity;
 
+import com.rpamis.pattern.chain.interfaces.ChainHandler;
 import com.rpamis.pattern.chain.interfaces.ChainPipeline;
 import com.rpamis.pattern.chain.interfaces.ChainStrategy;
 
@@ -14,17 +15,29 @@ public class ChainContext<T> {
     /**
      * 责任链处理的数据
      */
-    T handlerData;
+    private T handlerData;
 
     /**
      * 责任链
      */
-    ChainPipeline<T> chain;
+    private ChainPipeline<T> chain;
 
     /**
      * 责任链执行策略
      */
-    ChainStrategy<T> strategy;
+    private ChainStrategy<T> strategy;
+
+    /**
+     * 责任链具体执行器
+     */
+    private ChainHandler<T> chainHandler;
+
+    public ChainContext(T handlerData, ChainPipeline<T> chain, ChainStrategy<T> strategy, ChainHandler<T> chainHandler) {
+        this.handlerData = handlerData;
+        this.chain = chain;
+        this.strategy = strategy;
+        this.chainHandler = chainHandler;
+    }
 
     public T getHandlerData() {
         return handlerData;
@@ -50,12 +63,23 @@ public class ChainContext<T> {
         this.strategy = strategy;
     }
 
+    public ChainHandler<T> getChainHandler() {
+        return chainHandler;
+    }
+
+    public void setChainHandler(ChainHandler<T> chainHandler) {
+        this.chainHandler = chainHandler;
+    }
+
+
+
     @Override
     public String toString() {
         return "ChainContext{" +
                 "handlerData=" + handlerData +
                 ", chain=" + chain +
                 ", strategy=" + strategy +
+                ", chainHandler=" + chainHandler +
                 '}';
     }
 }

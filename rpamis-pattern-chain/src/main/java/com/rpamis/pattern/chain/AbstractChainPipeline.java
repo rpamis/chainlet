@@ -49,6 +49,11 @@ public abstract class AbstractChainPipeline<T> implements ChainPipeline<T> {
     private ChainFallBack<T> chainFallBack;
 
     /**
+     * 降级解析器
+     */
+    private final FallBackResolver<T> fallBackResolver = new FallBackResolver<>();
+
+    /**
      * 存储所有需要执行的handler实现
      */
     private final UniqueList<ChainHandler<T>> handlerList = new UniqueList<>();
@@ -78,7 +83,7 @@ public abstract class AbstractChainPipeline<T> implements ChainPipeline<T> {
      * @return ChainPipeline
      */
     @Override
-    public final ChainPipeline<T> fallback(ChainFallBack<T> fallBack) {
+    public final ChainPipeline<T> globalFallback(ChainFallBack<T> fallBack) {
         this.chainFallBack = fallBack;
         return this;
     }
@@ -106,17 +111,64 @@ public abstract class AbstractChainPipeline<T> implements ChainPipeline<T> {
         // 如果当前的handler的位置小于链上所有handler数量，则说明还没执行完，继续向前推进handler
         if (this.pos < this.n) {
             ChainHandler<T> chainHandler = handlerList.get(this.pos++);
-            ChainContext<T> chainContext = new ChainContext<>();
-            chainContext.setHandlerData(handlerData);
-            chainContext.setChain(this);
-            chainContext.setStrategy(this.chainStrategy);
-            chainHandler.handle(chainContext);
+            ChainContext<T> chainContext = new ChainContext<>(handlerData, this,
+                    this.chainStrategy, chainHandler);
+            this.handle(chainContext);
             if (this.chainStrategy instanceof FastReturnStrategy
                     || this.chainStrategy instanceof FastFailedStrategy
                     || this.chainStrategy instanceof FullExecutionStrategy) {
                 this.pos = this.n;
             }
         }
+    }
+
+    /**
+     * handler链式处理
+     *
+     * @param chainContext chainContext
+     */
+    private void handle(ChainContext<T> chainContext) {
+        ChainStrategy<T> strategy = chainContext.getStrategy();
+        T handlerData = chainContext.getHandlerData();
+        ChainPipeline<T> chain = chainContext.getChain();
+        ChainHandler<T> chainHandler = chainContext.getChainHandler();
+        Boolean processResult = this.concreteHandlerProcess(chainHandler, handlerData);
+        // 根据策略进行返回值包装
+        ChainResult chainResult = this.init(this.getClass(), processResult, chainHandler.message());
+        strategy.doStrategy(handlerData, chain, chainResult);
+    }
+
+    /**
+     * 具体handler实现类处理，如果处理不成功或发生异常则触发局部降级策略
+     *
+     * @param chainHandler hanlder具体实现类
+     * @param handlerData  责任链处理主数据
+     * @return Boolean
+     */
+    private Boolean concreteHandlerProcess(ChainHandler<T> chainHandler, T handlerData) {
+        try {
+            boolean processResult = chainHandler.process(handlerData);
+            // 如果处理不成功则调用降级方法，具体是否调用需查看降级注解中enabled值
+            if (!processResult) {
+                fallBackResolver.handleLocalFallBack(chainHandler, handlerData, this);
+            }
+            return processResult;
+        } catch (Exception e) {
+            fallBackResolver.handleLocalFallBack(chainHandler, handlerData, this);
+            throw e;
+        }
+    }
+
+    /**
+     * 策略接口初始化
+     *
+     * @param handlerClass  handlerClass
+     * @param processResult processResult
+     * @param message       message
+     * @return ChainResult
+     */
+    private ChainResult init(Class<?> handlerClass, boolean processResult, String message) {
+        return new ChainResult(handlerClass, processResult, message);
     }
 
     /**
@@ -130,24 +182,26 @@ public abstract class AbstractChainPipeline<T> implements ChainPipeline<T> {
 
     /**
      * 开启整个pipeline执行，并构建返回结果，可子类覆写
+     * 如果最终结果为false，且fallback不为空，则自动触发全局降级处理
      *
      * @param handlerData handlerData
      * @return CompleteChainResult
      * @throws ChainException ChainException
      */
     @Override
-    public CompleteChainResult start(T handlerData) throws ChainException {
+    public CompleteChainResult apply(T handlerData) {
+        CompleteChainResult completeChainResult = null;
         try {
             this.doHandler(handlerData);
             List<ChainResult> chainResults = CHECK_RESULT.get();
-            return new CompleteChainResult(buildSuccess(chainResults), Collections.unmodifiableList(chainResults));
+            completeChainResult = new CompleteChainResult(buildSuccess(chainResults), Collections.unmodifiableList(chainResults));
+            fallBackResolver.handleGlobalFallBack(chainFallBack, handlerData, completeChainResult, null);
+            return completeChainResult;
         } catch (Exception e) {
-            throw new ChainException("chain unexpected exception", e);
+            fallBackResolver.handleGlobalFallBack(chainFallBack, handlerData, completeChainResult, e);
+            throw e;
         } finally {
             this.afterHandler();
-            if (chainFallBack != null) {
-                chainFallBack.fallBack(handlerData);
-            }
         }
     }
 

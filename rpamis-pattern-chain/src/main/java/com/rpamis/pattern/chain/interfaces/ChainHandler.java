@@ -14,22 +14,6 @@ import com.rpamis.pattern.chain.entity.ChainResult;
 public interface ChainHandler<T> {
 
     /**
-     * handler链式处理
-     *
-     * @param chainContext chainContext
-     */
-    default void handle(ChainContext<T> chainContext) {
-        ChainStrategy<T> strategy = chainContext.getStrategy();
-        T handlerData = chainContext.getHandlerData();
-        ChainPipeline<T> chain = chainContext.getChain();
-        // 具体某个handler处理
-        boolean processResult = this.process(handlerData);
-        // 根据策略进行返回值包装
-        ChainResult chainResult = strategy.init(this.getClass(), processResult, this.message());
-        strategy.doStrategy(handlerData, chain, chainResult);
-    }
-
-    /**
      * 责任链处理器执行接口
      * 执行具体handler,true表示执行成功,false表示执行失败
      *

@@ -10,9 +10,6 @@ public class ChainException extends RuntimeException {
 
     private static final long serialVersionUID = 1L;
 
-    public ChainException() {
-    }
-
     public ChainException(String message) {
         super(message);
     }

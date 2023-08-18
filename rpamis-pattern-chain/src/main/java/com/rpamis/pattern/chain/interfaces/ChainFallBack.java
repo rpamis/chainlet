@@ -1,5 +1,7 @@
 package com.rpamis.pattern.chain.interfaces;
 
+import com.rpamis.pattern.chain.entity.FallBackContext;
+
 /**
  * 责任链降级处理接口
  *
@@ -13,5 +15,5 @@ public interface ChainFallBack<T> {
      *
      * @param fallBackContext fallBackContext
      */
-    void fallBack(T fallBackContext);
+    void fallBack(FallBackContext<T> fallBackContext);
 }

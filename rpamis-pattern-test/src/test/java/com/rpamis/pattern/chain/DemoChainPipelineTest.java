@@ -48,7 +48,7 @@ public class DemoChainPipelineTest {
         when(demoUser.getRole()).thenReturn("normal");
 
         // then
-        CompleteChainResult chainResult = demoChain.start(demoUser);
+        CompleteChainResult chainResult = demoChain.apply(demoUser);
         boolean allow = chainResult.isAllow();
         Assert.assertFalse(allow);
         Boolean authResult = chainResult.get(AuthHandler.class);
@@ -73,7 +73,7 @@ public class DemoChainPipelineTest {
         when(demoUser.getRole()).thenReturn("admin");
 
         // then
-        CompleteChainResult chainResult = demoChain.start(demoUser);
+        CompleteChainResult chainResult = demoChain.apply(demoUser);
         boolean allow = chainResult.isAllow();
         Assert.assertTrue(allow);
         Boolean authResult = chainResult.get(AuthHandler.class);
@@ -98,7 +98,7 @@ public class DemoChainPipelineTest {
         when(demoUser.getRole()).thenReturn("normal");
 
         // then
-        CompleteChainResult chainResult = demoChain.start(demoUser);
+        CompleteChainResult chainResult = demoChain.apply(demoUser);
         boolean allow = chainResult.isAllow();
         Assert.assertFalse(allow);
         Boolean authResult = chainResult.get(AuthHandler.class);
@@ -123,7 +123,7 @@ public class DemoChainPipelineTest {
         when(demoUser.getRole()).thenReturn("normal");
 
         // then
-        CompleteChainResult chainResult = demoChain.start(demoUser);
+        CompleteChainResult chainResult = demoChain.apply(demoUser);
         boolean allow = chainResult.isAllow();
         Assert.assertFalse(allow);
         Boolean validResult = chainResult.get(ValidateHandler.class);
@@ -148,7 +148,7 @@ public class DemoChainPipelineTest {
         when(demoUser.getRole()).thenReturn("normal");
 
         // then
-        CompleteChainResult chainResult = demoChain.start(demoUser);
+        CompleteChainResult chainResult = demoChain.apply(demoUser);
         boolean allow = chainResult.isAllow();
         Assert.assertTrue(allow);
         Boolean validResult = chainResult.get(ValidateHandler.class);
@@ -173,7 +173,7 @@ public class DemoChainPipelineTest {
         when(demoUser.getRole()).thenReturn("normal");
 
         // then
-        CompleteChainResult chainResult = demoChain.start(demoUser);
+        CompleteChainResult chainResult = demoChain.apply(demoUser);
         boolean allow = chainResult.isAllow();
         Assert.assertFalse(allow);
         Boolean validResult = chainResult.get(ValidateHandler.class);
@@ -236,12 +236,12 @@ public class DemoChainPipelineTest {
                 .strategy(new FastFailedStrategy<>());
 
         // then
-        CompleteChainResult chainResult = demoChain.start(demoUser);
+        CompleteChainResult chainResult = demoChain.apply(demoUser);
         return chainResult.isAllow();
     }
 
     @Test
-    public void should_throwChainException_when_start_given_MockExceptionHandlerInChain() throws ChainException {
+    public void should_throwChainException_when_apply_given_MockExceptionHandlerInChain() throws ChainException {
         // given
         ChainPipeline<DemoUser> demoChain = new DemoChainPipeline()
                 .addHandler(new MockExceptionHandler());
@@ -250,6 +250,6 @@ public class DemoChainPipelineTest {
         when(demoUser.getPwd()).thenReturn("123");
         when(demoUser.getRole()).thenReturn("normal");
         // then
-        Assert.assertThrows(ChainException.class, () -> demoChain.start(demoUser));
+        Assert.assertThrows(ChainException.class, () -> demoChain.apply(demoUser));
     }
 }
