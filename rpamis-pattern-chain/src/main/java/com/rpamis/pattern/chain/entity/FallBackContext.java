@@ -19,14 +19,14 @@ public class FallBackContext<T> {
     CompleteChainResult completeChainResult;
 
     /**
-     * 责任链异常情况
+     * 责任链是否发生异常
      */
-    Exception exception;
+    Boolean exceptionOccurred;
 
-    public FallBackContext(T handlerData, CompleteChainResult completeChainResult, Exception exception) {
+    public FallBackContext(T handlerData, CompleteChainResult completeChainResult, Boolean exceptionOccurred) {
         this.handlerData = handlerData;
         this.completeChainResult = completeChainResult;
-        this.exception = exception;
+        this.exceptionOccurred = exceptionOccurred;
     }
 
     public T getHandlerData() {
@@ -41,16 +41,8 @@ public class FallBackContext<T> {
         return completeChainResult;
     }
 
-    public void setCompleteChainResult(CompleteChainResult completeChainResult) {
-        this.completeChainResult = completeChainResult;
-    }
-
-    public Exception getException() {
-        return exception;
-    }
-
-    public void setException(Exception exception) {
-        this.exception = exception;
+    public Boolean getExceptionOccurred() {
+        return exceptionOccurred;
     }
 
     @Override
@@ -58,7 +50,7 @@ public class FallBackContext<T> {
         return "FallBackContext{" +
                 "handlerData=" + handlerData +
                 ", completeChainResult=" + completeChainResult +
-                ", exception=" + exception +
+                ", exceptionOccurred=" + exceptionOccurred +
                 '}';
     }
 }

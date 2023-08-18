@@ -27,5 +27,5 @@ public @interface LocalChainFallback {
      *
      * @return boolean
      */
-    boolean enabled() default true;
+    boolean enable() default true;
 }

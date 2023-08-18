@@ -25,7 +25,8 @@ public class FallBackResolver<T> {
      * @param chainHandler chainHandler
      * @param handlerData  handlerData
      */
-    public void handleLocalFallBack(ChainHandler<T> chainHandler, T handlerData, AbstractChainPipeline<T> abstractChainPipeline) {
+    public void handleLocalFallBack(ChainHandler<T> chainHandler, T handlerData, AbstractChainPipeline<T> abstractChainPipeline,
+                                    Boolean haveException) {
         try {
             Class<?> actualGenericClass = ChainTypeReference.getGenericTypeClass(abstractChainPipeline);
             // 获取process接口Method
@@ -33,18 +34,18 @@ public class FallBackResolver<T> {
             if (processMethod.isAnnotationPresent(LocalChainFallback.class)) {
                 LocalChainFallback fallbackAnnotation = processMethod.getAnnotation(LocalChainFallback.class);
                 String fallbackMethodName = fallbackAnnotation.fallbackMethod();
-                boolean enabled = fallbackAnnotation.enabled();
+                boolean enabled = fallbackAnnotation.enable();
                 if (!enabled) {
                     return;
                 }
                 // 获取fallback接口Method
-                Method method = chainHandler.getClass().getMethod(fallbackMethodName, actualGenericClass);
+                Method method = chainHandler.getClass().getMethod(fallbackMethodName, actualGenericClass, Boolean.class);
                 Class<?> returnType = method.getReturnType();
                 if (!returnType.equals(Void.TYPE)) {
                     throw new ChainException("fallback method return value type error, must be void type");
                 }
                 // 执行fallback
-                method.invoke(chainHandler, handlerData);
+                method.invoke(chainHandler, handlerData, haveException);
             }
         } catch (NoSuchMethodException e) {
             throw new ChainException(chainHandler.getClass().getName() + "has no process interface", e);
@@ -64,9 +65,9 @@ public class FallBackResolver<T> {
      * @param handlerData         责任链处理主数据
      * @param completeChainResult 责任链执行最终结果实体类
      */
-    public void handleGlobalFallBack(ChainFallBack<T> chainFallBack, T handlerData, CompleteChainResult completeChainResult, Exception exception) {
-        FallBackContext<T> fallBackContext = new FallBackContext<>(handlerData, completeChainResult, exception);
-        if (exception == null) {
+    public void handleGlobalFallBack(ChainFallBack<T> chainFallBack, T handlerData, CompleteChainResult completeChainResult, Boolean exceptionOccurred) {
+        FallBackContext<T> fallBackContext = new FallBackContext<>(handlerData, completeChainResult, exceptionOccurred);
+        if (!exceptionOccurred) {
             boolean allow = completeChainResult.isAllow();
             if (chainFallBack != null && !allow) {
                 chainFallBack.fallBack(fallBackContext);

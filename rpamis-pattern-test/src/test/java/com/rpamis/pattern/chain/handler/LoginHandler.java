@@ -24,7 +24,7 @@ public class LoginHandler implements ChainHandler<DemoUser> {
         }
     }
 
-    public void testFallback(DemoUser demoUser) {
+    public void testFallback(DemoUser demoUser, Boolean exceptionOccurred) {
         System.out.println(1);
     }
 }

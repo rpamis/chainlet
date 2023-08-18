@@ -13,7 +13,7 @@ import com.rpamis.pattern.chain.interfaces.GlobalChainFallBack;
 public class DemoChainGlobalFallBack implements GlobalChainFallBack<DemoUser> {
     @Override
     public void fallBack(FallBackContext<DemoUser> fallBackContext) {
-        Exception exception = fallBackContext.getException();
+        Boolean exceptionOccurred = fallBackContext.getExceptionOccurred();
         System.out.println(1);
     }
 }

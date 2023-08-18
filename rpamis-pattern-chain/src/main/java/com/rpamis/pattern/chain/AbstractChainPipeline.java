@@ -150,11 +150,11 @@ public abstract class AbstractChainPipeline<T> implements ChainPipeline<T> {
             boolean processResult = chainHandler.process(handlerData);
             // 如果处理不成功则调用降级方法，具体是否调用需查看降级注解中enabled值
             if (!processResult) {
-                fallBackResolver.handleLocalFallBack(chainHandler, handlerData, this);
+                fallBackResolver.handleLocalFallBack(chainHandler, handlerData, this, false);
             }
             return processResult;
         } catch (Exception e) {
-            fallBackResolver.handleLocalFallBack(chainHandler, handlerData, this);
+            fallBackResolver.handleLocalFallBack(chainHandler, handlerData, this, true);
             throw e;
         }
     }
@@ -195,10 +195,10 @@ public abstract class AbstractChainPipeline<T> implements ChainPipeline<T> {
             this.doHandler(handlerData);
             List<ChainResult> chainResults = CHECK_RESULT.get();
             completeChainResult = new CompleteChainResult(buildSuccess(chainResults), Collections.unmodifiableList(chainResults));
-            fallBackResolver.handleGlobalFallBack(chainFallBack, handlerData, completeChainResult, null);
+            fallBackResolver.handleGlobalFallBack(chainFallBack, handlerData, completeChainResult, false);
             return completeChainResult;
         } catch (Exception e) {
-            fallBackResolver.handleGlobalFallBack(chainFallBack, handlerData, completeChainResult, e);
+            fallBackResolver.handleGlobalFallBack(chainFallBack, handlerData, completeChainResult, true);
             throw e;
         } finally {
             this.afterHandler();
