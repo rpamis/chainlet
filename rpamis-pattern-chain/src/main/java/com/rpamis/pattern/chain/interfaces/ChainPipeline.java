@@ -1,7 +1,14 @@
 package com.rpamis.pattern.chain.interfaces;
 
 
+import com.rpamis.pattern.chain.FallBackResolver;
+import com.rpamis.pattern.chain.entity.ChainContext;
+import com.rpamis.pattern.chain.entity.ChainException;
+import com.rpamis.pattern.chain.entity.ChainResult;
 import com.rpamis.pattern.chain.entity.CompleteChainResult;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 泛型责任链流水线接口
@@ -10,15 +17,7 @@ import com.rpamis.pattern.chain.entity.CompleteChainResult;
  * @author benym
  * @date 2023/3/8 18:24
  */
-public interface ChainPipeline<T> {
-
-    /**
-     * 添加Handler处理
-     *
-     * @param handler 具体的Handler处理类
-     * @return ChainPipeline<T>责任链流水线
-     */
-    ChainPipeline<T> addHandler(ChainHandler<T> handler);
+public interface ChainPipeline<T> extends Apply<T> {
 
     /**
      * 流水线执行Handler处理
@@ -31,28 +30,4 @@ public interface ChainPipeline<T> {
      * 流水线执行Handler后的处理
      */
     void afterHandler();
-
-    /**
-     * 责任链执行策略
-     *
-     * @param strategy strategy
-     * @return ChainPipeline
-     */
-    ChainPipeline<T> strategy(ChainStrategy<T> strategy);
-
-    /**
-     * 责任链全局降级策略
-     *
-     * @param fallBack fallBack
-     * @return ChainPipeline
-     */
-    ChainPipeline<T> globalFallback(ChainFallBack<T> fallBack);
-
-    /**
-     * 责任链流水线执行入口
-     *
-     * @param handlerData handlerData
-     * @return boolean
-     */
-    CompleteChainResult apply(T handlerData);
 }

@@ -16,7 +16,8 @@ public class Test {
         ChainPipeline<DemoUser> demoChain = new DemoChainPipeline()
                 .addHandler(new LoginHandler())
                 .strategy(new FastReturnStrategy<>())
-                .globalFallback(new DemoChainGlobalFallBack());
+                .globalFallback(new DemoChainGlobalFallBack())
+                .build();
         DemoUser demoUser = new DemoUser("12", "2", "3");
         CompleteChainResult start = demoChain.apply(demoUser);
 //        DemoUser demoUser2 = new DemoUser("test", "123", "3");

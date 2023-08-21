@@ -2,10 +2,7 @@ package com.rpamis.pattern.chain;
 
 
 import com.rpamis.pattern.chain.entity.*;
-import com.rpamis.pattern.chain.interfaces.ChainFallBack;
-import com.rpamis.pattern.chain.interfaces.ChainHandler;
-import com.rpamis.pattern.chain.interfaces.ChainPipeline;
-import com.rpamis.pattern.chain.interfaces.ChainStrategy;
+import com.rpamis.pattern.chain.interfaces.*;
 import com.rpamis.pattern.chain.strategy.FastFailedStrategy;
 import com.rpamis.pattern.chain.strategy.FastReturnStrategy;
 import com.rpamis.pattern.chain.strategy.FullExecutionStrategy;
@@ -27,7 +24,7 @@ import java.util.stream.Collectors;
  * @author benym
  * @date 2023/2/1 17:33
  */
-public abstract class AbstractChainPipeline<T> implements ChainPipeline<T> {
+public abstract class AbstractChainPipeline<T> implements ChainPipeline<T>, Add<T>, Apply<T>, With<T>, Builder<T> {
 
     /**
      * 记录当前Handler位置
@@ -71,7 +68,7 @@ public abstract class AbstractChainPipeline<T> implements ChainPipeline<T> {
      * @return ChainPipeline
      */
     @Override
-    public final ChainPipeline<T> strategy(ChainStrategy<T> strategy) {
+    public With<T> strategy(ChainStrategy<T> strategy) {
         this.chainStrategy = strategy;
         return this;
     }
@@ -83,7 +80,7 @@ public abstract class AbstractChainPipeline<T> implements ChainPipeline<T> {
      * @return ChainPipeline
      */
     @Override
-    public final ChainPipeline<T> globalFallback(ChainFallBack<T> fallBack) {
+    public With<T> globalFallback(ChainFallBack<T> fallBack) {
         this.chainFallBack = fallBack;
         return this;
     }
@@ -95,7 +92,7 @@ public abstract class AbstractChainPipeline<T> implements ChainPipeline<T> {
      * @return ChainPipeline<T>
      */
     @Override
-    public ChainPipeline<T> addHandler(ChainHandler<T> handler) {
+    public Add<T> addHandler(ChainHandler<T> handler) {
         this.handlerList.add(handler);
         this.n++;
         return this;
@@ -218,5 +215,10 @@ public abstract class AbstractChainPipeline<T> implements ChainPipeline<T> {
     private boolean buildSuccess(List<ChainResult> checkResult) {
         return !checkResult.stream().map(ChainResult::isProcessResult)
                 .collect(Collectors.toList()).contains(Boolean.FALSE);
+    }
+
+    @Override
+    public ChainPipeline<T> build() {
+        return this;
     }
 }
