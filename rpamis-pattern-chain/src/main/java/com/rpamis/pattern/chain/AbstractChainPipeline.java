@@ -134,7 +134,7 @@ public abstract class AbstractChainPipeline<T> implements ChainPipeline<T> {
         ChainHandler<T> chainHandler = chainContext.getChainHandler();
         Boolean processResult = this.concreteHandlerProcess(chainHandler, handlerData);
         // 根据策略进行返回值包装
-        ChainResult chainResult = this.init(this.getClass(), processResult, chainHandler.message());
+        ChainResult chainResult = this.init(chainHandler.getClass(), processResult, chainHandler.message());
         strategy.doStrategy(handlerData, chain, chainResult);
     }
 
