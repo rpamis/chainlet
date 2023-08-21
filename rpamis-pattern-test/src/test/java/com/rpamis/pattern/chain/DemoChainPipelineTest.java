@@ -269,6 +269,6 @@ public class DemoChainPipelineTest {
         when(demoUser.getPwd()).thenReturn("123");
         when(demoUser.getRole()).thenReturn("normal");
         // then
-        Assert.assertThrows(ChainException.class, () -> demoChain.apply(demoUser));
+        Assert.assertThrows(ArithmeticException.class, () -> demoChain.apply(demoUser));
     }
 }

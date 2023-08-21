@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -57,7 +58,9 @@ public class CompleteChainResult implements Serializable {
      * @return 处理结果true/false
      */
     public <T> Boolean get(Class<T> cls) {
-        return chainResultMap.get(cls).isProcessResult();
+        return Optional.ofNullable(chainResultMap.get(cls))
+                .map(ChainResult::isProcessResult)
+                .orElse(null);
     }
 
     /**
@@ -68,8 +71,9 @@ public class CompleteChainResult implements Serializable {
      * @return 处理结果true/false
      */
     public <T> Boolean verifyIfFail(Class<T> handlerClass) {
-        Boolean result = this.get(handlerClass);
-        return result != null && !result;
+        return Optional.ofNullable(this.get(handlerClass))
+                .map(result -> !result)
+                .orElse(false);
     }
 
     /**
@@ -80,8 +84,8 @@ public class CompleteChainResult implements Serializable {
      * @return 处理结果true/false
      */
     public <T> Boolean verifyIfSuccess(Class<T> handlerClass) {
-        Boolean result = this.get(handlerClass);
-        return result != null && result;
+        return Optional.ofNullable(this.get(handlerClass))
+                .orElse(false);
     }
 
     /**
