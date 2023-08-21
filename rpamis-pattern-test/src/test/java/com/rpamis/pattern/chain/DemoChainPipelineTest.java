@@ -39,9 +39,10 @@ public class DemoChainPipelineTest {
 
     @Test
     public void should_returnFalse_when_isAllow_given_chainInFullExecutionStrategy() throws ChainException {
+        ChainPipelineBuilder<DemoUser> chainPipelineBuilder = ChainPipelineFactory.createChain();
         // given
-        ChainPipeline<DemoUser> demoChain = ChainPipelineFactory
-                .chain(DemoUser.class)
+        ChainPipeline<DemoUser> demoChain = chainPipelineBuilder
+                .chain()
                 .addHandler(new AuthHandler())
                 .addHandler(new ValidateHandler())
                 .addHandler(new LoginHandler())
@@ -66,9 +67,10 @@ public class DemoChainPipelineTest {
 
     @Test
     public void should_returnTrue_when_isAllow_given_chainInFullExecutionStrategy() throws ChainException {
+        ChainPipelineBuilder<DemoUser> chainPipelineBuilder = ChainPipelineFactory.createChain();
         // given
-        ChainPipeline<DemoUser> demoChain = ChainPipelineFactory
-                .chain(DemoUser.class)
+        ChainPipeline<DemoUser> demoChain = chainPipelineBuilder
+                .chain()
                 .addHandler(new AuthHandler())
                 .addHandler(new ValidateHandler())
                 .addHandler(new LoginHandler())
@@ -93,9 +95,10 @@ public class DemoChainPipelineTest {
 
     @Test
     public void should_returnFalse_when_isAllow_given_chainInFastFailedStrategy() throws ChainException {
+        ChainPipelineBuilder<DemoUser> chainPipelineBuilder = ChainPipelineFactory.createChain();
         // given
-        ChainPipeline<DemoUser> demoChain = ChainPipelineFactory
-                .chain(DemoUser.class)
+        ChainPipeline<DemoUser> demoChain = chainPipelineBuilder
+                .chain()
                 .addHandler(new AuthHandler())
                 .addHandler(new ValidateHandler())
                 .addHandler(new LoginHandler())
@@ -120,9 +123,10 @@ public class DemoChainPipelineTest {
 
     @Test
     public void should_returnFalse_when_isAllow_given_chainInFastFailedStrategySwitch() throws ChainException {
+        ChainPipelineBuilder<DemoUser> chainPipelineBuilder = ChainPipelineFactory.createChain();
         // given
-        ChainPipeline<DemoUser> demoChain = ChainPipelineFactory
-                .chain(DemoUser.class)
+        ChainPipeline<DemoUser> demoChain = chainPipelineBuilder
+                .chain()
                 .addHandler(new ValidateHandler())
                 .addHandler(new AuthHandler())
                 .addHandler(new LoginHandler())
@@ -147,9 +151,10 @@ public class DemoChainPipelineTest {
 
     @Test
     public void should_returnTrue_when_isAllow_given_chainInFastReturnStrategy() throws ChainException {
+        ChainPipelineBuilder<DemoUser> chainPipelineBuilder = ChainPipelineFactory.createChain();
         // given
-        ChainPipeline<DemoUser> demoChain = ChainPipelineFactory
-                .chain(DemoUser.class)
+        ChainPipeline<DemoUser> demoChain = chainPipelineBuilder
+                .chain()
                 .addHandler(new ValidateHandler())
                 .addHandler(new AuthHandler())
                 .addHandler(new LoginHandler())
@@ -174,9 +179,10 @@ public class DemoChainPipelineTest {
 
     @Test
     public void should_returnTrue_when_isAllow_given_chainInFastReturnStrategySwitch() throws ChainException {
+        ChainPipelineBuilder<DemoUser> chainPipelineBuilder = ChainPipelineFactory.createChain();
         // given
-        ChainPipeline<DemoUser> demoChain = ChainPipelineFactory
-                .chain(DemoUser.class)
+        ChainPipeline<DemoUser> demoChain = chainPipelineBuilder
+                .chain()
                 .addHandler(new AuthHandler())
                 .addHandler(new ValidateHandler())
                 .addHandler(new LoginHandler())
@@ -201,8 +207,9 @@ public class DemoChainPipelineTest {
 
     @Test
     public void should_throwException_when_addSameHandler_given_anyChain() {
+        ChainPipelineBuilder<DemoUser> chainPipelineBuilder = ChainPipelineFactory.createChain();
         // given
-        SerialChainPipelineBuilder<DemoUser> demoChain = spy(ChainPipelineFactory.chain(DemoUser.class));
+        SerialChainPipelineBuilder<DemoUser> demoChain = chainPipelineBuilder.chain();
         // when
         demoChain.addHandler(mock(ValidateHandler.class));
         // then
@@ -243,9 +250,10 @@ public class DemoChainPipelineTest {
     }
 
     private boolean executeChain(DemoUser demoUser) throws ChainException {
+        ChainPipelineBuilder<DemoUser> chainPipelineBuilder = ChainPipelineFactory.createChain();
         // given
-        ChainPipeline<DemoUser> demoChain = ChainPipelineFactory
-                .chain(DemoUser.class)
+        ChainPipeline<DemoUser> demoChain = chainPipelineBuilder
+                .chain()
                 .addHandler(new AuthHandler())
                 .addHandler(new ValidateHandler())
                 .addHandler(new LoginHandler())
@@ -259,9 +267,10 @@ public class DemoChainPipelineTest {
 
     @Test
     public void should_throwChainException_when_apply_given_MockExceptionHandlerInChain() throws ChainException {
+        ChainPipelineBuilder<DemoUser> chainPipelineBuilder = ChainPipelineFactory.createChain();
         // given
-        ChainPipeline<DemoUser> demoChain = ChainPipelineFactory
-                .chain(DemoUser.class)
+        ChainPipeline<DemoUser> demoChain = chainPipelineBuilder
+                .chain()
                 .addHandler(new MockExceptionHandler())
                 .build();
         // when
