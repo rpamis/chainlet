@@ -68,7 +68,7 @@ public class FallBackResolver<T> {
      */
     public void handleGlobalFallBack(ChainFallBack<T> chainFallBack, T handlerData, CompleteChainResult completeChainResult, Boolean exceptionOccurred) {
         FallBackContext<T> fallBackContext = new FallBackContext<>(handlerData, completeChainResult, exceptionOccurred);
-        if (!exceptionOccurred) {
+        if (Boolean.FALSE.equals(exceptionOccurred)) {
             boolean allow = completeChainResult.isAllow();
             if (chainFallBack != null && !allow) {
                 chainFallBack.fallBack(fallBackContext);
