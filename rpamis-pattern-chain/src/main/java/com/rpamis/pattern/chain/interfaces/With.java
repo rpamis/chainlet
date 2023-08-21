@@ -4,7 +4,7 @@ package com.rpamis.pattern.chain.interfaces;
  * @author benym
  * @date 2023/8/21 15:09
  */
-public interface With<T> extends Apply<T> {
+public interface With<T> extends Apply<T>, Builder<T> {
 
     /**
      * 责任链执行策略

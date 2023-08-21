@@ -7,6 +7,11 @@ import com.rpamis.pattern.chain.SerialChainPipelineImpl;
  * @date 2023/8/21 17:10
  */
 public class ChainPipelineBuilderImpl<T> implements ChainPipelineBuilder<T>{
+
+    public ChainPipelineBuilderImpl(Class<T> type) {
+
+    }
+
     @Override
     public SerialChainPipelineBuilder<T> createSerialChain() {
         return new SerialChainPipelineImpl<>();

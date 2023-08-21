@@ -6,7 +6,7 @@ import com.rpamis.pattern.chain.entity.CompleteChainResult;
  * @author benym
  * @date 2023/8/21 16:54
  */
-public interface Apply<T> extends Builder<T> {
+public interface Apply<T> {
 
     /**
      * 责任链流水线执行入口

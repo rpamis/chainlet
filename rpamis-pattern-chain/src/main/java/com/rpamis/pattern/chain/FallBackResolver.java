@@ -7,7 +7,6 @@ import com.rpamis.pattern.chain.entity.FallBackContext;
 import com.rpamis.pattern.chain.generic.ChainTypeReference;
 import com.rpamis.pattern.chain.interfaces.ChainFallBack;
 import com.rpamis.pattern.chain.interfaces.ChainHandler;
-import com.rpamis.pattern.chain.interfaces.ChainPipeline;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -26,10 +25,9 @@ public class FallBackResolver<T> {
      * @param chainHandler chainHandler
      * @param handlerData  handlerData
      */
-    public void handleLocalFallBack(ChainHandler<T> chainHandler, T handlerData, ChainPipeline<T> chainPipeline,
-                                    Boolean haveException) {
+    public void handleLocalFallBack(ChainHandler<T> chainHandler, T handlerData, Boolean haveException) {
         try {
-            Class<?> actualGenericClass = ChainTypeReference.getGenericTypeClass(chainPipeline);
+            Class<?> actualGenericClass = ChainTypeReference.getGenericTypeClass(handlerData);
             // 获取process接口Method
             Method processMethod = chainHandler.getClass().getMethod("process", actualGenericClass);
             if (processMethod.isAnnotationPresent(LocalChainFallback.class)) {

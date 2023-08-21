@@ -7,16 +7,16 @@ package com.rpamis.pattern.chain.builder;
 public class ChainPipelineFactory {
 
     public static <T> SerialChainPipelineBuilder<T> chain(Class<T> type) {
-        ChainPipelineBuilder<T> chain = createChain();
+        ChainPipelineBuilder<T> chain = createChain(type);
         return chain.createSerialChain();
     }
 
     public static <T> ParallelChainPipelineBuilder<T> parallelChain(Class<T> type){
-        ChainPipelineBuilder<T> chain = createChain();
+        ChainPipelineBuilder<T> chain = createChain(type);
         return chain.createParallelChain();
     }
 
-    private static <T> ChainPipelineBuilder<T> createChain(){
-        return new ChainPipelineBuilderImpl<>();
+    private static <T> ChainPipelineBuilder<T> createChain(Class<T> type){
+        return new ChainPipelineBuilderImpl<>(type);
     }
 }

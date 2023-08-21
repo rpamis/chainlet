@@ -16,6 +16,7 @@ public class ChainTypeReference {
     /**
      * 获取运行时真实泛型
      * 如获取A<T>时候的T的Type
+     * 获取T data时的T的Type
      *
      * @param genericClass 泛型类
      * @param <T>          <T>
@@ -29,6 +30,9 @@ public class ChainTypeReference {
         if (type instanceof ParameterizedType) {
             Type[] types = ((ParameterizedType) type).getActualTypeArguments();
             return types[0];
+        }
+        if (type instanceof Class) {
+            return type;
         }
         return null;
     }
