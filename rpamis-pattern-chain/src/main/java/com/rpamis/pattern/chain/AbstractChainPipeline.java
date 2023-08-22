@@ -2,6 +2,7 @@ package com.rpamis.pattern.chain;
 
 
 import com.rpamis.pattern.chain.entity.*;
+import com.rpamis.pattern.chain.generic.ChainTypeReference;
 import com.rpamis.pattern.chain.interfaces.*;
 import com.rpamis.pattern.chain.strategy.FastFailedStrategy;
 import com.rpamis.pattern.chain.strategy.FastReturnStrategy;
@@ -35,6 +36,8 @@ public abstract class AbstractChainPipeline<T> implements ChainPipeline<T>, Add<
      */
     private int n = 0;
 
+    private final ChainTypeReference<T> chainTypeReference;
+
     /**
      * 执行策略
      */
@@ -60,9 +63,12 @@ public abstract class AbstractChainPipeline<T> implements ChainPipeline<T>, Add<
      */
     public static final ThreadLocal<List<ChainResult>> CHECK_RESULT = ThreadLocal.withInitial(ArrayList::new);
 
+    protected AbstractChainPipeline(ChainTypeReference<T> chainTypeReference) {
+        this.chainTypeReference = chainTypeReference;
+    }
 
     /**
-     * 设置执行策略，不可子类覆写
+     * 设置执行策略
      *
      * @param strategy strategy
      * @return ChainPipeline
@@ -74,7 +80,7 @@ public abstract class AbstractChainPipeline<T> implements ChainPipeline<T>, Add<
     }
 
     /**
-     * 设置降级处理，不可子类覆写
+     * 设置降级处理
      *
      * @param fallBack fallBack
      * @return ChainPipeline
@@ -86,7 +92,7 @@ public abstract class AbstractChainPipeline<T> implements ChainPipeline<T>, Add<
     }
 
     /**
-     * 添加handler实现到责任链流水线中，可子类覆写
+     * 添加handler实现到责任链流水线中
      *
      * @param handler handler
      * @return ChainPipeline<T>
@@ -99,7 +105,7 @@ public abstract class AbstractChainPipeline<T> implements ChainPipeline<T>, Add<
     }
 
     /**
-     * 执行责任链，可子类覆写
+     * 执行责任链
      *
      * @param handlerData handlerData
      */
@@ -110,7 +116,7 @@ public abstract class AbstractChainPipeline<T> implements ChainPipeline<T>, Add<
             ChainHandler<T> chainHandler = handlerList.get(this.pos++);
             ChainContext<T> chainContext = new ChainContext<>(handlerData, this,
                     this.chainStrategy, chainHandler);
-            this.handle(chainContext);
+            this.handlePipeline(chainContext);
             if (this.chainStrategy instanceof FastReturnStrategy
                     || this.chainStrategy instanceof FastFailedStrategy
                     || this.chainStrategy instanceof FullExecutionStrategy) {
@@ -124,14 +130,14 @@ public abstract class AbstractChainPipeline<T> implements ChainPipeline<T>, Add<
      *
      * @param chainContext chainContext
      */
-    private void handle(ChainContext<T> chainContext) {
+    private void handlePipeline(ChainContext<T> chainContext) {
         ChainStrategy<T> strategy = chainContext.getStrategy();
         T handlerData = chainContext.getHandlerData();
         ChainPipeline<T> chain = chainContext.getChain();
         ChainHandler<T> chainHandler = chainContext.getChainHandler();
         Boolean processResult = this.concreteHandlerProcess(chainHandler, handlerData);
         // 根据策略进行返回值包装
-        ChainResult chainResult = this.init(chainHandler.getClass(), processResult, chainHandler.message());
+        ChainResult chainResult = this.initSingleChainResult(chainHandler.getClass(), processResult, chainHandler.message());
         strategy.doStrategy(handlerData, chain, chainResult);
     }
 
@@ -147,31 +153,31 @@ public abstract class AbstractChainPipeline<T> implements ChainPipeline<T>, Add<
             boolean processResult = chainHandler.process(handlerData);
             // 如果处理不成功则调用降级方法，具体是否调用需查看降级注解中enabled值
             if (!processResult) {
-                fallBackResolver.handleLocalFallBack(chainHandler, handlerData, false);
+                fallBackResolver.handleLocalFallBack(chainHandler, handlerData, chainTypeReference, false);
             }
             return processResult;
         } catch (ChainException e) {
             throw e;
         } catch (Exception e) {
-            fallBackResolver.handleLocalFallBack(chainHandler, handlerData, true);
+            fallBackResolver.handleLocalFallBack(chainHandler, handlerData, chainTypeReference, true);
             throw e;
         }
     }
 
     /**
-     * 策略接口初始化
+     * 单一责任链结果初始化
      *
-     * @param handlerClass  handlerClass
-     * @param processResult processResult
-     * @param message       message
+     * @param handlerClass  责任链具体处理类Class
+     * @param processResult 责任链处理结果
+     * @param message       责任链处理自定义消息
      * @return ChainResult
      */
-    private ChainResult init(Class<?> handlerClass, boolean processResult, String message) {
+    private ChainResult initSingleChainResult(Class<?> handlerClass, boolean processResult, String message) {
         return new ChainResult(handlerClass, processResult, message);
     }
 
     /**
-     * 执行后逻辑，可子类覆写
+     * 执行后逻辑
      */
     @Override
     public void afterHandler() {
@@ -180,10 +186,10 @@ public abstract class AbstractChainPipeline<T> implements ChainPipeline<T>, Add<
     }
 
     /**
-     * 开启整个pipeline执行，并构建返回结果，可子类覆写
+     * 开启整个pipeline执行，并构建返回结果
      * 如果最终结果为false，且fallback不为空，则自动触发全局降级处理
      *
-     * @param handlerData handlerData
+     * @param handlerData 责任链处理主数据
      * @return CompleteChainResult
      * @throws ChainException ChainException
      */
@@ -209,10 +215,10 @@ public abstract class AbstractChainPipeline<T> implements ChainPipeline<T>, Add<
     /**
      * 构建整个链执行结果，如果存在false则整体为false
      *
-     * @param checkResult checkResult
+     * @param checkResult 责任链整链结果List
      * @return boolean
      */
-    private boolean buildSuccess(List<ChainResult> checkResult) {
+    public boolean buildSuccess(List<ChainResult> checkResult) {
         return !checkResult.stream().map(ChainResult::isProcessResult)
                 .collect(Collectors.toList()).contains(Boolean.FALSE);
     }

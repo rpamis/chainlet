@@ -1,9 +1,6 @@
 package com.rpamis.pattern.chain.interfaces;
 
 
-import com.rpamis.pattern.chain.entity.ChainContext;
-import com.rpamis.pattern.chain.entity.ChainResult;
-
 /**
  * 泛型责任链Handler接口
  *

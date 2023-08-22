@@ -3,8 +3,8 @@ package com.rpamis.pattern.chain.entity;
 /**
  * 责任链Handler处理异常
  *
- * @date 2023/3/5 17:40
  * @author benym
+ * @date 2023/3/5 17:40
  */
 public class ChainException extends RuntimeException {
 
@@ -16,9 +16,5 @@ public class ChainException extends RuntimeException {
 
     public ChainException(String message, Throwable rootCause) {
         super(message, rootCause);
-    }
-
-    public ChainException(Throwable rootCause) {
-        super(rootCause);
     }
 }

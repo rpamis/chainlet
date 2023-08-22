@@ -5,8 +5,8 @@ import java.io.Serializable;
 /**
  * 单个责任链结果存储实体
  *
- * @date 2023/3/7 14:41
  * @author benym
+ * @date 2023/3/7 14:41
  */
 public class ChainResult implements Serializable {
 

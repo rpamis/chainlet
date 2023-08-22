@@ -25,9 +25,9 @@ public class FallBackResolver<T> {
      * @param chainHandler chainHandler
      * @param handlerData  handlerData
      */
-    public void handleLocalFallBack(ChainHandler<T> chainHandler, T handlerData, Boolean haveException) {
+    public void handleLocalFallBack(ChainHandler<T> chainHandler, T handlerData, ChainTypeReference<T> reference, Boolean haveException) {
         try {
-            Class<?> actualGenericClass = ChainTypeReference.getGenericTypeClass(handlerData);
+            Class<?> actualGenericClass = ChainTypeReference.getGenericTypeClass();
             // 获取process接口Method
             Method processMethod = chainHandler.getClass().getMethod("process", actualGenericClass);
             if (processMethod.isAnnotationPresent(LocalChainFallback.class)) {
@@ -47,10 +47,11 @@ public class FallBackResolver<T> {
                 method.invoke(chainHandler, handlerData, haveException);
             }
         } catch (NoSuchMethodException e) {
-            throw new ChainException(chainHandler.getClass().getName() + "has no process interface", e);
+            throw new ChainException(chainHandler.getClass().getName() + "without correct process interface", e);
         } catch (InvocationTargetException | IllegalAccessException e) {
             throw new ChainException(chainHandler.getClass().getName()
-                    + "without correct fallback interface, the method signature need to consistent with the process interface", e);
+                    + "without correct fallback interface, the method signature requires at least 2 input parameters, " +
+                    "one for the process method and the other for Boolean type", e);
         } catch (ClassNotFoundException e) {
             throw new ChainException("The true generic Class for " + chainHandler.getClass().getName() + " was not found", e);
         }

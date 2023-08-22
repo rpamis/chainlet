@@ -11,7 +11,7 @@ import java.lang.reflect.Type;
  * @author benym
  * @date 2023/8/17 16:29
  */
-public class ChainTypeReference {
+public abstract class ChainTypeReference<T> {
 
     /**
      * 获取运行时真实泛型
@@ -31,15 +31,13 @@ public class ChainTypeReference {
             Type[] types = ((ParameterizedType) type).getActualTypeArguments();
             return types[0];
         }
-        if (type instanceof Class) {
-            return type;
-        }
         return null;
     }
 
     /**
      * 获取运行时泛型实际类型Class
      * 如获取A<T>时候的T的Class
+     * 获取T data时的T的Class
      *
      * @param genericClass 泛型类
      * @param <T>          <T>
@@ -47,9 +45,12 @@ public class ChainTypeReference {
      * @throws ClassNotFoundException ClassNotFoundException
      */
     public static <T> Class<?> getGenericTypeClass(T genericClass) throws ClassNotFoundException {
-        Type type = ChainTypeReference.getGenericType(genericClass);
+        Type type = getGenericType(genericClass);
         if (type == null) {
             throw new ChainException("Unable to get generic class at runtime");
+        }
+        if (type instanceof ParameterizedType) {
+            return (Class<?>) ((ParameterizedType) type).getRawType();
         }
         String typeName = type.getTypeName();
         return Class.forName(typeName);

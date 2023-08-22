@@ -1,6 +1,8 @@
 package com.rpamis.pattern.chain.builder;
 
 /**
+ * 责任链Builder接口
+ *
  * @author benym
  * @date 2023/8/21 16:55
  */

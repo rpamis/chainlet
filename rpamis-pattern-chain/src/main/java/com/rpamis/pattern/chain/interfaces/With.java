@@ -1,6 +1,8 @@
 package com.rpamis.pattern.chain.interfaces;
 
 /**
+ * With接口
+ *
  * @author benym
  * @date 2023/8/21 15:09
  */

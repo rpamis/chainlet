@@ -72,7 +72,6 @@ public class ChainContext<T> {
     }
 
 
-
     @Override
     public String toString() {
         return "ChainContext{" +
