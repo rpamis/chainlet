@@ -2,7 +2,7 @@ package com.rpamis.pattern.chain.handler;
 
 import com.rpamis.pattern.chain.DemoUser;
 import com.rpamis.pattern.chain.annotation.LocalChainFallback;
-import com.rpamis.pattern.chain.entity.ChainException;
+import com.rpamis.pattern.chain.entity.LocalFallBackContext;
 import com.rpamis.pattern.chain.interfaces.ChainHandler;
 
 /**
@@ -20,11 +20,11 @@ public class LoginHandler implements ChainHandler<DemoUser> {
             System.out.println("login success");
             return true;
         } else {
-            throw new ChainException("2131");
+            throw new RuntimeException("2131");
         }
     }
 
-    public void testFallback(DemoUser demoUser, Boolean exceptionOccurred) {
+    public void testFallback(LocalFallBackContext<DemoUser> localFallBackContext) {
         System.out.println(1);
     }
 }

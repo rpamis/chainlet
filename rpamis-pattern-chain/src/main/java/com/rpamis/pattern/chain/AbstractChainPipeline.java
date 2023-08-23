@@ -153,13 +153,15 @@ public abstract class AbstractChainPipeline<T> implements ChainPipeline<T>, Add<
             boolean processResult = chainHandler.process(handlerData);
             // 如果处理不成功则调用降级方法，具体是否调用需查看降级注解中enabled值
             if (!processResult) {
-                fallBackResolver.handleLocalFallBack(chainHandler, handlerData, chainTypeReference, false);
+                LocalFallBackContext<T> localFallBackContext = new LocalFallBackContext<>(handlerData,false);
+                fallBackResolver.handleLocalFallBack(chainHandler, localFallBackContext, chainTypeReference);
             }
             return processResult;
         } catch (ChainException e) {
             throw e;
         } catch (Exception e) {
-            fallBackResolver.handleLocalFallBack(chainHandler, handlerData, chainTypeReference, true);
+            LocalFallBackContext<T> localFallBackContext = new LocalFallBackContext<>(handlerData,true);
+            fallBackResolver.handleLocalFallBack(chainHandler, localFallBackContext, chainTypeReference);
             throw e;
         }
     }

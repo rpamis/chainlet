@@ -1,9 +1,7 @@
 package com.rpamis.pattern.chain;
 
 import com.rpamis.pattern.chain.annotation.LocalChainFallback;
-import com.rpamis.pattern.chain.entity.ChainException;
-import com.rpamis.pattern.chain.entity.CompleteChainResult;
-import com.rpamis.pattern.chain.entity.FallBackContext;
+import com.rpamis.pattern.chain.entity.*;
 import com.rpamis.pattern.chain.generic.ChainTypeReference;
 import com.rpamis.pattern.chain.interfaces.ChainFallBack;
 import com.rpamis.pattern.chain.interfaces.ChainHandler;
@@ -22,10 +20,11 @@ public class FallBackResolver<T> {
     /**
      * 处理责任链局部降级方法
      *
-     * @param chainHandler chainHandler
-     * @param handlerData  handlerData
+     * @param chainHandler         责任链具体处理者
+     * @param localFallBackContext 责任链局部降级上下文
+     * @param reference            责任链TypeReference
      */
-    public void handleLocalFallBack(ChainHandler<T> chainHandler, T handlerData, ChainTypeReference<T> reference, Boolean haveException) {
+    public void handleLocalFallBack(ChainHandler<T> chainHandler, LocalFallBackContext<T> localFallBackContext, ChainTypeReference<T> reference) {
         try {
             Class<? super T> actualGenericClass = reference.getGenericClass();
             // 获取process接口Method
@@ -38,19 +37,19 @@ public class FallBackResolver<T> {
                     return;
                 }
                 // 获取fallback接口Method
-                Method method = chainHandler.getClass().getMethod(fallbackMethodName, actualGenericClass, Boolean.class);
+                Method method = chainHandler.getClass().getMethod(fallbackMethodName, LocalFallBackContext.class);
                 Class<?> returnType = method.getReturnType();
                 if (!returnType.equals(Void.TYPE)) {
                     throw new ChainException("fallback method return value type error, must be void type");
                 }
                 // 执行fallback
-                method.invoke(chainHandler, handlerData, haveException);
+                method.invoke(chainHandler, localFallBackContext);
             }
         } catch (NoSuchMethodException e) {
-            throw new ChainException(chainHandler.getClass().getName() + "without correct process interface", e);
+            throw new ChainException(chainHandler.getClass().getName() + " without correct process or fallback method, the fallback method signature requires at least 2 input parameters", e);
         } catch (InvocationTargetException | IllegalAccessException e) {
             throw new ChainException(chainHandler.getClass().getName()
-                    + "without correct fallback interface, the method signature requires at least 2 input parameters, " +
+                    + "without correct fallback method, the method signature requires at least 2 input parameters, " +
                     "one for the process method and the other for Boolean type", e);
         }
     }
@@ -64,15 +63,15 @@ public class FallBackResolver<T> {
      * @param completeChainResult 责任链执行最终结果实体类
      */
     public void handleGlobalFallBack(ChainFallBack<T> chainFallBack, T handlerData, CompleteChainResult completeChainResult, Boolean exceptionOccurred) {
-        FallBackContext<T> fallBackContext = new FallBackContext<>(handlerData, completeChainResult, exceptionOccurred);
+        GlobalFallBackContext<T> globalFallBackContext = new GlobalFallBackContext<>(handlerData, completeChainResult, exceptionOccurred);
         if (Boolean.FALSE.equals(exceptionOccurred)) {
             boolean allow = completeChainResult.isAllow();
             if (chainFallBack != null && !allow) {
-                chainFallBack.fallBack(fallBackContext);
+                chainFallBack.fallBack(globalFallBackContext);
             }
         } else {
             if (chainFallBack != null) {
-                chainFallBack.fallBack(fallBackContext);
+                chainFallBack.fallBack(globalFallBackContext);
             }
         }
     }
