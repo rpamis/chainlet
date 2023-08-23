@@ -27,7 +27,7 @@ public class FallBackResolver<T> {
      */
     public void handleLocalFallBack(ChainHandler<T> chainHandler, T handlerData, ChainTypeReference<T> reference, Boolean haveException) {
         try {
-            Class<?> actualGenericClass = ChainTypeReference.getGenericTypeClass();
+            Class<? super T> actualGenericClass = reference.getGenericClass();
             // 获取process接口Method
             Method processMethod = chainHandler.getClass().getMethod("process", actualGenericClass);
             if (processMethod.isAnnotationPresent(LocalChainFallback.class)) {
@@ -52,8 +52,6 @@ public class FallBackResolver<T> {
             throw new ChainException(chainHandler.getClass().getName()
                     + "without correct fallback interface, the method signature requires at least 2 input parameters, " +
                     "one for the process method and the other for Boolean type", e);
-        } catch (ClassNotFoundException e) {
-            throw new ChainException("The true generic Class for " + chainHandler.getClass().getName() + " was not found", e);
         }
     }
 

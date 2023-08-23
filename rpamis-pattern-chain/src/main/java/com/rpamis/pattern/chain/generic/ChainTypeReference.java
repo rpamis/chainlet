@@ -13,6 +13,24 @@ import java.lang.reflect.Type;
  */
 public abstract class ChainTypeReference<T> {
 
+    protected final Type genericType;
+
+    protected final Class<? super T> genericClass;
+
+    /**
+     * 初始化时直接获取对应的泛型Type和Class
+     */
+    @SuppressWarnings("unchecked")
+    public ChainTypeReference() {
+        Type superclass = getClass().getGenericSuperclass();
+        genericType = ((ParameterizedType) superclass).getActualTypeArguments()[0];
+        if (genericType instanceof ParameterizedType) {
+            genericClass = (Class<? super T>) ((ParameterizedType) genericType).getRawType();
+        } else {
+            genericClass = (Class<? super T>) genericType;
+        }
+    }
+
     /**
      * 获取运行时真实泛型
      * 如获取A<T>时候的T的Type
@@ -54,5 +72,13 @@ public abstract class ChainTypeReference<T> {
         }
         String typeName = type.getTypeName();
         return Class.forName(typeName);
+    }
+
+    public Type getGenericType() {
+        return genericType;
+    }
+
+    public Class<? super T> getGenericClass() {
+        return genericClass;
     }
 }
