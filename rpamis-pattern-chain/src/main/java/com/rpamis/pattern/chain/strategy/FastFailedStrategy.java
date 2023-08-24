@@ -1,9 +1,9 @@
 package com.rpamis.pattern.chain.strategy;
 
 import com.rpamis.pattern.chain.AbstractChainPipeline;
-import com.rpamis.pattern.chain.entity.ChainResult;
 import com.rpamis.pattern.chain.definition.ChainPipeline;
 import com.rpamis.pattern.chain.definition.ChainStrategy;
+import com.rpamis.pattern.chain.entity.ChainResult;
 
 /**
  * 责任链快速失败模式

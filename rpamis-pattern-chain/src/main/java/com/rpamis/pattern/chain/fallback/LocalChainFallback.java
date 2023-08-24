@@ -23,6 +23,13 @@ public @interface LocalChainFallback {
     String fallbackMethod() default "";
 
     /**
+     * 指定的降级Class, 配合降级方法使用
+     *
+     * @return String
+     */
+    Class<?>[] fallbackClass() default {};
+
+    /**
      * 是否开启降级
      *
      * @return boolean

@@ -14,7 +14,7 @@ import java.lang.reflect.Method;
  * @author benym
  * @date 2023/8/18 14:04
  */
-public class FallBackResolver<T> {
+public class FallBackResolver<T> extends AbstractFallBackResolverSupport {
 
     /**
      * 处理责任链局部降级方法
@@ -31,15 +31,17 @@ public class FallBackResolver<T> {
             if (processMethod.isAnnotationPresent(LocalChainFallback.class)) {
                 LocalChainFallback fallbackAnnotation = processMethod.getAnnotation(LocalChainFallback.class);
                 String fallbackMethodName = fallbackAnnotation.fallbackMethod();
+                Class<?>[] fallbackClass = fallbackAnnotation.fallbackClass();
                 boolean enabled = fallbackAnnotation.enable();
                 if (!enabled) {
                     return;
                 }
                 // 获取fallback接口Method
-                Method method = chainHandler.getClass().getMethod(fallbackMethodName, LocalFallBackContext.class);
-                Class<?> returnType = method.getReturnType();
-                if (!returnType.equals(Void.TYPE)) {
-                    throw new ChainException("fallback method return value type error, must be void type");
+                Method method;
+                if (fallbackClass != null && fallbackClass.length >= 1) {
+                    method = findLocalFallBackMethod(fallbackMethodName, fallbackClass[0]);
+                } else {
+                    method = findLocalFallBackMethod(fallbackMethodName, chainHandler.getClass());
                 }
                 // 执行fallback
                 method.invoke(chainHandler, localFallBackContext);
