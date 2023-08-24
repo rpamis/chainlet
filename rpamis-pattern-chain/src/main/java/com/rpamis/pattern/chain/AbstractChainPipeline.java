@@ -41,6 +41,9 @@ public abstract class AbstractChainPipeline<T> implements ChainPipeline<T>, Add<
      */
     private int n = 0;
 
+    /**
+     * 责任链TypeReference
+     */
     private final ChainTypeReference<T> chainTypeReference;
 
     /**
