@@ -1,6 +1,6 @@
 package com.rpamis.pattern.chain.fallback;
 
-import com.rpamis.pattern.chain.core.ChainFallBack;
+import com.rpamis.pattern.chain.definition.ChainFallBack;
 
 /**
  * 责任链全局降级接口

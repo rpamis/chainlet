@@ -1,10 +1,10 @@
 package com.rpamis.pattern.chain.strategy;
 
 
-import com.rpamis.pattern.chain.core.AbstractChainPipeline;
+import com.rpamis.pattern.chain.AbstractChainPipeline;
 import com.rpamis.pattern.chain.entity.ChainResult;
-import com.rpamis.pattern.chain.core.ChainPipeline;
-import com.rpamis.pattern.chain.core.ChainStrategy;
+import com.rpamis.pattern.chain.definition.ChainPipeline;
+import com.rpamis.pattern.chain.definition.ChainStrategy;
 
 /**
  * 责任链快速返回模式

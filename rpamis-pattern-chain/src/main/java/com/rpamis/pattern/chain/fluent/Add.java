@@ -1,6 +1,6 @@
 package com.rpamis.pattern.chain.fluent;
 
-import com.rpamis.pattern.chain.core.ChainHandler;
+import com.rpamis.pattern.chain.definition.ChainHandler;
 
 /**
  * Add接口

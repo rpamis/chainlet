@@ -1,4 +1,4 @@
-package com.rpamis.pattern.chain.core;
+package com.rpamis.pattern.chain;
 
 import com.rpamis.pattern.chain.builder.SerialChainPipelineBuilder;
 import com.rpamis.pattern.chain.generic.ChainTypeReference;

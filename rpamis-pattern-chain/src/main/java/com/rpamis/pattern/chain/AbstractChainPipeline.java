@@ -1,6 +1,10 @@
-package com.rpamis.pattern.chain.core;
+package com.rpamis.pattern.chain;
 
 
+import com.rpamis.pattern.chain.definition.ChainFallBack;
+import com.rpamis.pattern.chain.definition.ChainHandler;
+import com.rpamis.pattern.chain.definition.ChainPipeline;
+import com.rpamis.pattern.chain.definition.ChainStrategy;
 import com.rpamis.pattern.chain.entity.*;
 import com.rpamis.pattern.chain.fallback.FallBackResolver;
 import com.rpamis.pattern.chain.generic.ChainTypeReference;

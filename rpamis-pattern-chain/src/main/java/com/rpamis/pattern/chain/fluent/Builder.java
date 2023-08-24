@@ -1,6 +1,6 @@
 package com.rpamis.pattern.chain.fluent;
 
-import com.rpamis.pattern.chain.core.ChainPipeline;
+import com.rpamis.pattern.chain.definition.ChainPipeline;
 
 /**
  * Builder接口

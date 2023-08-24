@@ -3,7 +3,7 @@ package com.rpamis.pattern.chain.handler;
 import com.rpamis.pattern.chain.DemoUser;
 import com.rpamis.pattern.chain.entity.LocalFallBackContext;
 import com.rpamis.pattern.chain.fallback.LocalChainFallback;
-import com.rpamis.pattern.chain.core.ChainHandler;
+import com.rpamis.pattern.chain.definition.ChainHandler;
 
 import java.util.List;
 

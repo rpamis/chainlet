@@ -1,4 +1,4 @@
-package com.rpamis.pattern.chain.core;
+package com.rpamis.pattern.chain.definition;
 
 import com.rpamis.pattern.chain.entity.ChainResult;
 import com.rpamis.pattern.chain.fluent.Apply;

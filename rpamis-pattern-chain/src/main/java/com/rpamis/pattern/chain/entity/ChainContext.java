@@ -1,8 +1,8 @@
 package com.rpamis.pattern.chain.entity;
 
-import com.rpamis.pattern.chain.core.ChainHandler;
-import com.rpamis.pattern.chain.core.ChainPipeline;
-import com.rpamis.pattern.chain.core.ChainStrategy;
+import com.rpamis.pattern.chain.definition.ChainHandler;
+import com.rpamis.pattern.chain.definition.ChainPipeline;
+import com.rpamis.pattern.chain.definition.ChainStrategy;
 
 /**
  * 责任链上下文
