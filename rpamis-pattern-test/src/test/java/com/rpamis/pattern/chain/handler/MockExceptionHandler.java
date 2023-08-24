@@ -1,7 +1,7 @@
 package com.rpamis.pattern.chain.handler;
 
 import com.rpamis.pattern.chain.DemoUser;
-import com.rpamis.pattern.chain.interfaces.ChainHandler;
+import com.rpamis.pattern.chain.core.ChainHandler;
 
 /**
  * Handler异常模拟类

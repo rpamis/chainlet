@@ -1,6 +1,6 @@
 package com.rpamis.pattern.chain.builder;
 
-import com.rpamis.pattern.chain.interfaces.Add;
+import com.rpamis.pattern.chain.fluent.Add;
 
 /**
  * 并行责任链Builder

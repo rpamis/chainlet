@@ -1,4 +1,4 @@
-package com.rpamis.pattern.chain.annotation;
+package com.rpamis.pattern.chain.fallback;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

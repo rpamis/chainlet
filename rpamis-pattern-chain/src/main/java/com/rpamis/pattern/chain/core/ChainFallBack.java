@@ -1,4 +1,4 @@
-package com.rpamis.pattern.chain.interfaces;
+package com.rpamis.pattern.chain.core;
 
 import com.rpamis.pattern.chain.entity.GlobalFallBackContext;
 

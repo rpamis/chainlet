@@ -1,10 +1,9 @@
-package com.rpamis.pattern.chain;
+package com.rpamis.pattern.chain.fallback;
 
-import com.rpamis.pattern.chain.annotation.LocalChainFallback;
+import com.rpamis.pattern.chain.core.ChainFallBack;
 import com.rpamis.pattern.chain.entity.*;
 import com.rpamis.pattern.chain.generic.ChainTypeReference;
-import com.rpamis.pattern.chain.interfaces.ChainFallBack;
-import com.rpamis.pattern.chain.interfaces.ChainHandler;
+import com.rpamis.pattern.chain.core.ChainHandler;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;

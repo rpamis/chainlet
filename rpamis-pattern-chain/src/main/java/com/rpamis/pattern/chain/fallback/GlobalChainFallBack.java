@@ -1,4 +1,6 @@
-package com.rpamis.pattern.chain.interfaces;
+package com.rpamis.pattern.chain.fallback;
+
+import com.rpamis.pattern.chain.core.ChainFallBack;
 
 /**
  * 责任链全局降级接口

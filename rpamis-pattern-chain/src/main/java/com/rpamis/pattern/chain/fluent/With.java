@@ -1,4 +1,7 @@
-package com.rpamis.pattern.chain.interfaces;
+package com.rpamis.pattern.chain.fluent;
+
+import com.rpamis.pattern.chain.core.ChainStrategy;
+import com.rpamis.pattern.chain.core.ChainFallBack;
 
 /**
  * With接口

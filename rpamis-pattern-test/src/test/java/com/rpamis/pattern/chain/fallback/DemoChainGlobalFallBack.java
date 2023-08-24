@@ -2,7 +2,6 @@ package com.rpamis.pattern.chain.fallback;
 
 import com.rpamis.pattern.chain.DemoUser;
 import com.rpamis.pattern.chain.entity.GlobalFallBackContext;
-import com.rpamis.pattern.chain.interfaces.GlobalChainFallBack;
 
 /**
  * 全局降级demo类

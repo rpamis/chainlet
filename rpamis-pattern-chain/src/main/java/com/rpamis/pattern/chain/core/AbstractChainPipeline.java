@@ -1,9 +1,10 @@
-package com.rpamis.pattern.chain;
+package com.rpamis.pattern.chain.core;
 
 
 import com.rpamis.pattern.chain.entity.*;
+import com.rpamis.pattern.chain.fallback.FallBackResolver;
 import com.rpamis.pattern.chain.generic.ChainTypeReference;
-import com.rpamis.pattern.chain.interfaces.*;
+import com.rpamis.pattern.chain.fluent.*;
 import com.rpamis.pattern.chain.strategy.FastFailedStrategy;
 import com.rpamis.pattern.chain.strategy.FastReturnStrategy;
 import com.rpamis.pattern.chain.strategy.FullExecutionStrategy;

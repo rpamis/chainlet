@@ -1,9 +1,9 @@
 package com.rpamis.pattern.chain.handler;
 
 import com.rpamis.pattern.chain.DemoUser;
-import com.rpamis.pattern.chain.annotation.LocalChainFallback;
+import com.rpamis.pattern.chain.fallback.LocalChainFallback;
 import com.rpamis.pattern.chain.entity.LocalFallBackContext;
-import com.rpamis.pattern.chain.interfaces.ChainHandler;
+import com.rpamis.pattern.chain.core.ChainHandler;
 
 /**
  * LoginHandler

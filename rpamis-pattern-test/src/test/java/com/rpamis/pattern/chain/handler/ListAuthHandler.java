@@ -1,8 +1,9 @@
 package com.rpamis.pattern.chain.handler;
 
 import com.rpamis.pattern.chain.DemoUser;
-import com.rpamis.pattern.chain.annotation.LocalChainFallback;
-import com.rpamis.pattern.chain.interfaces.ChainHandler;
+import com.rpamis.pattern.chain.entity.LocalFallBackContext;
+import com.rpamis.pattern.chain.fallback.LocalChainFallback;
+import com.rpamis.pattern.chain.core.ChainHandler;
 
 import java.util.List;
 
@@ -24,7 +25,7 @@ public class ListAuthHandler implements ChainHandler<List<DemoUser>> {
         return true;
     }
 
-    public void fallback(List<DemoUser> demoUserList, Boolean exceptionOccurred) {
+    public void fallback(LocalFallBackContext<DemoUser> localFallBackContext) {
         System.out.println("fallback");
     }
 }
