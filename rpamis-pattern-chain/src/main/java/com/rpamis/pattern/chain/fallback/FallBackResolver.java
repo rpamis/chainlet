@@ -27,7 +27,7 @@ public class FallBackResolver<T> extends AbstractFallBackResolverSupport {
         try {
             Class<? super T> actualGenericClass = reference.getGenericClass();
             // 获取process接口Method
-            Method processMethod = chainHandler.getClass().getMethod("process", actualGenericClass);
+            Method processMethod = findHandlerProcessMethod(chainHandler.getClass(), actualGenericClass);
             if (processMethod.isAnnotationPresent(LocalChainFallback.class)) {
                 LocalChainFallback fallbackAnnotation = processMethod.getAnnotation(LocalChainFallback.class);
                 String fallbackMethodName = fallbackAnnotation.fallbackMethod();
@@ -46,8 +46,6 @@ public class FallBackResolver<T> extends AbstractFallBackResolverSupport {
                 // 执行fallback
                 method.invoke(chainHandler, localFallBackContext);
             }
-        } catch (NoSuchMethodException e) {
-            throw new ChainException(chainHandler.getClass().getName() + " without correct process or fallback method, the fallback method signature requires at least 2 input parameters", e);
         } catch (InvocationTargetException | IllegalAccessException e) {
             throw new ChainException(chainHandler.getClass().getName()
                     + "without correct fallback method, the method signature requires at least 2 input parameters, " +

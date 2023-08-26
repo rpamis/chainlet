@@ -24,16 +24,39 @@ public abstract class AbstractFallBackResolverSupport {
         if (fallBackName == null || fallBackName.trim().length() == 0) {
             return null;
         }
-        MethodRecord methodRecord = MethodMetaDataRegistry.getLocalFallBackRecord(fallBackClass, fallBackName);
-        if (methodRecord == null) {
+        MethodRecord fallBackRecord = MethodMetaDataRegistry.getLocalFallBackRecord(fallBackClass, fallBackName);
+        if (fallBackRecord == null) {
             Method method = resolverLocalFallBackMethod(fallBackName, fallBackClass);
             MethodMetaDataRegistry.initLocalFallBackRecord(fallBackClass, fallBackName, method);
             return method;
         }
-        if (!methodRecord.isExist()) {
+        if (!fallBackRecord.isExist()) {
             return null;
         }
-        return methodRecord.getMethod();
+        return fallBackRecord.getMethod();
+    }
+
+
+    /**
+     * 根据责任链处理类Class，主数据泛型Class寻找缓存的Method
+     *
+     * @param chainHandlerClass  责任链处理类Class
+     * @param actualGenericClass 主数据泛型Class
+     * @return Method
+     */
+    protected Method findHandlerProcessMethod(Class<?> chainHandlerClass, Class<?> actualGenericClass) {
+        try {
+            MethodRecord processRecord = MethodMetaDataRegistry.getProcessRecord(chainHandlerClass, actualGenericClass);
+            if (processRecord == null) {
+                return chainHandlerClass.getMethod("process", actualGenericClass);
+            }
+            if (!processRecord.isExist()) {
+                return null;
+            }
+            return processRecord.getMethod();
+        } catch (NoSuchMethodException e) {
+            throw new ChainException(chainHandlerClass.getName() + " without correct process or fallback method, the fallback method signature requires at least 2 input parameters", e);
+        }
     }
 
     /**
