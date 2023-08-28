@@ -1,9 +1,13 @@
 package com.rpamis.pattern.chain.fallback;
 
+import com.rpamis.pattern.chain.definition.ChainHandler;
 import com.rpamis.pattern.chain.entity.ChainException;
+import com.rpamis.pattern.chain.entity.LocalFallBackContext;
 import com.rpamis.pattern.chain.entity.MethodRecord;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 
 /**
  * 抽象降级方法支持类
@@ -20,14 +24,16 @@ public abstract class AbstractFallBackResolverSupport {
      * @param fallBackClass 降级方法Class
      * @return Method
      */
-    protected Method findLocalFallBackMethod(String fallBackName, Class<?> fallBackClass) {
+    protected Method findLocalFallBackMethod(ChainHandler<?> chainHandler, String fallBackName, Class<?>[] fallBackClass) {
         if (fallBackName == null || fallBackName.trim().length() == 0) {
             return null;
         }
-        MethodRecord fallBackRecord = MethodMetaDataRegistry.getLocalFallBackRecord(fallBackClass, fallBackName);
+        boolean mustStatic = fallBackClass != null && fallBackClass.length >= 1;
+        Class<?> actualFallBackMethodClass = mustStatic ? fallBackClass[0] : chainHandler.getClass();
+        MethodRecord fallBackRecord = MethodMetaDataRegistry.getLocalFallBackRecord(actualFallBackMethodClass, fallBackName);
         if (fallBackRecord == null) {
-            Method method = resolverLocalFallBackMethod(fallBackName, fallBackClass);
-            MethodMetaDataRegistry.initLocalFallBackRecord(fallBackClass, fallBackName, method);
+            Method method = resolverLocalFallBackMethod(fallBackName, actualFallBackMethodClass, mustStatic);
+            MethodMetaDataRegistry.initLocalFallBackRecord(actualFallBackMethodClass, fallBackName, method);
             return method;
         }
         if (!fallBackRecord.isExist()) {
@@ -35,7 +41,6 @@ public abstract class AbstractFallBackResolverSupport {
         }
         return fallBackRecord.getMethod();
     }
-
 
     /**
      * 根据责任链处理类Class，主数据泛型Class寻找缓存的Method
@@ -48,15 +53,63 @@ public abstract class AbstractFallBackResolverSupport {
         try {
             MethodRecord processRecord = MethodMetaDataRegistry.getProcessRecord(chainHandlerClass, actualGenericClass);
             if (processRecord == null) {
-                return chainHandlerClass.getMethod("process", actualGenericClass);
+                Method method = chainHandlerClass.getMethod("process", actualGenericClass);
+                MethodMetaDataRegistry.initProcessRecord(chainHandlerClass, actualGenericClass, method);
+                return method;
             }
             if (!processRecord.isExist()) {
                 return null;
             }
             return processRecord.getMethod();
         } catch (NoSuchMethodException e) {
-            throw new ChainException(chainHandlerClass.getName() + " without correct process or fallback method, the fallback method signature requires at least 2 input parameters", e);
+            throw new ChainException(chainHandlerClass.getName() + " without correct process method, " +
+                    "the parameter signature of the process method needs to match the generic " + actualGenericClass.getName(), e);
         }
+    }
+
+    /**
+     * 进行局部降级实际invoke
+     *
+     * @param chainHandler         责任链具体处理handler
+     * @param method               降级方法method
+     * @param localFallBackContext 降级方法上下文入参
+     */
+    protected void invokeActual(ChainHandler<?> chainHandler, Method method, LocalFallBackContext<?> localFallBackContext) {
+        try {
+            if (!method.isAccessible()) {
+                makeAccessibleIfNecessary(method);
+            }
+            if (isStatic(method)) {
+                method.invoke(null, localFallBackContext);
+            }
+            method.invoke(chainHandler, localFallBackContext);
+        } catch (InvocationTargetException | IllegalAccessException e) {
+            throw new ChainException("The invoke local fallback method failed. Check that the parameters of the fallback method are correct and that it is public", e);
+        }
+
+    }
+
+    /**
+     * 在必要时将Method的可访问性设置为true
+     *
+     * @param method method
+     */
+    private static void makeAccessibleIfNecessary(Method method) {
+        boolean isNotPublic = !Modifier.isPublic(method.getModifiers()) ||
+                !Modifier.isPublic(method.getDeclaringClass().getModifiers());
+        if (isNotPublic && !method.isAccessible()) {
+            method.setAccessible(true);
+        }
+    }
+
+    /**
+     * 判断方式是否是静态方法
+     *
+     * @param method method
+     * @return boolean
+     */
+    private boolean isStatic(Method method) {
+        return Modifier.isStatic(method.getModifiers());
     }
 
     /**
@@ -64,9 +117,10 @@ public abstract class AbstractFallBackResolverSupport {
      *
      * @param fallBackName  降级方法名
      * @param fallBackClass 降级方法Class
+     * @param mustStatic    是否是静态方法
      * @return Method
      */
-    private Method resolverLocalFallBackMethod(String fallBackName, Class<?> fallBackClass) {
+    private Method resolverLocalFallBackMethod(String fallBackName, Class<?> fallBackClass, boolean mustStatic) {
         try {
             Method method = fallBackClass.getMethod(fallBackName, LocalChainFallback.class);
             Class<?> returnType = method.getReturnType();
@@ -75,7 +129,8 @@ public abstract class AbstractFallBackResolverSupport {
             }
             return method;
         } catch (NoSuchMethodException e) {
-            throw new ChainException(fallBackClass.getName() + " without correct process or fallback method, the fallback method signature requires at least 2 input parameters", e);
+            throw new ChainException(fallBackClass.getName() + " without correct fallback method, " +
+                    "the fallback method argument signature must be LocalFallBackContext", e);
         }
     }
 }

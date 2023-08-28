@@ -1,11 +1,12 @@
 package com.rpamis.pattern.chain.fallback;
 
 import com.rpamis.pattern.chain.definition.ChainFallBack;
-import com.rpamis.pattern.chain.entity.*;
-import com.rpamis.pattern.chain.generic.ChainTypeReference;
 import com.rpamis.pattern.chain.definition.ChainHandler;
+import com.rpamis.pattern.chain.entity.CompleteChainResult;
+import com.rpamis.pattern.chain.entity.GlobalFallBackContext;
+import com.rpamis.pattern.chain.entity.LocalFallBackContext;
+import com.rpamis.pattern.chain.generic.ChainTypeReference;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 /**
@@ -24,32 +25,21 @@ public class FallBackResolver<T> extends AbstractFallBackResolverSupport {
      * @param reference            责任链TypeReference
      */
     public void handleLocalFallBack(ChainHandler<T> chainHandler, LocalFallBackContext<T> localFallBackContext, ChainTypeReference<T> reference) {
-        try {
-            Class<? super T> actualGenericClass = reference.getGenericClass();
-            // 获取process接口Method
-            Method processMethod = findHandlerProcessMethod(chainHandler.getClass(), actualGenericClass);
-            if (processMethod.isAnnotationPresent(LocalChainFallback.class)) {
-                LocalChainFallback fallbackAnnotation = processMethod.getAnnotation(LocalChainFallback.class);
-                String fallbackMethodName = fallbackAnnotation.fallbackMethod();
-                Class<?>[] fallbackClass = fallbackAnnotation.fallbackClass();
-                boolean enabled = fallbackAnnotation.enable();
-                if (!enabled) {
-                    return;
-                }
-                // 获取fallback接口Method
-                Method method;
-                if (fallbackClass != null && fallbackClass.length >= 1) {
-                    method = findLocalFallBackMethod(fallbackMethodName, fallbackClass[0]);
-                } else {
-                    method = findLocalFallBackMethod(fallbackMethodName, chainHandler.getClass());
-                }
-                // 执行fallback
-                method.invoke(chainHandler, localFallBackContext);
+        Class<? super T> actualGenericClass = reference.getGenericClass();
+        // 获取process接口Method
+        Method processMethod = findHandlerProcessMethod(chainHandler.getClass(), actualGenericClass);
+        if (processMethod.isAnnotationPresent(LocalChainFallback.class)) {
+            LocalChainFallback fallbackAnnotation = processMethod.getAnnotation(LocalChainFallback.class);
+            String fallbackMethodName = fallbackAnnotation.fallbackMethod();
+            Class<?>[] fallbackClass = fallbackAnnotation.fallbackClass();
+            boolean enabled = fallbackAnnotation.enable();
+            if (!enabled) {
+                return;
             }
-        } catch (InvocationTargetException | IllegalAccessException e) {
-            throw new ChainException(chainHandler.getClass().getName()
-                    + "without correct fallback method, the method signature requires at least 2 input parameters, " +
-                    "one for the process method and the other for Boolean type", e);
+            // 获取fallback接口Method
+            Method method = findLocalFallBackMethod(chainHandler, fallbackMethodName, fallbackClass);
+            // 执行fallback
+            invokeActual(chainHandler, method, localFallBackContext);
         }
     }
 
