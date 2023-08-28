@@ -76,6 +76,9 @@ public abstract class AbstractFallBackResolverSupport {
      */
     protected void invokeActual(ChainHandler<?> chainHandler, Method method, LocalFallBackContext<?> localFallBackContext) {
         try {
+            if (method == null) {
+                throw new ChainException("The fallback method is null, ");
+            }
             if (!method.isAccessible()) {
                 makeAccessibleIfNecessary(method);
             }
@@ -86,7 +89,18 @@ public abstract class AbstractFallBackResolverSupport {
         } catch (InvocationTargetException | IllegalAccessException e) {
             throw new ChainException("The invoke local fallback method failed. Check that the parameters of the fallback method are correct and that it is public", e);
         }
+    }
 
+    /**
+     * 校验Method是否为空
+     *
+     * @param method  method
+     * @param message 异常消息
+     */
+    protected void checkMethod(Method method, String message) {
+        if (method == null) {
+            throw new ChainException(message);
+        }
     }
 
     /**
