@@ -136,7 +136,7 @@ public abstract class AbstractFallBackResolverSupport {
      */
     private Method resolverLocalFallBackMethod(String fallBackName, Class<?> fallBackClass, boolean mustStatic) {
         try {
-            Method method = fallBackClass.getMethod(fallBackName, LocalChainFallback.class);
+            Method method = fallBackClass.getMethod(fallBackName, LocalFallBackContext.class);
             Class<?> returnType = method.getReturnType();
             if (!returnType.equals(Void.TYPE)) {
                 throw new ChainException("fallback method return value type error, must be void type");
