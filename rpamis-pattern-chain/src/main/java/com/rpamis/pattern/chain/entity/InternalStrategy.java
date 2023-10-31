@@ -6,7 +6,7 @@ package com.rpamis.pattern.chain.entity;
  * @author benym
  * @date 2023/10/31 21:37
  */
-public enum InnerStrategy {
+public enum InternalStrategy {
 
     /**
      * 快速失败策略
@@ -26,7 +26,7 @@ public enum InnerStrategy {
      */
     private String code;
 
-    InnerStrategy(String code) {
+    InternalStrategy(String code) {
         this.code = code;
     }
 
