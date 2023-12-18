@@ -1,6 +1,7 @@
 package com.rpamis.pattern.chain.definition;
 
 
+import com.rpamis.extension.spi.RpamisSpi;
 import com.rpamis.pattern.chain.entity.ChainResult;
 
 /**
@@ -9,6 +10,7 @@ import com.rpamis.pattern.chain.entity.ChainResult;
  * @author benym
  * @date 2023/3/7 18:10
  */
+@RpamisSpi
 public interface ChainStrategy<T> {
 
     /**

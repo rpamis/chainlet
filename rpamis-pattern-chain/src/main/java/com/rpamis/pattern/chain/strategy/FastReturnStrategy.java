@@ -1,6 +1,7 @@
 package com.rpamis.pattern.chain.strategy;
 
 
+import com.rpamis.extension.spi.SpiLoader;
 import com.rpamis.pattern.chain.AbstractChainPipeline;
 import com.rpamis.pattern.chain.entity.ChainResult;
 import com.rpamis.pattern.chain.definition.ChainPipeline;
@@ -17,11 +18,13 @@ import com.rpamis.pattern.chain.definition.ChainStrategy;
 public class FastReturnStrategy<T> implements ChainStrategy<T> {
 
     @Override
+    @SuppressWarnings("all")
     public void doStrategy(T handlerData, ChainPipeline<T> chain, ChainResult chainResult) {
         if (chainResult.isProcessResult()) {
             AbstractChainPipeline.CHECK_RESULT.get().add(chainResult);
         } else {
-            FullExecutionStrategy<T> fullExecutionStrategy = new FullExecutionStrategy<>();
+            ChainStrategy fullExecutionStrategy = SpiLoader.getSpiLoader(ChainStrategy.class)
+                    .getSpiImpl("fullExecutionStrategy");
             chainResult.setProcessResult(false);
             fullExecutionStrategy.doStrategy(handlerData, chain, chainResult);
         }

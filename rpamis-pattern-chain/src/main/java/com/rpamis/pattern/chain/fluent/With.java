@@ -2,6 +2,7 @@ package com.rpamis.pattern.chain.fluent;
 
 import com.rpamis.pattern.chain.definition.ChainStrategy;
 import com.rpamis.pattern.chain.definition.ChainFallBack;
+import com.rpamis.pattern.chain.strategy.Strategy;
 
 /**
  * With接口
@@ -17,7 +18,7 @@ public interface With<T> extends Apply<T>, Builder<T> {
      * @param strategy strategy
      * @return ChainPipeline
      */
-    With<T> strategy(ChainStrategy<T> strategy);
+    With<T> strategy(Strategy strategy);
 
     /**
      * 责任链全局降级策略

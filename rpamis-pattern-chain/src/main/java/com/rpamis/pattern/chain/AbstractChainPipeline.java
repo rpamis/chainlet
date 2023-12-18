@@ -1,6 +1,7 @@
 package com.rpamis.pattern.chain;
 
 
+import com.rpamis.extension.spi.SpiLoader;
 import com.rpamis.pattern.chain.definition.ChainFallBack;
 import com.rpamis.pattern.chain.definition.ChainHandler;
 import com.rpamis.pattern.chain.definition.ChainPipeline;
@@ -12,6 +13,7 @@ import com.rpamis.pattern.chain.fluent.*;
 import com.rpamis.pattern.chain.strategy.FastFailedStrategy;
 import com.rpamis.pattern.chain.strategy.FastReturnStrategy;
 import com.rpamis.pattern.chain.strategy.FullExecutionStrategy;
+import com.rpamis.pattern.chain.strategy.Strategy;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -82,8 +84,9 @@ public abstract class AbstractChainPipeline<T> implements ChainPipeline<T>, Add<
      * @return ChainPipeline
      */
     @Override
-    public With<T> strategy(ChainStrategy<T> strategy) {
-        this.chainStrategy = strategy;
+    @SuppressWarnings("unchecked")
+    public With<T> strategy(Strategy strategy) {
+        this.chainStrategy = SpiLoader.getSpiLoader(ChainStrategy.class).getSpiImpl(strategy.getCode());
         return this;
     }
 

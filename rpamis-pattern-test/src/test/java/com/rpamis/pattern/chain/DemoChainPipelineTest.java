@@ -11,6 +11,7 @@ import com.rpamis.pattern.chain.definition.ChainPipeline;
 import com.rpamis.pattern.chain.strategy.FastFailedStrategy;
 import com.rpamis.pattern.chain.strategy.FastReturnStrategy;
 import com.rpamis.pattern.chain.strategy.FullExecutionStrategy;
+import com.rpamis.pattern.chain.strategy.Strategy;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -46,7 +47,7 @@ public class DemoChainPipelineTest {
                 .addHandler(new AuthHandler())
                 .addHandler(new ValidateHandler())
                 .addHandler(new LoginHandler())
-                .strategy(new FullExecutionStrategy<>())
+                .strategy(Strategy.FULL)
                 .build();
         // when
         when(demoUser.getName()).thenReturn("test");
@@ -74,7 +75,7 @@ public class DemoChainPipelineTest {
                 .addHandler(new AuthHandler())
                 .addHandler(new ValidateHandler())
                 .addHandler(new LoginHandler())
-                .strategy(new FullExecutionStrategy<>())
+                .strategy(Strategy.FULL)
                 .build();
         // when
         when(demoUser.getName()).thenReturn("test");
@@ -102,7 +103,7 @@ public class DemoChainPipelineTest {
                 .addHandler(new AuthHandler())
                 .addHandler(new ValidateHandler())
                 .addHandler(new LoginHandler())
-                .strategy(new FastFailedStrategy<>())
+                .strategy(Strategy.FAST_FAILED)
                 .build();
         // when
         when(demoUser.getName()).thenReturn("test");
@@ -130,7 +131,7 @@ public class DemoChainPipelineTest {
                 .addHandler(new ValidateHandler())
                 .addHandler(new AuthHandler())
                 .addHandler(new LoginHandler())
-                .strategy(new FastFailedStrategy<>())
+                .strategy(Strategy.FAST_FAILED)
                 .build();
         // when
         when(demoUser.getName()).thenReturn("test");
@@ -158,7 +159,7 @@ public class DemoChainPipelineTest {
                 .addHandler(new ValidateHandler())
                 .addHandler(new AuthHandler())
                 .addHandler(new LoginHandler())
-                .strategy(new FastReturnStrategy<>())
+                .strategy(Strategy.FAST_RETURN)
                 .build();
         // when
         when(demoUser.getName()).thenReturn("test");
@@ -186,7 +187,7 @@ public class DemoChainPipelineTest {
                 .addHandler(new AuthHandler())
                 .addHandler(new ValidateHandler())
                 .addHandler(new LoginHandler())
-                .strategy(new FastReturnStrategy<>())
+                .strategy(Strategy.FAST_RETURN)
                 .build();
         // when
         when(demoUser.getName()).thenReturn("test");
@@ -259,7 +260,7 @@ public class DemoChainPipelineTest {
                 .addHandler(new AuthHandler())
                 .addHandler(new ValidateHandler())
                 .addHandler(new LoginHandler())
-                .strategy(new FastFailedStrategy<>())
+                .strategy(Strategy.FAST_FAILED)
                 .build();
 
         // then
@@ -290,7 +291,7 @@ public class DemoChainPipelineTest {
         ChainPipeline<List<DemoUser>> demoChain = ChainPipelineFactory.createChain(reference)
                 .chain()
                 .addHandler(new ListAuthHandler())
-                .strategy(new FullExecutionStrategy<>())
+                .strategy(Strategy.FULL)
                 .build();
         // when
         when(demoUser.getRole()).thenReturn("normal");
