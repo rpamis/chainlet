@@ -194,6 +194,7 @@ public abstract class AbstractChainPipeline<T> implements ChainPipeline<T>, Add<
      */
     @Override
     public void afterHandler() {
+        this.checkResults.clear();
         this.pos = 0;
     }
 
