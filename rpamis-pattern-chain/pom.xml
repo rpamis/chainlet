@@ -23,7 +23,7 @@
         <dependency>
             <groupId>com.rpamis</groupId>
             <artifactId>rpamis-extension-spi</artifactId>
-            <version>1.0.0</version>
+            <version>1.0.1</version>
         </dependency>
     </dependencies>
 
