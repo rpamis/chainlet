@@ -4,6 +4,8 @@ import com.rpamis.pattern.chain.definition.ChainHandler;
 import com.rpamis.pattern.chain.definition.ChainPipeline;
 import com.rpamis.pattern.chain.definition.ChainStrategy;
 
+import java.util.List;
+
 /**
  * 责任链上下文
  *
@@ -32,11 +34,17 @@ public class ChainContext<T> {
      */
     private ChainHandler<T> chainHandler;
 
-    public ChainContext(T handlerData, ChainPipeline<T> chain, ChainStrategy<T> strategy, ChainHandler<T> chainHandler) {
+    /**
+     * 责任链存储结果list
+     */
+    private List<ChainResult> checkResults;
+
+    public ChainContext(T handlerData, ChainPipeline<T> chain, ChainStrategy<T> strategy, ChainHandler<T> chainHandler, List<ChainResult> checkResults) {
         this.handlerData = handlerData;
         this.chain = chain;
         this.strategy = strategy;
         this.chainHandler = chainHandler;
+        this.checkResults = checkResults;
     }
 
     public T getHandlerData() {
@@ -71,6 +79,13 @@ public class ChainContext<T> {
         this.chainHandler = chainHandler;
     }
 
+    public List<ChainResult> getCheckResults() {
+        return checkResults;
+    }
+
+    public void setCheckResults(List<ChainResult> checkResults) {
+        this.checkResults = checkResults;
+    }
 
     @Override
     public String toString() {
@@ -79,6 +94,7 @@ public class ChainContext<T> {
                 ", chain=" + chain +
                 ", strategy=" + strategy +
                 ", chainHandler=" + chainHandler +
+                ", checkResults=" + checkResults +
                 '}';
     }
 }

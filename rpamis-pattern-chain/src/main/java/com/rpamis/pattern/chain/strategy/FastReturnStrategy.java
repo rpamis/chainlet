@@ -1,10 +1,11 @@
 package com.rpamis.pattern.chain.strategy;
 
 
-import com.rpamis.pattern.chain.AbstractChainPipeline;
-import com.rpamis.pattern.chain.entity.ChainResult;
-import com.rpamis.pattern.chain.definition.ChainPipeline;
 import com.rpamis.pattern.chain.definition.ChainStrategy;
+import com.rpamis.pattern.chain.entity.ChainResult;
+import com.rpamis.pattern.chain.entity.ChainStrategyContext;
+
+import java.util.List;
 
 /**
  * 责任链快速返回模式
@@ -23,13 +24,14 @@ public class FastReturnStrategy<T> implements ChainStrategy<T> {
     }
 
     @Override
-    @SuppressWarnings("all")
-    public void doStrategy(T handlerData, ChainPipeline<T> chain, ChainResult chainResult) {
+    public void doStrategy(ChainStrategyContext<T> chainStrategyContext) {
+        ChainResult chainResult = chainStrategyContext.getChainResult();
+        List<ChainResult> checkResults = chainStrategyContext.getCheckResults();
         if (chainResult.isProcessResult()) {
-            AbstractChainPipeline.CHECK_RESULT.get().add(chainResult);
+            checkResults.add(chainResult);
         } else {
             chainResult.setProcessResult(false);
-            fullExecutionStrategy.doStrategy(handlerData, chain, chainResult);
+            fullExecutionStrategy.doStrategy(chainStrategyContext);
         }
     }
 }

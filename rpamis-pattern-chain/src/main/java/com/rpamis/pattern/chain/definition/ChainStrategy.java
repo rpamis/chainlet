@@ -3,6 +3,7 @@ package com.rpamis.pattern.chain.definition;
 
 import com.rpamis.extension.spi.RpamisSpi;
 import com.rpamis.pattern.chain.entity.ChainResult;
+import com.rpamis.pattern.chain.entity.ChainStrategyContext;
 
 /**
  * 责任链策略接口
@@ -16,9 +17,7 @@ public interface ChainStrategy<T> {
     /**
      * 执行对应返回策略
      *
-     * @param handlerData handlerData
-     * @param chain       chain
-     * @param chainResult chainResult
+     * @param chainStrategyContext 责任链执行策略上下文
      */
-    void doStrategy(T handlerData, ChainPipeline<T> chain, ChainResult chainResult);
+    void doStrategy(ChainStrategyContext<T> chainStrategyContext);
 }

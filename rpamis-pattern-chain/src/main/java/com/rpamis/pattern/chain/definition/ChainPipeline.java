@@ -17,9 +17,10 @@ public interface ChainPipeline<T> extends Apply<T> {
     /**
      * 流水线执行Handler处理
      *
-     * @param handlerData 需要处理的数据
+     * @param handlerData  需要处理的数据
+     * @param checkResults 责任链结果存储list
      */
-    void doHandler(T handlerData);
+    void doHandler(T handlerData, List<ChainResult> checkResults);
 
     /**
      * 流水线执行Handler后的处理

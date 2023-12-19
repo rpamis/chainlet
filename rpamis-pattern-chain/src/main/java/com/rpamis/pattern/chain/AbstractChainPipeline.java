@@ -68,7 +68,7 @@ public abstract class AbstractChainPipeline<T> implements ChainPipeline<T>, Add<
     /**
      * 存储所有责任链校验结果
      */
-    public static final ThreadLocal<List<ChainResult>> CHECK_RESULT = ThreadLocal.withInitial(ArrayList::new);
+    private final List<ChainResult> checkResults = new ArrayList<>();
 
     protected AbstractChainPipeline(ChainTypeReference<T> chainTypeReference) {
         this.chainTypeReference = chainTypeReference;
@@ -115,15 +115,16 @@ public abstract class AbstractChainPipeline<T> implements ChainPipeline<T>, Add<
     /**
      * 执行责任链
      *
-     * @param handlerData handlerData
+     * @param handlerData  handlerData
+     * @param checkResults checkResults
      */
     @Override
-    public void doHandler(T handlerData) {
+    public void doHandler(T handlerData, List<ChainResult> checkResults) {
         // 如果当前的handler的位置小于链上所有handler数量，则说明还没执行完，继续向前推进handler
         if (this.pos < this.n) {
             ChainHandler<T> chainHandler = handlerList.get(this.pos++);
             ChainContext<T> chainContext = new ChainContext<>(handlerData, this,
-                    this.chainStrategy, chainHandler);
+                    this.chainStrategy, chainHandler, checkResults);
             this.handlePipeline(chainContext);
             if (this.chainStrategy instanceof FastReturnStrategy
                     || this.chainStrategy instanceof FastFailedStrategy
@@ -143,10 +144,12 @@ public abstract class AbstractChainPipeline<T> implements ChainPipeline<T>, Add<
         T handlerData = chainContext.getHandlerData();
         ChainPipeline<T> chain = chainContext.getChain();
         ChainHandler<T> chainHandler = chainContext.getChainHandler();
+        List<ChainResult> checkResults = chainContext.getCheckResults();
         Boolean processResult = this.concreteHandlerProcess(chainHandler, handlerData);
         // 根据策略进行返回值包装
         ChainResult chainResult = this.initSingleChainResult(chainHandler.getClass(), processResult, chainHandler.message());
-        strategy.doStrategy(handlerData, chain, chainResult);
+        ChainStrategyContext<T> chainStrategyContext = new ChainStrategyContext<>(handlerData, chain, chainResult, checkResults);
+        strategy.doStrategy(chainStrategyContext);
     }
 
     /**
@@ -191,7 +194,6 @@ public abstract class AbstractChainPipeline<T> implements ChainPipeline<T>, Add<
      */
     @Override
     public void afterHandler() {
-        CHECK_RESULT.remove();
         this.pos = 0;
     }
 
@@ -207,9 +209,8 @@ public abstract class AbstractChainPipeline<T> implements ChainPipeline<T>, Add<
     public CompleteChainResult apply(T handlerData) {
         CompleteChainResult completeChainResult = null;
         try {
-            this.doHandler(handlerData);
-            List<ChainResult> chainResults = CHECK_RESULT.get();
-            completeChainResult = new CompleteChainResult(buildSuccess(chainResults), Collections.unmodifiableList(chainResults));
+            this.doHandler(handlerData, checkResults);
+            completeChainResult = new CompleteChainResult(buildSuccess(checkResults), Collections.unmodifiableList(checkResults));
             fallBackResolver.handleGlobalFallBack(chainFallBack, handlerData, completeChainResult, false);
             return completeChainResult;
         } catch (ChainException e) {
