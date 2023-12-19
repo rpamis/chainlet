@@ -21,7 +21,9 @@ public class FullExecutionStrategy<T> implements ChainStrategy<T> {
     public void doStrategy(ChainStrategyContext<T> chainStrategyContext) {
         ChainPipeline<T> chain = chainStrategyContext.getChain();
         T handlerData = chainStrategyContext.getHandlerData();
+        ChainResult chainResult = chainStrategyContext.getChainResult();
         List<ChainResult> checkResults = chainStrategyContext.getCheckResults();
+        checkResults.add(chainResult);
         chain.doHandler(handlerData, checkResults);
     }
 }
