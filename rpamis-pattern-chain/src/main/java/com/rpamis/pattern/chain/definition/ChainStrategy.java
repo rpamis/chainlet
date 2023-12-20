@@ -2,7 +2,6 @@ package com.rpamis.pattern.chain.definition;
 
 
 import com.rpamis.extension.spi.RpamisSpi;
-import com.rpamis.pattern.chain.entity.ChainResult;
 import com.rpamis.pattern.chain.entity.ChainStrategyContext;
 
 /**
