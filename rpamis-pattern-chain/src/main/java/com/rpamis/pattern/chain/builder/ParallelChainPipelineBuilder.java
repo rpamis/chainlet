@@ -2,6 +2,8 @@ package com.rpamis.pattern.chain.builder;
 
 import com.rpamis.pattern.chain.fluent.Add;
 
+import java.util.concurrent.ForkJoinPool;
+
 /**
  * 并行责任链Builder
  *
@@ -10,4 +12,11 @@ import com.rpamis.pattern.chain.fluent.Add;
  */
 public interface ParallelChainPipelineBuilder<T> extends Add<T> {
 
+    /**
+     * 替换并行责任链的ForkJoinPool
+     *
+     * @param forkJoinPool forkJoinPool
+     * @return Add<T>
+     */
+    Add<T> pool(ForkJoinPool forkJoinPool);
 }

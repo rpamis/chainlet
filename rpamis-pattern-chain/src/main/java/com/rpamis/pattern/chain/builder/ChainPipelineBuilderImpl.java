@@ -1,5 +1,6 @@
 package com.rpamis.pattern.chain.builder;
 
+import com.rpamis.pattern.chain.ParallelChainPipelineImpl;
 import com.rpamis.pattern.chain.SerialChainPipelineImpl;
 import com.rpamis.pattern.chain.generic.ChainTypeReference;
 
@@ -24,6 +25,6 @@ public class ChainPipelineBuilderImpl<T> implements ChainPipelineBuilder<T> {
 
     @Override
     public ParallelChainPipelineBuilder<T> parallelChain() {
-        return null;
+        return new ParallelChainPipelineImpl<>(chainTypeReference);
     }
 }

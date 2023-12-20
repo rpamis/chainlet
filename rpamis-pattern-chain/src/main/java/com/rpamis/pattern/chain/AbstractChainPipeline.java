@@ -34,41 +34,41 @@ public abstract class AbstractChainPipeline<T> implements ChainPipeline<T>, Add<
     /**
      * 记录当前Handler位置
      */
-    private int pos = 0;
+    protected int pos = 0;
     /**
      * 记录责任链Chain中Handler的个数
      */
-    private int n = 0;
+    protected int n = 0;
 
     /**
      * 责任链TypeReference
      */
-    private final ChainTypeReference<T> chainTypeReference;
+    protected final ChainTypeReference<T> chainTypeReference;
 
     /**
      * 执行策略
      */
-    private ChainStrategy<T> chainStrategy = new FullExecutionStrategy<>();
+    protected ChainStrategy<T> chainStrategy = new FullExecutionStrategy<>();
 
     /**
      * 降级方法
      */
-    private ChainFallBack<T> chainFallBack;
+    protected ChainFallBack<T> chainFallBack;
 
     /**
      * 降级解析器
      */
-    private final FallBackResolver<T> fallBackResolver = new FallBackResolver<>();
+    protected final FallBackResolver<T> fallBackResolver = new FallBackResolver<>();
 
     /**
      * 存储所有需要执行的handler实现
      */
-    private final UniqueList<ChainHandler<T>> handlerList = new UniqueList<>();
+    protected final UniqueList<ChainHandler<T>> handlerList = new UniqueList<>();
 
     /**
      * 存储所有责任链校验结果
      */
-    private final List<ChainResult> checkResults = new ArrayList<>();
+    protected final List<ChainResult> checkResults = new ArrayList<>();
 
     protected AbstractChainPipeline(ChainTypeReference<T> chainTypeReference) {
         this.chainTypeReference = chainTypeReference;
@@ -139,7 +139,7 @@ public abstract class AbstractChainPipeline<T> implements ChainPipeline<T>, Add<
      *
      * @param chainContext chainContext
      */
-    private void handlePipeline(ChainContext<T> chainContext) {
+    protected void handlePipeline(ChainContext<T> chainContext) {
         ChainStrategy<T> strategy = chainContext.getStrategy();
         T handlerData = chainContext.getHandlerData();
         ChainPipeline<T> chain = chainContext.getChain();
@@ -159,7 +159,7 @@ public abstract class AbstractChainPipeline<T> implements ChainPipeline<T>, Add<
      * @param handlerData  责任链处理主数据
      * @return Boolean
      */
-    private Boolean concreteHandlerProcess(ChainHandler<T> chainHandler, T handlerData) {
+    protected Boolean concreteHandlerProcess(ChainHandler<T> chainHandler, T handlerData) {
         try {
             boolean processResult = chainHandler.process(handlerData);
             // 如果处理不成功则调用降级方法，具体是否调用需查看降级注解中enabled值
@@ -185,7 +185,7 @@ public abstract class AbstractChainPipeline<T> implements ChainPipeline<T>, Add<
      * @param message       责任链处理自定义消息
      * @return ChainResult
      */
-    private ChainResult initSingleChainResult(Class<?> handlerClass, boolean processResult, String message) {
+    protected ChainResult initSingleChainResult(Class<?> handlerClass, boolean processResult, String message) {
         return new ChainResult(handlerClass, processResult, message);
     }
 
