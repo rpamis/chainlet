@@ -3,7 +3,6 @@ package com.rpamis.pattern.chain;
 import com.rpamis.pattern.chain.builder.ParallelChainPipelineBuilder;
 import com.rpamis.pattern.chain.definition.ChainHandler;
 import com.rpamis.pattern.chain.definition.ChainPipeline;
-import com.rpamis.pattern.chain.definition.ChainStrategy;
 import com.rpamis.pattern.chain.entity.ChainContext;
 import com.rpamis.pattern.chain.entity.ChainException;
 import com.rpamis.pattern.chain.entity.ChainResult;

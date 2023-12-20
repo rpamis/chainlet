@@ -3,7 +3,6 @@ package com.rpamis.pattern.chain.thread;
 import com.rpamis.pattern.chain.ParallelChainPipelineImpl;
 import com.rpamis.pattern.chain.definition.ChainHandler;
 import com.rpamis.pattern.chain.entity.ChainResult;
-import com.rpamis.pattern.chain.entity.UniqueList;
 
 import java.util.List;
 import java.util.concurrent.RecursiveAction;
@@ -18,7 +17,9 @@ public class ParallelChainTask<T> extends RecursiveAction {
 
     private static final long serialVersionUID = 6963339111247246802L;
 
-    private final UniqueList<ChainHandler<T>> handlerList;
+    private static final int THRESHOLD = 1;
+
+    private final List<ChainHandler<T>> handlerList;
 
     private final T handlerData;
 
@@ -26,15 +27,24 @@ public class ParallelChainTask<T> extends RecursiveAction {
 
     private final ParallelChainPipelineImpl<T> parallelChainPipeline;
 
-    public ParallelChainTask(UniqueList<ChainHandler<T>> handlerList, T handlerData, List<ChainResult> checkResults, ParallelChainPipelineImpl<T> parallelChainPipeline) {
+    public ParallelChainTask(List<ChainHandler<T>> handlerList, T handlerData, List<ChainResult> checkResults, ParallelChainPipelineImpl<T> parallelChainPipeline) {
         this.handlerList = handlerList;
         this.handlerData = handlerData;
         this.checkResults = checkResults;
         this.parallelChainPipeline = parallelChainPipeline;
     }
+
     @Override
     protected void compute() {
-        this.handlerList.parallelStream()
-                .forEach(handler-> parallelChainPipeline.assembleAndExecute(handlerData, parallelChainPipeline, handler, checkResults));
+        if (handlerList.size() <= THRESHOLD && handlerList.size() > 0) {
+            parallelChainPipeline.assembleAndExecute(handlerData, parallelChainPipeline, handlerList.get(0), checkResults);
+            return;
+        }
+        int mid = handlerList.size() / 2;
+        List<ChainHandler<T>> leftHandlerList = handlerList.subList(0, mid);
+        List<ChainHandler<T>> rightHandlerList = handlerList.subList(mid, handlerList.size());
+        ParallelChainTask<T> leftTask = new ParallelChainTask<>(leftHandlerList, handlerData, checkResults, parallelChainPipeline);
+        ParallelChainTask<T> rightTask = new ParallelChainTask<>(rightHandlerList, handlerData, checkResults, parallelChainPipeline);
+        invokeAll(leftTask, rightTask);
     }
 }
