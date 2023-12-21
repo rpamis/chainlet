@@ -1,6 +1,13 @@
 package com.rpamis.pattern.chain.builder;
 
+import com.rpamis.pattern.chain.ParallelChainPipelineImpl;
+import com.rpamis.pattern.chain.SerialChainPipelineImpl;
+import com.rpamis.pattern.chain.definition.ChainFallBack;
+import com.rpamis.pattern.chain.definition.ChainHandler;
+import com.rpamis.pattern.chain.definition.ChainStrategy;
 import com.rpamis.pattern.chain.entity.ChainException;
+import com.rpamis.pattern.chain.entity.UniqueList;
+import com.rpamis.pattern.chain.generic.ChainTypeReference;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,9 +20,9 @@ import java.util.Map;
  */
 public class ChainPipelineCache {
 
-    private static final Map<String, SerialChainPipelineBuilder<?>> CHAIN_MAP = new HashMap<>();
+    private static final Map<String, SerialChainPipelineImpl<?>> CHAIN_MAP = new HashMap<>();
 
-    private static final Map<String, ParallelChainPipelineBuilder<?>> PARALLEL_CHAIN_MAP = new HashMap<>();
+    private static final Map<String, ParallelChainPipelineImpl<?>> PARALLEL_CHAIN_MAP = new HashMap<>();
 
     /**
      * 注册一个串行责任链
@@ -24,7 +31,7 @@ public class ChainPipelineCache {
      * @param chainId 唯一标识
      * @param <T>     责任链数据类型
      */
-    public static <T> void registerChain(SerialChainPipelineBuilder<T> chain, String chainId) {
+    public static <T> void registerChain(SerialChainPipelineImpl<T> chain, String chainId) {
         if (CHAIN_MAP.containsKey(chainId)) {
             throw new ChainException("There is already a serial chain with chainId [" + chainId + "], please change your chainId, " +
                     "or use com.rpamis.pattern.chain.builder.ChainPipelineFactory.getChain method to obtain the existing chain");
@@ -39,7 +46,7 @@ public class ChainPipelineCache {
      * @param chainId 唯一标识
      * @param <T>     责任链数据类型
      */
-    public static <T> void registerParallelChain(ParallelChainPipelineBuilder<T> chain, String chainId) {
+    public static <T> void registerParallelChain(ParallelChainPipelineImpl<T> chain, String chainId) {
         if (PARALLEL_CHAIN_MAP.containsKey(chainId)) {
             throw new ChainException("There is already a parallel chain with chainId [" + chainId + "], please change your chainId, " +
                     "or use com.rpamis.pattern.chain.builder.ChainPipelineFactory.getParallelChain method to obtain the existing chain");
@@ -56,11 +63,11 @@ public class ChainPipelineCache {
      */
     @SuppressWarnings("unchecked")
     public static <T> SerialChainPipelineBuilder<T> getChain(String chainId) {
-        SerialChainPipelineBuilder<?> chain = CHAIN_MAP.get(chainId);
+        SerialChainPipelineImpl<?> chain = CHAIN_MAP.get(chainId);
         if (chain == null) {
             throw new ChainException("There is no chain instance for " + chainId + ", please create chain with chainId");
         }
-        return (SerialChainPipelineBuilder<T>) chain;
+        return (SerialChainPipelineBuilder<T>) copyChain(chain);
     }
 
     /**
@@ -72,10 +79,48 @@ public class ChainPipelineCache {
      */
     @SuppressWarnings("unchecked")
     public static <T> ParallelChainPipelineBuilder<T> getParallelChain(String chainId) {
-        ParallelChainPipelineBuilder<?> chain = PARALLEL_CHAIN_MAP.get(chainId);
+        ParallelChainPipelineImpl<?> chain = PARALLEL_CHAIN_MAP.get(chainId);
         if (chain == null) {
             throw new ChainException("There is no chain instance for " + chainId + ", please create chain with chainId");
         }
-        return (ParallelChainPipelineBuilder<T>) chain;
+        return (ParallelChainPipelineBuilder<T>) copyChain(chain);
+    }
+
+    /**
+     * 复制串行责任链属性到新串行责任链
+     *
+     * @param chain chain
+     * @param <T>   <T>
+     * @return SerialChainPipelineBuilder<T>
+     */
+    public static <T> SerialChainPipelineBuilder<T> copyChain(SerialChainPipelineImpl<T> chain) {
+        ChainStrategy<T> chainStrategy = chain.getChainStrategy();
+        ChainFallBack<T> chainFallBack = chain.getChainFallBack();
+        UniqueList<ChainHandler<T>> handlerList = chain.getHandlerList();
+        ChainTypeReference<T> chainTypeReference = chain.getChainTypeReference();
+        SerialChainPipelineBuilder<T> newChain = ChainPipelineFactory.createChain(chainTypeReference).chain();
+        newChain.addHandler(handlerList);
+        newChain.globalFallback(chainFallBack);
+        newChain.strategy(chainStrategy);
+        return newChain;
+    }
+
+    /**
+     * 复制并行责任链属性到新并行责任链
+     *
+     * @param chain chain
+     * @param <T>   <T>
+     * @return SerialChainPipelineBuilder<T>
+     */
+    public static <T> ParallelChainPipelineBuilder<T> copyChain(ParallelChainPipelineImpl<T> chain) {
+        ChainStrategy<T> chainStrategy = chain.getChainStrategy();
+        ChainFallBack<T> chainFallBack = chain.getChainFallBack();
+        UniqueList<ChainHandler<T>> handlerList = chain.getHandlerList();
+        ChainTypeReference<T> chainTypeReference = chain.getChainTypeReference();
+        ParallelChainPipelineBuilder<T> newChain = ChainPipelineFactory.createChain(chainTypeReference).parallelChain();
+        newChain.addHandler(handlerList);
+        newChain.globalFallback(chainFallBack);
+        newChain.strategy(chainStrategy);
+        return newChain;
     }
 }

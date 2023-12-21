@@ -2,6 +2,8 @@ package com.rpamis.pattern.chain.fluent;
 
 import com.rpamis.pattern.chain.definition.ChainHandler;
 
+import java.util.List;
+
 /**
  * Add接口
  *
@@ -14,7 +16,15 @@ public interface Add<T> extends With<T> {
      * 添加Handler处理
      *
      * @param handler 具体的Handler处理类
-     * @return ChainPipeline<T>责任链流水线
+     * @return Add<T>
      */
     Add<T> addHandler(ChainHandler<T> handler);
+
+    /**
+     * 添加Handler处理列表
+     *
+     * @param handlerList 具体的Handler处理类列表
+     * @return Add<T>
+     */
+    Add<T> addHandler(List<ChainHandler<T>> handlerList);
 }

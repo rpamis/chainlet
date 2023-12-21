@@ -88,6 +88,18 @@ public abstract class AbstractChainPipeline<T> implements ChainPipeline<T>, Add<
     }
 
     /**
+     * 设置执行策略
+     *
+     * @param chainStrategy chainStrategy
+     * @return With<T>
+     */
+    @Override
+    public With<T> strategy(ChainStrategy<T> chainStrategy) {
+        this.chainStrategy = chainStrategy;
+        return this;
+    }
+
+    /**
      * 设置降级处理
      *
      * @param fallBack fallBack
@@ -103,12 +115,27 @@ public abstract class AbstractChainPipeline<T> implements ChainPipeline<T>, Add<
      * 添加handler实现到责任链流水线中
      *
      * @param handler handler
-     * @return ChainPipeline<T>
+     * @return Add<T>
      */
     @Override
     public Add<T> addHandler(ChainHandler<T> handler) {
         this.handlerList.add(handler);
         this.n++;
+        return this;
+    }
+
+    /**
+     * 添加handler实现列表到责任链流水线中
+     *
+     * @param handlerList 具体的Handler处理类列表
+     * @return Add<T>
+     */
+    @Override
+    public Add<T> addHandler(List<ChainHandler<T>> handlerList) {
+        if (handlerList != null && !handlerList.isEmpty()) {
+            this.handlerList.addAll(handlerList);
+            this.n += handlerList.size();
+        }
         return this;
     }
 
@@ -164,14 +191,14 @@ public abstract class AbstractChainPipeline<T> implements ChainPipeline<T>, Add<
             boolean processResult = chainHandler.process(handlerData);
             // 如果处理不成功则调用降级方法，具体是否调用需查看降级注解中enabled值
             if (!processResult) {
-                LocalFallBackContext<T> localFallBackContext = new LocalFallBackContext<>(handlerData,false);
+                LocalFallBackContext<T> localFallBackContext = new LocalFallBackContext<>(handlerData, false);
                 fallBackResolver.handleLocalFallBack(chainHandler, localFallBackContext, chainTypeReference);
             }
             return processResult;
         } catch (ChainException e) {
             throw e;
         } catch (Exception e) {
-            LocalFallBackContext<T> localFallBackContext = new LocalFallBackContext<>(handlerData,true);
+            LocalFallBackContext<T> localFallBackContext = new LocalFallBackContext<>(handlerData, true);
             fallBackResolver.handleLocalFallBack(chainHandler, localFallBackContext, chainTypeReference);
             throw e;
         }
@@ -238,5 +265,21 @@ public abstract class AbstractChainPipeline<T> implements ChainPipeline<T>, Add<
     @Override
     public ChainPipeline<T> build() {
         return this;
+    }
+
+    public ChainTypeReference<T> getChainTypeReference() {
+        return chainTypeReference;
+    }
+
+    public ChainStrategy<T> getChainStrategy() {
+        return chainStrategy;
+    }
+
+    public ChainFallBack<T> getChainFallBack() {
+        return chainFallBack;
+    }
+
+    public UniqueList<ChainHandler<T>> getHandlerList() {
+        return handlerList;
     }
 }
