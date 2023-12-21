@@ -2,6 +2,7 @@ package com.rpamis.pattern.chain.entity;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -24,5 +25,16 @@ public class UniqueList<T> extends ArrayList<T> implements Serializable {
         }
         handlerSet.add(chainHandler.getClass());
         return super.add(chainHandler);
+    }
+
+    @Override
+    public boolean addAll(Collection<? extends T> collection) {
+        for (T chainHandler : collection) {
+            if (handlerSet.contains(chainHandler.getClass())) {
+                throw new ChainException("Class " + chainHandler.getClass().getSimpleName() + " already exists in the ChainPipeline.");
+            }
+            handlerSet.add(chainHandler.getClass());
+        }
+        return super.addAll(collection);
     }
 }
