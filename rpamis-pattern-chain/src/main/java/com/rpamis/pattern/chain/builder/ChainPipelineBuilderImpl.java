@@ -24,7 +24,21 @@ public class ChainPipelineBuilderImpl<T> implements ChainPipelineBuilder<T> {
     }
 
     @Override
+    public SerialChainPipelineBuilder<T> chain(String chainId) {
+        SerialChainPipelineImpl<T> serialChainPipeline = new SerialChainPipelineImpl<>(chainTypeReference);
+        ChainPipelineCache.registerChain(serialChainPipeline, chainId);
+        return serialChainPipeline;
+    }
+
+    @Override
     public ParallelChainPipelineBuilder<T> parallelChain() {
         return new ParallelChainPipelineImpl<>(chainTypeReference);
+    }
+
+    @Override
+    public ParallelChainPipelineBuilder<T> parallelChain(String chainId) {
+        ParallelChainPipelineImpl<T> parallelChainPipeline = new ParallelChainPipelineImpl<>(chainTypeReference);
+        ChainPipelineCache.registerParallelChain(parallelChainPipeline, chainId);
+        return parallelChainPipeline;
     }
 }

@@ -16,9 +16,25 @@ public interface ChainPipelineBuilder<T> {
     SerialChainPipelineBuilder<T> chain();
 
     /**
+     * 构建串行责任链, 并指定chainId
+     *
+     * @param chainId chainId
+     * @return SerialChainPipelineBuilder
+     */
+    SerialChainPipelineBuilder<T> chain(String chainId);
+
+    /**
      * 构建并行责任链
      *
      * @return ParallelChainPipelineBuilder
      */
     ParallelChainPipelineBuilder<T> parallelChain();
+
+    /**
+     * 构建并行责任链, 并指定chainId
+     *
+     * @param chainId chainId
+     * @return ParallelChainPipelineBuilder
+     */
+    ParallelChainPipelineBuilder<T> parallelChain(String chainId);
 }
