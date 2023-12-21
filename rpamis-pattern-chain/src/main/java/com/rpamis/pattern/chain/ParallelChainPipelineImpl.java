@@ -36,7 +36,7 @@ public class ParallelChainPipelineImpl<T> extends AbstractChainPipeline<T> imple
     @Override
     public void doHandler(T handlerData, List<ChainResult> checkResults) {
         if (!(super.chainStrategy instanceof FullExecutionStrategy)) {
-            throw new ChainException("Parallel chains can only be executed under the FullExecutionStrategy policy. Consider changing your execution strategy");
+            throw new ChainException("Parallel chains can only be executed under the FullExecutionStrategy. Consider changing your execution strategy");
         }
         if (!inParallel.compareAndSet(false, true)) {
             return;

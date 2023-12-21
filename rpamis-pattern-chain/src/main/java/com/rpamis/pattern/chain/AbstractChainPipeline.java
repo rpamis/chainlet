@@ -68,7 +68,7 @@ public abstract class AbstractChainPipeline<T> implements ChainPipeline<T>, Add<
     /**
      * 存储所有责任链校验结果
      */
-    protected final List<ChainResult> checkResults = new ArrayList<>();
+    protected final List<ChainResult> checkResults = Collections.synchronizedList(new ArrayList<>());
 
     protected AbstractChainPipeline(ChainTypeReference<T> chainTypeReference) {
         this.chainTypeReference = chainTypeReference;

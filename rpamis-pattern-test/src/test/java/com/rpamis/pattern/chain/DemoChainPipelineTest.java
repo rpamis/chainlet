@@ -14,6 +14,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.util.StopWatch;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -301,5 +302,37 @@ public class DemoChainPipelineTest {
         Assert.assertFalse(allow);
         Boolean authResult = chainResult.get(ListAuthHandler.class);
         Assert.assertFalse(authResult);
+    }
+
+    @Test
+    public void should_returnFalse_when_isAllow_given_parallelChainInFullExecutionStrategy() {
+        StopWatch stopWatch = new StopWatch();
+        stopWatch.start();
+        ChainTypeReference<DemoUser> reference = new ChainTypeReference<DemoUser>() {};
+        // given
+        ChainPipeline<DemoUser> demoChain = ChainPipelineFactory.createChain(reference)
+                .parallelChain()
+                .addHandler(new AuthHandler())
+                .addHandler(new ValidateHandler())
+                .addHandler(new LoginHandler())
+                .strategy(Strategy.FULL)
+                .build();
+        // when
+        when(demoUser.getName()).thenReturn("test");
+        when(demoUser.getPwd()).thenReturn("123");
+        when(demoUser.getRole()).thenReturn("normal");
+
+        // then
+        CompleteChainResult chainResult = demoChain.apply(demoUser);
+        boolean allow = chainResult.isAllow();
+        Assert.assertFalse(allow);
+        Boolean authResult = chainResult.get(AuthHandler.class);
+        Assert.assertFalse(authResult);
+        Boolean validResult = chainResult.get(ValidateHandler.class);
+        Assert.assertTrue(validResult);
+        Boolean loginResult = chainResult.get(LoginHandler.class);
+        Assert.assertTrue(loginResult);
+        stopWatch.stop();
+        System.out.println(stopWatch.prettyPrint());
     }
 }
