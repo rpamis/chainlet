@@ -37,4 +37,14 @@ public class UniqueList<T> extends ArrayList<T> implements Serializable {
         }
         return super.addAll(collection);
     }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        return super.equals(o);
+    }
 }

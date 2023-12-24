@@ -11,7 +11,7 @@ import java.lang.reflect.Type;
  * @author benym
  * @date 2023/8/17 16:29
  */
-public abstract class ChainTypeReference<T> {
+public class ChainTypeReference<T> {
 
     protected final Type genericType;
 

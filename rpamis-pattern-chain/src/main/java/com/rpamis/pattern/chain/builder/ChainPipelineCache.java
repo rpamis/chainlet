@@ -20,6 +20,10 @@ import java.util.Map;
  */
 public class ChainPipelineCache {
 
+    private ChainPipelineCache() {
+        throw new IllegalStateException("ChainPipelineFactory class prohibited instantiation");
+    }
+
     private static final Map<String, SerialChainPipelineImpl<?>> CHAIN_MAP = new HashMap<>();
 
     private static final Map<String, ParallelChainPipelineImpl<?>> PARALLEL_CHAIN_MAP = new HashMap<>();

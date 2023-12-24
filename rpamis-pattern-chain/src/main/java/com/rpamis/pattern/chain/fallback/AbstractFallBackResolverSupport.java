@@ -25,14 +25,14 @@ public abstract class AbstractFallBackResolverSupport {
      * @return Method
      */
     protected Method findLocalFallBackMethod(ChainHandler<?> chainHandler, String fallBackName, Class<?>[] fallBackClass) {
-        if (fallBackName == null || fallBackName.trim().length() == 0) {
+        if (fallBackName == null || fallBackName.trim().isEmpty()) {
             return null;
         }
         boolean mustStatic = fallBackClass != null && fallBackClass.length >= 1;
         Class<?> actualFallBackMethodClass = mustStatic ? fallBackClass[0] : chainHandler.getClass();
         MethodRecord fallBackRecord = MethodMetaDataRegistry.getLocalFallBackRecord(actualFallBackMethodClass, fallBackName);
         if (fallBackRecord == null) {
-            Method method = resolverLocalFallBackMethod(fallBackName, actualFallBackMethodClass, mustStatic);
+            Method method = resolverLocalFallBackMethod(fallBackName, actualFallBackMethodClass);
             MethodMetaDataRegistry.initLocalFallBackRecord(actualFallBackMethodClass, fallBackName, method);
             return method;
         }
@@ -77,7 +77,7 @@ public abstract class AbstractFallBackResolverSupport {
     protected void invokeActual(ChainHandler<?> chainHandler, Method method, LocalFallBackContext<?> localFallBackContext) {
         try {
             if (method == null) {
-                throw new ChainException("The fallback method is null, ");
+                throw new ChainException("The fallback method executed by [" + chainHandler.getClass().getSimpleName() + " was not found. Please verify that the configuration is correct ");
             }
             if (!method.isAccessible()) {
                 makeAccessibleIfNecessary(method);
@@ -131,10 +131,9 @@ public abstract class AbstractFallBackResolverSupport {
      *
      * @param fallBackName  降级方法名
      * @param fallBackClass 降级方法Class
-     * @param mustStatic    是否是静态方法
      * @return Method
      */
-    private Method resolverLocalFallBackMethod(String fallBackName, Class<?> fallBackClass, boolean mustStatic) {
+    private Method resolverLocalFallBackMethod(String fallBackName, Class<?> fallBackClass) {
         try {
             Method method = fallBackClass.getMethod(fallBackName, LocalFallBackContext.class);
             Class<?> returnType = method.getReturnType();
