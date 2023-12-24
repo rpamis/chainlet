@@ -1,10 +1,10 @@
 package com.rpamis.pattern.chain.entity;
 
+import com.rpamis.pattern.chain.definition.ChainHandler;
+import com.rpamis.pattern.chain.definition.ChainOrder;
+
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 /**
  * 唯一List
@@ -36,6 +36,25 @@ public class UniqueList<T> extends ArrayList<T> implements Serializable {
             handlerSet.add(chainHandler.getClass());
         }
         return super.addAll(collection);
+    }
+
+    /**
+     * 将Handler按照Order进行排序
+     */
+    @SuppressWarnings("unchecked")
+    public void sortByOrder() {
+        sort(Comparator.comparingInt(handler -> getOrderValue((ChainHandler<T>) handler)));
+    }
+
+    /**
+     * 获取Handler的执行顺序
+     *
+     * @param chainHandler chainHandler
+     * @return int
+     */
+    public int getOrderValue(ChainHandler<T> chainHandler) {
+        ChainOrder chainOrder = chainHandler.getClass().getAnnotation(ChainOrder.class);
+        return (chainOrder != null) ? chainOrder.value() : Integer.MAX_VALUE;
     }
 
     @Override

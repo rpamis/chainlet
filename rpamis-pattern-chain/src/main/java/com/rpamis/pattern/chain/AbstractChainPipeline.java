@@ -264,6 +264,7 @@ public abstract class AbstractChainPipeline<T> implements ChainPipeline<T>, Add<
 
     @Override
     public ChainPipeline<T> build() {
+        handlerList.sortByOrder();
         return this;
     }
 
