@@ -20,6 +20,11 @@ public class ChainContext<T> {
     private T handlerData;
 
     /**
+     * 责任链可变数据
+     */
+    private Object variableData;
+
+    /**
      * 责任链
      */
     private ChainPipeline<T> chain;
@@ -41,6 +46,15 @@ public class ChainContext<T> {
 
     public ChainContext(T handlerData, ChainPipeline<T> chain, ChainStrategy<T> strategy, ChainHandler<T> chainHandler, List<ChainResult> checkResults) {
         this.handlerData = handlerData;
+        this.chain = chain;
+        this.strategy = strategy;
+        this.chainHandler = chainHandler;
+        this.checkResults = checkResults;
+    }
+
+    public ChainContext(T handlerData, Object variableData, ChainPipeline<T> chain, ChainStrategy<T> strategy, ChainHandler<T> chainHandler, List<ChainResult> checkResults) {
+        this.handlerData = handlerData;
+        this.variableData = variableData;
         this.chain = chain;
         this.strategy = strategy;
         this.chainHandler = chainHandler;
@@ -87,10 +101,19 @@ public class ChainContext<T> {
         this.checkResults = checkResults;
     }
 
+    public Object getVariableData() {
+        return variableData;
+    }
+
+    public void setVariableData(Object variableData) {
+        this.variableData = variableData;
+    }
+
     @Override
     public String toString() {
         return "ChainContext{" +
                 "handlerData=" + handlerData +
+                ", variableData=" + variableData +
                 ", chain=" + chain +
                 ", strategy=" + strategy +
                 ", chainHandler=" + chainHandler +

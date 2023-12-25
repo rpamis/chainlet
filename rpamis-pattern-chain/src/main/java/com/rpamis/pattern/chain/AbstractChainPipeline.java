@@ -172,9 +172,10 @@ public abstract class AbstractChainPipeline<T> implements ChainPipeline<T>, Add<
         ChainPipeline<T> chain = chainContext.getChain();
         ChainHandler<T> chainHandler = chainContext.getChainHandler();
         List<ChainResult> checkResults = chainContext.getCheckResults();
-        Boolean processResult = this.concreteHandlerProcess(chainHandler, handlerData);
+        Boolean processResult = this.concreteHandlerProcess(chainContext);
         // 根据策略进行返回值包装
-        ChainResult chainResult = this.initSingleChainResult(chainHandler.getClass(), processResult, chainHandler.message());
+        ChainResult chainResult = this.initSingleChainResult(chainHandler.getClass(), processResult,
+                chainContext.getVariableData(), chainHandler.message());
         ChainStrategyContext<T> chainStrategyContext = new ChainStrategyContext<>(handlerData, chain, chainResult, checkResults);
         strategy.doStrategy(chainStrategyContext);
     }
@@ -182,11 +183,12 @@ public abstract class AbstractChainPipeline<T> implements ChainPipeline<T>, Add<
     /**
      * 具体handler实现类处理，如果处理不成功或发生异常则触发局部降级策略
      *
-     * @param chainHandler hanlder具体实现类
-     * @param handlerData  责任链处理主数据
+     * @param chainContext 责任链上下文
      * @return Boolean
      */
-    protected Boolean concreteHandlerProcess(ChainHandler<T> chainHandler, T handlerData) {
+    protected Boolean concreteHandlerProcess(ChainContext<T> chainContext) {
+        T handlerData = chainContext.getHandlerData();
+        ChainHandler<T> chainHandler = chainContext.getChainHandler();
         try {
             boolean processResult = chainHandler.process(handlerData);
             // 如果处理不成功则调用降级方法，具体是否调用需查看降级注解中enabled值
@@ -209,11 +211,12 @@ public abstract class AbstractChainPipeline<T> implements ChainPipeline<T>, Add<
      *
      * @param handlerClass  责任链具体处理类Class
      * @param processResult 责任链处理结果
+     * @param variableData  责任链可变数据
      * @param message       责任链处理自定义消息
      * @return ChainResult
      */
-    protected ChainResult initSingleChainResult(Class<?> handlerClass, boolean processResult, String message) {
-        return new ChainResult(handlerClass, processResult, message);
+    protected ChainResult initSingleChainResult(Class<?> handlerClass, boolean processResult, Object variableData, String message) {
+        return new ChainResult(handlerClass, processResult, variableData, message);
     }
 
     /**
