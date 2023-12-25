@@ -2,6 +2,7 @@ package com.rpamis.pattern.chain.builder;
 
 import com.rpamis.pattern.chain.ParallelChainPipelineImpl;
 import com.rpamis.pattern.chain.SerialChainPipelineImpl;
+import com.rpamis.pattern.chain.VariableChainPipelineImpl;
 import com.rpamis.pattern.chain.generic.ChainTypeReference;
 
 /**
@@ -40,5 +41,17 @@ public class ChainPipelineBuilderImpl<T> implements ChainPipelineBuilder<T> {
         ParallelChainPipelineImpl<T> parallelChainPipeline = new ParallelChainPipelineImpl<>(chainTypeReference);
         ChainPipelineCache.registerParallelChain(parallelChainPipeline, chainId);
         return parallelChainPipeline;
+    }
+
+    @Override
+    public VariableChainPipelineBuilder<T> variableChain() {
+        return new VariableChainPipelineImpl<>(chainTypeReference);
+    }
+
+    @Override
+    public VariableChainPipelineBuilder<T> variableChain(String chainId) {
+        VariableChainPipelineImpl<T> variableChainPipeline = new VariableChainPipelineImpl<>(chainTypeReference);
+        ChainPipelineCache.registerVariableChain(variableChainPipeline, chainId);
+        return variableChainPipeline;
     }
 }
