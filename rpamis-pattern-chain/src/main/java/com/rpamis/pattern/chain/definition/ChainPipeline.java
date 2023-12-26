@@ -23,6 +23,17 @@ public interface ChainPipeline<T> extends Apply<T> {
     void doHandler(T handlerData, List<ChainResult> checkResults);
 
     /**
+     * 流水线执行Handler处理
+     *
+     * @param handlerData  需要处理的数据
+     * @param variableData 返回的可变数据
+     * @param checkResults 责任链结果存储list
+     */
+    default void doHandler(T handlerData, Object variableData, List<ChainResult> checkResults) {
+
+    }
+
+    /**
      * 流水线执行Handler后的处理
      */
     void afterHandler();
