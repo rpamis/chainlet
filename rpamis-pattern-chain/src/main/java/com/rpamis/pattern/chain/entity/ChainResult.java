@@ -23,19 +23,19 @@ public class ChainResult implements Serializable {
     private boolean processResult;
 
     /**
-     * 责任链可变数据
+     * 责任链可变数据，处理后返回的数据
      */
-    private Object variableData;
+    private Object processedData;
 
     /**
      * 当前处理类消息
      */
     private String message;
 
-    public ChainResult(Class<?> handlerClass, boolean processResult, Object variableData, String message) {
+    public ChainResult(Class<?> handlerClass, boolean processResult, Object processedData, String message) {
         this.handlerClass = handlerClass;
         this.processResult = processResult;
-        this.variableData = variableData;
+        this.processedData = processedData;
         this.message = message;
     }
 
@@ -63,12 +63,12 @@ public class ChainResult implements Serializable {
         this.message = message;
     }
 
-    public Object getVariableData() {
-        return variableData;
+    public Object getProcessedData() {
+        return processedData;
     }
 
-    public void setVariableData(Object variableData) {
-        this.variableData = variableData;
+    public void setProcessedData(Object processedData) {
+        this.processedData = processedData;
     }
 
     @Override
@@ -76,7 +76,7 @@ public class ChainResult implements Serializable {
         return "ChainResult{" +
                 "handlerClass=" + handlerClass +
                 ", processResult=" + processResult +
-                ", variableData=" + variableData +
+                ", processedData=" + processedData +
                 ", message='" + message + '\'' +
                 '}';
     }

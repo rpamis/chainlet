@@ -175,7 +175,7 @@ public abstract class AbstractChainPipeline<T> implements ChainPipeline<T>, Add<
         Boolean processResult = this.concreteHandlerProcess(chainContext);
         // 根据策略进行返回值包装
         ChainResult chainResult = this.initSingleChainResult(chainHandler.getClass(), processResult,
-                chainContext.getVariableData(), chainHandler.message());
+                chainContext.getProcessedData(), chainHandler.message());
         ChainStrategyContext<T> chainStrategyContext = new ChainStrategyContext<>(handlerData, chain, chainResult, checkResults);
         strategy.doStrategy(chainStrategyContext);
     }
@@ -211,12 +211,12 @@ public abstract class AbstractChainPipeline<T> implements ChainPipeline<T>, Add<
      *
      * @param handlerClass  责任链具体处理类Class
      * @param processResult 责任链处理结果
-     * @param variableData  责任链可变数据
+     * @param processedData  责任链返回数据
      * @param message       责任链处理自定义消息
      * @return ChainResult
      */
-    protected ChainResult initSingleChainResult(Class<?> handlerClass, boolean processResult, Object variableData, String message) {
-        return new ChainResult(handlerClass, processResult, variableData, message);
+    protected ChainResult initSingleChainResult(Class<?> handlerClass, boolean processResult, Object processedData, String message) {
+        return new ChainResult(handlerClass, processResult, processedData, message);
     }
 
     /**

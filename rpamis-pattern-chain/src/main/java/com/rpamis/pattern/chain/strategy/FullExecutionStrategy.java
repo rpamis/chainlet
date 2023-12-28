@@ -24,9 +24,9 @@ public class FullExecutionStrategy<T> implements ChainStrategy<T> {
         ChainResult chainResult = chainStrategyContext.getChainResult();
         List<ChainResult> checkResults = chainStrategyContext.getCheckResults();
         checkResults.add(chainResult);
-        Object variableData = chainResult.getVariableData();
-        if (variableData != null) {
-            chain.doHandler(handlerData, variableData, checkResults);
+        Object processedData = chainResult.getProcessedData();
+        if (processedData != null) {
+            chain.doHandler(handlerData, processedData, checkResults);
         } else {
             chain.doHandler(handlerData, checkResults);
         }

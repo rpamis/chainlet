@@ -25,7 +25,7 @@ public class VariableChainPipelineImpl<T> extends AbstractChainPipeline<T> imple
     }
 
     @Override
-    public void doHandler(T handlerData, Object variableData, List<ChainResult> checkResults) {
-        super.doHandler(handlerData, variableData, checkResults);
+    public void doHandler(T handlerData, Object processedData, List<ChainResult> checkResults) {
+        super.doHandler(handlerData, processedData, checkResults);
     }
 }
