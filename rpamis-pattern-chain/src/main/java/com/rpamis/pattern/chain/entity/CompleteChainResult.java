@@ -20,7 +20,7 @@ public class CompleteChainResult implements Serializable {
     /**
      * 整个链计算结果，如果有一个false则为false
      */
-    private final boolean allow;
+    private final Boolean allow;
 
     /**
      * 所有处理类->处理结果实体Map
@@ -60,6 +60,18 @@ public class CompleteChainResult implements Serializable {
     public <T> Boolean get(Class<T> cls) {
         return Optional.ofNullable(chainResultMap.get(cls))
                 .map(ChainResult::isProcessResult)
+                .orElse(null);
+    }
+
+    /**
+     * 获取责任链最终输出实体，以最后一个处理结果为准
+     *
+     * @return Object
+     */
+    public Object getFinalResult() {
+        return chainResults.stream()
+                .reduce((first, second) -> second)
+                .map(ChainResult::getProcessedData)
                 .orElse(null);
     }
 

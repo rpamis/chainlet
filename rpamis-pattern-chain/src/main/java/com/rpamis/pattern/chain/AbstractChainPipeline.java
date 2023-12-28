@@ -238,7 +238,7 @@ public abstract class AbstractChainPipeline<T> implements ChainPipeline<T>, Add<
      */
     @Override
     public CompleteChainResult apply(T handlerData) {
-        CompleteChainResult completeChainResult = null;
+        CompleteChainResult completeChainResult;
         try {
             this.doHandler(handlerData, checkResults);
             completeChainResult = new CompleteChainResult(buildSuccess(checkResults), Collections.unmodifiableList(checkResults));
@@ -247,7 +247,7 @@ public abstract class AbstractChainPipeline<T> implements ChainPipeline<T>, Add<
         } catch (ChainException e) {
             throw e;
         } catch (Exception e) {
-            fallBackResolver.handleGlobalFallBack(chainFallBack, handlerData, completeChainResult, true);
+            fallBackResolver.handleGlobalFallBack(chainFallBack, handlerData, null, true);
             throw e;
         } finally {
             this.afterHandler();

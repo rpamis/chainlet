@@ -8,13 +8,16 @@ package com.rpamis.pattern.chain.entity;
  */
 public class GlobalFallBackContext<T> extends FallBackContext<T> {
 
+    private static final long serialVersionUID = -7138806610509549353L;
+
     /**
      * 责任链最终结果实体
      */
     CompleteChainResult completeChainResult;
 
-    public GlobalFallBackContext(T handlerData, CompleteChainResult completeChainResult, Boolean exceptionOccurred) {
+    public GlobalFallBackContext(T handlerData, Object processedData, CompleteChainResult completeChainResult, Boolean exceptionOccurred) {
         this.handlerData = handlerData;
+        this.processedData = processedData;
         this.completeChainResult = completeChainResult;
         this.exceptionOccurred = exceptionOccurred;
     }
@@ -25,5 +28,15 @@ public class GlobalFallBackContext<T> extends FallBackContext<T> {
 
     public void setCompleteChainResult(CompleteChainResult completeChainResult) {
         this.completeChainResult = completeChainResult;
+    }
+
+    @Override
+    public String toString() {
+        return "GlobalFallBackContext{" +
+                "completeChainResult=" + completeChainResult +
+                ", handlerData=" + handlerData +
+                ", processedData=" + processedData +
+                ", exceptionOccurred=" + exceptionOccurred +
+                '}';
     }
 }

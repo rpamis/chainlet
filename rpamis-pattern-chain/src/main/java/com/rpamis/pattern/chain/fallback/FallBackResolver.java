@@ -52,10 +52,18 @@ public class FallBackResolver<T> extends AbstractFallBackResolverSupport {
      * @param chainFallBack       全局降级方法实现类
      * @param handlerData         责任链处理主数据
      * @param completeChainResult 责任链执行最终结果实体类
+     * @param exceptionOccurred   责任链执行是否发生异常
      */
-    public void handleGlobalFallBack(ChainFallBack<T> chainFallBack, T handlerData, CompleteChainResult completeChainResult, Boolean exceptionOccurred) {
-        GlobalFallBackContext<T> globalFallBackContext = new GlobalFallBackContext<>(handlerData, completeChainResult, exceptionOccurred);
-        if (Boolean.FALSE.equals(exceptionOccurred)) {
+    public void handleGlobalFallBack(ChainFallBack<T> chainFallBack, T handlerData, CompleteChainResult completeChainResult,
+                                     Boolean exceptionOccurred) {
+        Object processedResult = null;
+        boolean resultHaveValue = completeChainResult != null;
+        if (resultHaveValue) {
+            processedResult = completeChainResult.getFinalResult();
+        }
+        GlobalFallBackContext<T> globalFallBackContext = new GlobalFallBackContext<>(handlerData, processedResult,
+                completeChainResult, exceptionOccurred);
+        if (Boolean.FALSE.equals(exceptionOccurred) && resultHaveValue) {
             boolean allow = completeChainResult.isAllow();
             if (chainFallBack != null && !allow) {
                 chainFallBack.fallBack(globalFallBackContext);

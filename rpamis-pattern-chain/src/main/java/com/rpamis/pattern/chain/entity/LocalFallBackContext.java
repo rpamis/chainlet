@@ -8,8 +8,19 @@ package com.rpamis.pattern.chain.entity;
  */
 public class LocalFallBackContext<T> extends FallBackContext<T> {
 
+    private static final long serialVersionUID = 364337999955615297L;
+
     public LocalFallBackContext(T handlerData, Boolean exceptionOccurred) {
         this.handlerData = handlerData;
         this.exceptionOccurred = exceptionOccurred;
+    }
+
+    @Override
+    public String toString() {
+        return "LocalFallBackContext{" +
+                "handlerData=" + handlerData +
+                ", processedData=" + processedData +
+                ", exceptionOccurred=" + exceptionOccurred +
+                '}';
     }
 }
