@@ -2,6 +2,7 @@ package com.rpamis.pattern.chain;
 
 import com.rpamis.pattern.chain.builder.VariableChainPipelineBuilder;
 import com.rpamis.pattern.chain.definition.ChainHandler;
+import com.rpamis.pattern.chain.definition.ChainStrategy;
 import com.rpamis.pattern.chain.entity.ChainContext;
 import com.rpamis.pattern.chain.entity.ChainException;
 import com.rpamis.pattern.chain.entity.ChainResult;
@@ -10,6 +11,7 @@ import com.rpamis.pattern.chain.generic.ChainTypeReference;
 import com.rpamis.pattern.chain.strategy.FastFailedStrategy;
 import com.rpamis.pattern.chain.strategy.FastReturnStrategy;
 import com.rpamis.pattern.chain.strategy.FullExecutionStrategy;
+import com.rpamis.pattern.chain.support.InstanceOfCache;
 
 import java.util.List;
 
@@ -36,9 +38,7 @@ public class VariableChainPipelineImpl<T> extends AbstractChainPipeline<T> imple
             ChainContext<T> chainContext = new ChainContext<>(handlerData, processedData, this,
                     this.chainStrategy, chainHandler, checkResults);
             this.handlePipeline(chainContext);
-            if (this.chainStrategy instanceof FastReturnStrategy
-                    || this.chainStrategy instanceof FastFailedStrategy
-                    || this.chainStrategy instanceof FullExecutionStrategy) {
+            if (InstanceOfCache.instanceofCheck(chainStrategy.getClass(), ChainStrategy.class)) {
                 this.pos = this.n;
             }
         }
