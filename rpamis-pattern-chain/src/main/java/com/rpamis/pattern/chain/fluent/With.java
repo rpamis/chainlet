@@ -10,7 +10,7 @@ import com.rpamis.pattern.chain.strategy.StrategyKey;
  * @author benym
  * @date 2023/8/21 15:09
  */
-public interface With<T> extends Apply<T>, Builder<T> {
+public interface With<T> extends Builder<T> {
 
     /**
      * 责任链执行策略
