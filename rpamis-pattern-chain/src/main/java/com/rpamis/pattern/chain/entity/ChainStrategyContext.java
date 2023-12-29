@@ -1,6 +1,6 @@
 package com.rpamis.pattern.chain.entity;
 
-import com.rpamis.pattern.chain.definition.ChainPipeline;
+import com.rpamis.pattern.chain.definition.ChainInnerPipeline;
 
 import java.util.List;
 
@@ -19,7 +19,7 @@ public class ChainStrategyContext<T> {
     /**
      * 责任链
      */
-    private ChainPipeline<T> chain;
+    private ChainInnerPipeline<T> chain;
 
     /**
      * 单个责任链Handler执行结果
@@ -31,7 +31,7 @@ public class ChainStrategyContext<T> {
      */
     private List<ChainResult> checkResults;
 
-    public ChainStrategyContext(T handlerData, ChainPipeline<T> chain, ChainResult chainResult, List<ChainResult> checkResults) {
+    public ChainStrategyContext(T handlerData, ChainInnerPipeline<T> chain, ChainResult chainResult, List<ChainResult> checkResults) {
         this.handlerData = handlerData;
         this.chain = chain;
         this.chainResult = chainResult;
@@ -46,11 +46,11 @@ public class ChainStrategyContext<T> {
         this.handlerData = handlerData;
     }
 
-    public ChainPipeline<T> getChain() {
+    public ChainInnerPipeline<T> getChain() {
         return chain;
     }
 
-    public void setChain(ChainPipeline<T> chain) {
+    public void setChain(ChainInnerPipeline<T> chain) {
         this.chain = chain;
     }
 

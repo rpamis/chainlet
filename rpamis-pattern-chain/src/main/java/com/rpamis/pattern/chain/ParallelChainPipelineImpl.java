@@ -2,7 +2,7 @@ package com.rpamis.pattern.chain;
 
 import com.rpamis.pattern.chain.builder.ParallelChainPipelineBuilder;
 import com.rpamis.pattern.chain.definition.ChainHandler;
-import com.rpamis.pattern.chain.definition.ChainPipeline;
+import com.rpamis.pattern.chain.definition.ChainInnerPipeline;
 import com.rpamis.pattern.chain.entity.ChainContext;
 import com.rpamis.pattern.chain.entity.ChainException;
 import com.rpamis.pattern.chain.entity.ChainResult;
@@ -55,7 +55,7 @@ public class ParallelChainPipelineImpl<T> extends AbstractChainPipeline<T> imple
      * @param chainHandler chainHandler
      * @param checkResults checkResults
      */
-    public void assembleAndExecute(T handlerData, ChainPipeline<T> chain, ChainHandler<T> chainHandler, List<ChainResult> checkResults) {
+    public void assembleAndExecute(T handlerData, ChainInnerPipeline<T> chain, ChainHandler<T> chainHandler, List<ChainResult> checkResults) {
         ChainContext<T> chainContext = new ChainContext<>(handlerData, chain,
                 super.chainStrategy, chainHandler, checkResults);
         super.handlePipeline(chainContext);

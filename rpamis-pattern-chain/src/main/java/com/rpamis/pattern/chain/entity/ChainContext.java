@@ -1,7 +1,7 @@
 package com.rpamis.pattern.chain.entity;
 
 import com.rpamis.pattern.chain.definition.ChainHandler;
-import com.rpamis.pattern.chain.definition.ChainPipeline;
+import com.rpamis.pattern.chain.definition.ChainInnerPipeline;
 import com.rpamis.pattern.chain.definition.ChainStrategy;
 
 import java.util.List;
@@ -27,7 +27,7 @@ public class ChainContext<T> {
     /**
      * 责任链
      */
-    private ChainPipeline<T> chain;
+    private ChainInnerPipeline<T> chain;
 
     /**
      * 责任链执行策略
@@ -44,7 +44,7 @@ public class ChainContext<T> {
      */
     private List<ChainResult> checkResults;
 
-    public ChainContext(T handlerData, ChainPipeline<T> chain, ChainStrategy<T> strategy, ChainHandler<T> chainHandler, List<ChainResult> checkResults) {
+    public ChainContext(T handlerData, ChainInnerPipeline<T> chain, ChainStrategy<T> strategy, ChainHandler<T> chainHandler, List<ChainResult> checkResults) {
         this.handlerData = handlerData;
         this.chain = chain;
         this.strategy = strategy;
@@ -52,7 +52,7 @@ public class ChainContext<T> {
         this.checkResults = checkResults;
     }
 
-    public ChainContext(T handlerData, Object processedData, ChainPipeline<T> chain, ChainStrategy<T> strategy, ChainHandler<T> chainHandler, List<ChainResult> checkResults) {
+    public ChainContext(T handlerData, Object processedData, ChainInnerPipeline<T> chain, ChainStrategy<T> strategy, ChainHandler<T> chainHandler, List<ChainResult> checkResults) {
         this.handlerData = handlerData;
         this.processedData = processedData;
         this.chain = chain;
@@ -69,11 +69,11 @@ public class ChainContext<T> {
         this.handlerData = handlerData;
     }
 
-    public ChainPipeline<T> getChain() {
+    public ChainInnerPipeline<T> getChain() {
         return chain;
     }
 
-    public void setChain(ChainPipeline<T> chain) {
+    public void setChain(ChainInnerPipeline<T> chain) {
         this.chain = chain;
     }
 

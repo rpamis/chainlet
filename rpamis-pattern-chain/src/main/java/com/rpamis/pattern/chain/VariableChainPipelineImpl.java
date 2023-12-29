@@ -2,13 +2,15 @@ package com.rpamis.pattern.chain;
 
 import com.rpamis.pattern.chain.builder.VariableChainPipelineBuilder;
 import com.rpamis.pattern.chain.definition.ChainHandler;
-import com.rpamis.pattern.chain.entity.*;
+import com.rpamis.pattern.chain.entity.ChainContext;
+import com.rpamis.pattern.chain.entity.ChainException;
+import com.rpamis.pattern.chain.entity.ChainResult;
+import com.rpamis.pattern.chain.entity.LocalFallBackContext;
 import com.rpamis.pattern.chain.generic.ChainTypeReference;
 import com.rpamis.pattern.chain.strategy.FastFailedStrategy;
 import com.rpamis.pattern.chain.strategy.FastReturnStrategy;
 import com.rpamis.pattern.chain.strategy.FullExecutionStrategy;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -24,28 +26,13 @@ public class VariableChainPipelineImpl<T> extends AbstractChainPipeline<T> imple
     }
 
     @Override
-    public CompleteChainResult apply(T handlerData) {
-        CompleteChainResult completeChainResult;
-        try {
-            this.doHandler(handlerData, null, checkResults);
-            completeChainResult = new CompleteChainResult(buildSuccess(checkResults), Collections.unmodifiableList(checkResults));
-            fallBackResolver.handleGlobalFallBack(chainFallBack, handlerData, completeChainResult, false);
-            return completeChainResult;
-        } catch (ChainException e) {
-            throw e;
-        } catch (Exception e) {
-            fallBackResolver.handleGlobalFallBack(chainFallBack, handlerData, null, true);
-            throw e;
-        } finally {
-            this.afterHandler();
-        }
-    }
-
-    @Override
-    public void doHandler(T handlerData, Object processedData, List<ChainResult> checkResults) {
+    public void doHandler(T handlerData, List<ChainResult> checkResults) {
         // 如果当前的handler的位置小于链上所有handler数量，则说明还没执行完，继续向前推进handler
         if (this.pos < this.n) {
             ChainHandler<T> chainHandler = handlerList.get(this.pos++);
+            // 获取结果中的最后一个processedData往下传递
+            Object processedData = checkResults.stream().reduce((first, second) -> second)
+                    .map(ChainResult::getProcessedData).orElse(null);
             ChainContext<T> chainContext = new ChainContext<>(handlerData, processedData, this,
                     this.chainStrategy, chainHandler, checkResults);
             this.handlePipeline(chainContext);
@@ -67,6 +54,7 @@ public class VariableChainPipelineImpl<T> extends AbstractChainPipeline<T> imple
             // 如果处理不成功则调用降级方法，具体是否调用需查看降级注解中enabled值
             if (!processResult) {
                 LocalFallBackContext<T> localFallBackContext = new LocalFallBackContext<>(handlerData, false);
+                localFallBackContext.setProcessedData(processedData);
                 fallBackResolver.handleLocalFallBack(chainHandler, localFallBackContext, chainTypeReference);
             }
             return processResult;
@@ -74,6 +62,7 @@ public class VariableChainPipelineImpl<T> extends AbstractChainPipeline<T> imple
             throw e;
         } catch (Exception e) {
             LocalFallBackContext<T> localFallBackContext = new LocalFallBackContext<>(handlerData, true);
+            localFallBackContext.setProcessedData(processedData);
             fallBackResolver.handleLocalFallBack(chainHandler, localFallBackContext, chainTypeReference);
             throw e;
         }

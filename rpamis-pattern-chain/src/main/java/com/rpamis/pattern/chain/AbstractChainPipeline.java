@@ -2,10 +2,7 @@ package com.rpamis.pattern.chain;
 
 
 import com.rpamis.extension.spi.SpiLoader;
-import com.rpamis.pattern.chain.definition.ChainFallBack;
-import com.rpamis.pattern.chain.definition.ChainHandler;
-import com.rpamis.pattern.chain.definition.ChainPipeline;
-import com.rpamis.pattern.chain.definition.ChainStrategy;
+import com.rpamis.pattern.chain.definition.*;
 import com.rpamis.pattern.chain.entity.*;
 import com.rpamis.pattern.chain.fallback.FallBackResolver;
 import com.rpamis.pattern.chain.generic.ChainTypeReference;
@@ -29,7 +26,7 @@ import java.util.stream.Collectors;
  * @author benym
  * @date 2023/2/1 17:33
  */
-public abstract class AbstractChainPipeline<T> implements ChainPipeline<T>, Add<T>, Apply<T>, With<T>, Builder<T> {
+public abstract class AbstractChainPipeline<T> implements ChainInnerPipeline<T>, ChainPipeline<T>, Add<T>, Apply<T>, With<T>, Builder<T> {
 
     /**
      * 记录当前Handler位置
@@ -169,7 +166,7 @@ public abstract class AbstractChainPipeline<T> implements ChainPipeline<T>, Add<
     protected void handlePipeline(ChainContext<T> chainContext) {
         ChainStrategy<T> strategy = chainContext.getStrategy();
         T handlerData = chainContext.getHandlerData();
-        ChainPipeline<T> chain = chainContext.getChain();
+        ChainInnerPipeline<T> chain = chainContext.getChain();
         ChainHandler<T> chainHandler = chainContext.getChainHandler();
         List<ChainResult> checkResults = chainContext.getCheckResults();
         Boolean processResult = this.concreteHandlerProcess(chainContext);
@@ -211,7 +208,7 @@ public abstract class AbstractChainPipeline<T> implements ChainPipeline<T>, Add<
      *
      * @param handlerClass  责任链具体处理类Class
      * @param processResult 责任链处理结果
-     * @param processedData  责任链返回数据
+     * @param processedData 责任链返回数据
      * @param message       责任链处理自定义消息
      * @return ChainResult
      */

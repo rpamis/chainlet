@@ -1,7 +1,7 @@
 package com.rpamis.pattern.chain.strategy;
 
 
-import com.rpamis.pattern.chain.definition.ChainPipeline;
+import com.rpamis.pattern.chain.definition.ChainInnerPipeline;
 import com.rpamis.pattern.chain.definition.ChainStrategy;
 import com.rpamis.pattern.chain.entity.ChainResult;
 import com.rpamis.pattern.chain.entity.ChainStrategyContext;
@@ -19,7 +19,7 @@ public class FullExecutionStrategy<T> implements ChainStrategy<T> {
 
     @Override
     public void doStrategy(ChainStrategyContext<T> chainStrategyContext) {
-        ChainPipeline<T> chain = chainStrategyContext.getChain();
+        ChainInnerPipeline<T> chain = chainStrategyContext.getChain();
         T handlerData = chainStrategyContext.getHandlerData();
         ChainResult chainResult = chainStrategyContext.getChainResult();
         List<ChainResult> checkResults = chainStrategyContext.getCheckResults();
