@@ -8,6 +8,7 @@ import com.rpamis.pattern.chain.definition.ChainHandler;
 import com.rpamis.pattern.chain.definition.ChainStrategy;
 import com.rpamis.pattern.chain.entity.ChainException;
 import com.rpamis.pattern.chain.entity.UniqueList;
+import com.rpamis.pattern.chain.fallback.GlobalChainFallBack;
 import com.rpamis.pattern.chain.generic.ChainTypeReference;
 import com.rpamis.pattern.chain.strategy.StrategyKey;
 
@@ -142,7 +143,7 @@ public class ChainPipelineCache {
         UniqueList<? extends ChainHandler<?>> handlerList = chain.getHandlerList();
         SerialChainPipelineBuilder<T> newChain = ChainPipelineFactory.createChain(chainTypeReference).chain();
         newChain.addHandler((ChainHandler<T>) handlerList);
-        newChain.globalFallback((ChainFallBack<T>) chainFallBack);
+        newChain.globalFallback((GlobalChainFallBack<T>) chainFallBack);
         newChain.strategy((ChainStrategy<T>) chainStrategy);
         return newChain;
     }
@@ -164,7 +165,7 @@ public class ChainPipelineCache {
         UniqueList<? extends ChainHandler<?>> handlerList = chain.getHandlerList();
         ParallelChainPipelineBuilder<T> newChain = ChainPipelineFactory.createChain(chainTypeReference).parallelChain();
         newChain.addHandler((ChainHandler<T>) handlerList);
-        newChain.globalFallback((ChainFallBack<T>) chainFallBack);
+        newChain.globalFallback((GlobalChainFallBack<T>) chainFallBack);
         newChain.strategy((ChainStrategy<T>) chainStrategy);
         return newChain;
     }
@@ -186,7 +187,7 @@ public class ChainPipelineCache {
         UniqueList<? extends ChainHandler<?>> handlerList = chain.getHandlerList();
         VariableChainPipelineBuilder<T> newChain = ChainPipelineFactory.createChain(chainTypeReference).variableChain();
         newChain.addHandler((ChainHandler<T>) handlerList);
-        newChain.globalFallback((ChainFallBack<T>) chainFallBack);
+        newChain.globalFallback((GlobalChainFallBack<T>) chainFallBack);
         newChain.strategy((StrategyKey) chainStrategy);
         return newChain;
     }

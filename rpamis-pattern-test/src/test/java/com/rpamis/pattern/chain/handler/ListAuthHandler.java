@@ -2,7 +2,7 @@ package com.rpamis.pattern.chain.handler;
 
 import com.rpamis.pattern.chain.DemoUser;
 import com.rpamis.pattern.chain.entity.LocalFallBackContext;
-import com.rpamis.pattern.chain.fallback.LocalChainFallback;
+import com.rpamis.pattern.chain.fallback.Fallback;
 import com.rpamis.pattern.chain.definition.ChainHandler;
 
 import java.util.List;
@@ -15,7 +15,7 @@ import java.util.List;
  */
 public class ListAuthHandler implements ChainHandler<List<DemoUser>> {
     @Override
-    @LocalChainFallback(fallbackMethod = "fallback")
+    @Fallback(fallbackMethod = "fallback")
     public boolean process(List<DemoUser> demoUserList) {
         if (!"admin".equals(demoUserList.get(0).getRole())) {
             System.out.println("auth failed");
@@ -25,7 +25,7 @@ public class ListAuthHandler implements ChainHandler<List<DemoUser>> {
         return true;
     }
 
-    public void fallback(LocalFallBackContext<DemoUser> localFallBackContext) {
+    public void fallback(LocalFallBackContext<List<DemoUser>> localFallBackContext) {
         System.out.println("fallback");
     }
 }

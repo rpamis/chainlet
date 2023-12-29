@@ -1,7 +1,7 @@
 package com.rpamis.pattern.chain.handler;
 
 import com.rpamis.pattern.chain.DemoUser;
-import com.rpamis.pattern.chain.fallback.LocalChainFallback;
+import com.rpamis.pattern.chain.fallback.Fallback;
 import com.rpamis.pattern.chain.entity.LocalFallBackContext;
 import com.rpamis.pattern.chain.definition.ChainHandler;
 
@@ -14,7 +14,7 @@ import com.rpamis.pattern.chain.definition.ChainHandler;
 public class LoginHandler implements ChainHandler<DemoUser> {
 
     @Override
-    @LocalChainFallback(fallbackMethod = "testFallback")
+    @Fallback(fallbackMethod = "testFallback")
     public boolean process(DemoUser demoUser) {
         if ("test".equals(demoUser.getName()) && "123".equals(demoUser.getPwd())) {
             System.out.println("login success");

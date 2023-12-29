@@ -5,9 +5,11 @@ import com.rpamis.extension.spi.SpiLoader;
 import com.rpamis.pattern.chain.definition.*;
 import com.rpamis.pattern.chain.entity.*;
 import com.rpamis.pattern.chain.fallback.FallBackResolver;
+import com.rpamis.pattern.chain.fallback.GlobalChainFallBack;
 import com.rpamis.pattern.chain.generic.ChainTypeReference;
 import com.rpamis.pattern.chain.fluent.*;
 import com.rpamis.pattern.chain.strategy.*;
+import com.rpamis.pattern.chain.support.InstanceOfCache;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -48,9 +50,9 @@ public abstract class AbstractChainPipeline<T> implements ChainInnerPipeline<T>,
     protected ChainStrategy<T> chainStrategy = new FullExecutionStrategy<>();
 
     /**
-     * 降级方法
+     * 全局降级方法
      */
-    protected ChainFallBack<T> chainFallBack;
+    protected GlobalChainFallBack<T> chainFallBack;
 
     /**
      * 降级解析器
@@ -103,7 +105,7 @@ public abstract class AbstractChainPipeline<T> implements ChainInnerPipeline<T>,
      * @return ChainPipeline
      */
     @Override
-    public With<T> globalFallback(ChainFallBack<T> fallBack) {
+    public With<T> globalFallback(GlobalChainFallBack<T> fallBack) {
         this.chainFallBack = fallBack;
         return this;
     }
@@ -150,9 +152,7 @@ public abstract class AbstractChainPipeline<T> implements ChainInnerPipeline<T>,
             ChainContext<T> chainContext = new ChainContext<>(handlerData, this,
                     this.chainStrategy, chainHandler, checkResults);
             this.handlePipeline(chainContext);
-            if (this.chainStrategy instanceof FastReturnStrategy
-                    || this.chainStrategy instanceof FastFailedStrategy
-                    || this.chainStrategy instanceof FullExecutionStrategy) {
+            if (InstanceOfCache.instanceofCheck(chainStrategy.getClass(), ChainStrategy.class)) {
                 this.pos = this.n;
             }
         }

@@ -1,11 +1,11 @@
 package com.rpamis.pattern.chain.fallback;
 
-import com.rpamis.pattern.chain.definition.ChainFallBack;
 import com.rpamis.pattern.chain.definition.ChainHandler;
 import com.rpamis.pattern.chain.entity.CompleteChainResult;
 import com.rpamis.pattern.chain.entity.GlobalFallBackContext;
 import com.rpamis.pattern.chain.entity.LocalFallBackContext;
 import com.rpamis.pattern.chain.generic.ChainTypeReference;
+import com.rpamis.pattern.chain.support.InstanceOfCache;
 
 import java.lang.reflect.Method;
 
@@ -24,13 +24,18 @@ public class FallBackResolver<T> extends AbstractFallBackResolverSupport {
      * @param localFallBackContext 责任链局部降级上下文
      * @param reference            责任链TypeReference
      */
+    @SuppressWarnings("unchecked")
     public void handleLocalFallBack(ChainHandler<T> chainHandler, LocalFallBackContext<T> localFallBackContext, ChainTypeReference<T> reference) {
         Class<? super T> actualGenericClass = reference.getGenericClass();
+        if (InstanceOfCache.instanceofCheck(chainHandler.getClass(), LocalChainFallBack.class)) {
+            ((LocalChainFallBack<T>) chainHandler).fallBack(localFallBackContext);
+            return;
+        }
         // 获取process接口Method
         Method processMethod = findHandlerProcessMethod(chainHandler.getClass(), actualGenericClass);
         checkMethod(processMethod, "the process method is null, ignore fallback execute");
-        if (processMethod.isAnnotationPresent(LocalChainFallback.class)) {
-            LocalChainFallback fallbackAnnotation = processMethod.getAnnotation(LocalChainFallback.class);
+        if (processMethod.isAnnotationPresent(Fallback.class)) {
+            Fallback fallbackAnnotation = processMethod.getAnnotation(Fallback.class);
             String fallbackMethodName = fallbackAnnotation.fallbackMethod();
             Class<?>[] fallbackClass = fallbackAnnotation.fallbackClass();
             boolean enabled = fallbackAnnotation.enable();
@@ -54,7 +59,7 @@ public class FallBackResolver<T> extends AbstractFallBackResolverSupport {
      * @param completeChainResult 责任链执行最终结果实体类
      * @param exceptionOccurred   责任链执行是否发生异常
      */
-    public void handleGlobalFallBack(ChainFallBack<T> chainFallBack, T handlerData, CompleteChainResult completeChainResult,
+    public void handleGlobalFallBack(GlobalChainFallBack<T> chainFallBack, T handlerData, CompleteChainResult completeChainResult,
                                      Boolean exceptionOccurred) {
         Object processedResult = null;
         boolean resultHaveValue = completeChainResult != null;

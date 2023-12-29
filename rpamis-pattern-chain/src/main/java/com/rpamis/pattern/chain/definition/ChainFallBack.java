@@ -1,7 +1,5 @@
 package com.rpamis.pattern.chain.definition;
 
-import com.rpamis.pattern.chain.entity.GlobalFallBackContext;
-
 /**
  * 责任链降级处理接口
  *
@@ -10,10 +8,4 @@ import com.rpamis.pattern.chain.entity.GlobalFallBackContext;
  */
 public interface ChainFallBack<T> {
 
-    /**
-     * 降级方法
-     *
-     * @param fallBackContext fallBackContext
-     */
-    void fallBack(GlobalFallBackContext<T> fallBackContext);
 }

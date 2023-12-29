@@ -1,7 +1,7 @@
 package com.rpamis.pattern.chain.fluent;
 
-import com.rpamis.pattern.chain.definition.ChainFallBack;
 import com.rpamis.pattern.chain.definition.ChainStrategy;
+import com.rpamis.pattern.chain.fallback.GlobalChainFallBack;
 import com.rpamis.pattern.chain.strategy.StrategyKey;
 
 /**
@@ -34,5 +34,5 @@ public interface With<T> extends Builder<T> {
      * @param fallBack fallBack
      * @return ChainPipeline
      */
-    With<T> globalFallback(ChainFallBack<T> fallBack);
+    With<T> globalFallback(GlobalChainFallBack<T> fallBack);
 }

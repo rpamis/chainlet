@@ -13,7 +13,7 @@ import java.lang.annotation.Target;
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
-public @interface LocalChainFallback {
+public @interface Fallback {
 
     /**
      * 指定的降级方法
