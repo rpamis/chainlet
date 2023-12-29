@@ -28,23 +28,37 @@ public class ChainPipelineFactory {
     /**
      * 根据chainId获取串行责任链实例
      *
-     * @param chainId chainId
-     * @param <T>     <T>
+     * @param chainId            chainId
+     * @param chainTypeReference chainTypeReference
+     * @param <T>                <T>
      * @return <T>
      */
-    public static <T> SerialChainPipelineBuilder<T> getChain(String chainId) {
-        return ChainPipelineCache.getChain(chainId);
+    public static <T> SerialChainPipelineBuilder<T> getChain(String chainId, ChainTypeReference<T> chainTypeReference) {
+        return ChainPipelineCache.getChain(chainId, chainTypeReference);
     }
 
     /**
      * 根据chainId获取并行责任链实例
      *
-     * @param chainId chainId
-     * @param <T>     <T>
+     * @param chainId            chainId
+     * @param chainTypeReference chainTypeReference
+     * @param <T>                <T>
      * @return <T>
      */
-    public static <T> ParallelChainPipelineBuilder<T> getParallelChain(String chainId) {
-        return ChainPipelineCache.getParallelChain(chainId);
+    public static <T> ParallelChainPipelineBuilder<T> getParallelChain(String chainId, ChainTypeReference<T> chainTypeReference) {
+        return ChainPipelineCache.getParallelChain(chainId, chainTypeReference);
+    }
+
+    /**
+     * 根据chainId获取可变责任链实例
+     *
+     * @param chainId            chainId
+     * @param chainTypeReference chainTypeReference
+     * @param <T>                <T>
+     * @return <T>
+     */
+    public static <T> VariableChainPipelineBuilder<T> getVariableChain(String chainId, ChainTypeReference<T> chainTypeReference) {
+        return ChainPipelineCache.getVariableChain(chainId, chainTypeReference);
     }
 
 

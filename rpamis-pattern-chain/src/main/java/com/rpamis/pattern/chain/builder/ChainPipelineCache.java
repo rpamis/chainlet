@@ -9,6 +9,7 @@ import com.rpamis.pattern.chain.definition.ChainStrategy;
 import com.rpamis.pattern.chain.entity.ChainException;
 import com.rpamis.pattern.chain.entity.UniqueList;
 import com.rpamis.pattern.chain.generic.ChainTypeReference;
+import com.rpamis.pattern.chain.strategy.StrategyKey;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -79,105 +80,129 @@ public class ChainPipelineCache {
     /**
      * 根据chainId获取串行责任链
      *
-     * @param chainId 唯一标识
-     * @param <T>     <T>
+     * @param chainId            唯一标识
+     * @param chainTypeReference chainTypeReference
+     * @param <T>                <T>
      * @return <T>
      */
-    @SuppressWarnings("unchecked")
-    public static <T> SerialChainPipelineBuilder<T> getChain(String chainId) {
+    public static <T> SerialChainPipelineBuilder<T> getChain(String chainId, ChainTypeReference<T> chainTypeReference) {
         SerialChainPipelineImpl<?> chain = CHAIN_MAP.get(chainId);
         if (chain == null) {
             throw new ChainException("There is no chain instance for " + chainId + ", please create chain with chainId");
         }
-        return (SerialChainPipelineBuilder<T>) copyChain(chain);
+        return copyChain(chainId, chain, chainTypeReference);
     }
 
     /**
      * 根据chainId获取并行责任链
      *
-     * @param chainId 唯一标识
-     * @param <T>     <T>
+     * @param chainId            唯一标识
+     * @param chainTypeReference chainTypeReference
+     * @param <T>                <T>
      * @return <T>
      */
-    @SuppressWarnings("unchecked")
-    public static <T> ParallelChainPipelineBuilder<T> getParallelChain(String chainId) {
+    public static <T> ParallelChainPipelineBuilder<T> getParallelChain(String chainId, ChainTypeReference<T> chainTypeReference) {
         ParallelChainPipelineImpl<?> chain = PARALLEL_CHAIN_MAP.get(chainId);
         if (chain == null) {
             throw new ChainException("There is no chain instance for " + chainId + ", please create chain with chainId");
         }
-        return (ParallelChainPipelineBuilder<T>) copyChain(chain);
+        return copyChain(chainId, chain, chainTypeReference);
     }
 
     /**
      * 根据chainId获取可变责任链
      *
-     * @param chainId 唯一标识
-     * @param <T>     <T>
+     * @param chainId            唯一标识
+     * @param chainTypeReference chainTypeReference
+     * @param <T>                <T>
      * @return <T>
      */
-    @SuppressWarnings("unchecked")
-    public static <T> VariableChainPipelineBuilder<T> getVariableChain(String chainId) {
+    public static <T> VariableChainPipelineBuilder<T> getVariableChain(String chainId, ChainTypeReference<T> chainTypeReference) {
         VariableChainPipelineImpl<?> chain = VARIABLE_CHAIN_MAP.get(chainId);
         if (chain == null) {
             throw new ChainException("There is no chain instance for " + chainId + ", please create chain with chainId");
         }
-        return (VariableChainPipelineBuilder<T>) copyChain(chain);
+        return copyChain(chainId, chain, chainTypeReference);
     }
 
     /**
      * 复制串行责任链属性到新串行责任链
      *
-     * @param chain chain
-     * @param <T>   <T>
+     * @param chainId            chainId
+     * @param chain              chain
+     * @param chainTypeReference chainTypeReference
+     * @param <T>                <T>
      * @return SerialChainPipelineBuilder<T>
      */
-    public static <T> SerialChainPipelineBuilder<T> copyChain(SerialChainPipelineImpl<T> chain) {
-        ChainStrategy<T> chainStrategy = chain.getChainStrategy();
-        ChainFallBack<T> chainFallBack = chain.getChainFallBack();
-        UniqueList<ChainHandler<T>> handlerList = chain.getHandlerList();
-        ChainTypeReference<T> chainTypeReference = chain.getChainTypeReference();
+    @SuppressWarnings("unchecked")
+    public static <T> SerialChainPipelineBuilder<T> copyChain(String chainId, SerialChainPipelineImpl<?> chain, ChainTypeReference<T> chainTypeReference) {
+        verifyChainTypeReference(chainId, chain.getChainTypeReference(), chainTypeReference);
+        ChainStrategy<?> chainStrategy = chain.getChainStrategy();
+        ChainFallBack<?> chainFallBack = chain.getChainFallBack();
+        UniqueList<? extends ChainHandler<?>> handlerList = chain.getHandlerList();
         SerialChainPipelineBuilder<T> newChain = ChainPipelineFactory.createChain(chainTypeReference).chain();
-        newChain.addHandler(handlerList);
-        newChain.globalFallback(chainFallBack);
-        newChain.strategy(chainStrategy);
+        newChain.addHandler((ChainHandler<T>) handlerList);
+        newChain.globalFallback((ChainFallBack<T>) chainFallBack);
+        newChain.strategy((ChainStrategy<T>) chainStrategy);
         return newChain;
     }
 
     /**
      * 复制并行责任链属性到新并行责任链
      *
-     * @param chain chain
-     * @param <T>   <T>
+     * @param chainId            chainId
+     * @param chain              chain
+     * @param chainTypeReference chainTypeReference
+     * @param <T>                <T>
      * @return ParallelChainPipelineBuilder<T>
      */
-    public static <T> ParallelChainPipelineBuilder<T> copyChain(ParallelChainPipelineImpl<T> chain) {
-        ChainStrategy<T> chainStrategy = chain.getChainStrategy();
-        ChainFallBack<T> chainFallBack = chain.getChainFallBack();
-        UniqueList<ChainHandler<T>> handlerList = chain.getHandlerList();
-        ChainTypeReference<T> chainTypeReference = chain.getChainTypeReference();
+    @SuppressWarnings("unchecked")
+    public static <T> ParallelChainPipelineBuilder<T> copyChain(String chainId, ParallelChainPipelineImpl<?> chain, ChainTypeReference<T> chainTypeReference) {
+        verifyChainTypeReference(chainId, chain.getChainTypeReference(), chainTypeReference);
+        ChainStrategy<?> chainStrategy = chain.getChainStrategy();
+        ChainFallBack<?> chainFallBack = chain.getChainFallBack();
+        UniqueList<? extends ChainHandler<?>> handlerList = chain.getHandlerList();
         ParallelChainPipelineBuilder<T> newChain = ChainPipelineFactory.createChain(chainTypeReference).parallelChain();
-        newChain.addHandler(handlerList);
-        newChain.globalFallback(chainFallBack);
-        newChain.strategy(chainStrategy);
+        newChain.addHandler((ChainHandler<T>) handlerList);
+        newChain.globalFallback((ChainFallBack<T>) chainFallBack);
+        newChain.strategy((ChainStrategy<T>) chainStrategy);
         return newChain;
     }
 
     /**
      * 复制可变责任链属性到新可变责任链
      *
-     * @param chain chain
-     * @param <T>   <T>
+     * @param chainId            chainId
+     * @param chain              chain
+     * @param chainTypeReference chainTypeReference
+     * @param <T>                <T>
      * @return VariableChainPipelineBuilder<T>
      */
-    public static <T> VariableChainPipelineBuilder<T> copyChain(VariableChainPipelineImpl<T> chain) {
-        ChainStrategy<T> chainStrategy = chain.getChainStrategy();
-        ChainFallBack<T> chainFallBack = chain.getChainFallBack();
-        UniqueList<ChainHandler<T>> handlerList = chain.getHandlerList();
-        ChainTypeReference<T> chainTypeReference = chain.getChainTypeReference();
+    @SuppressWarnings("unchecked")
+    public static <T> VariableChainPipelineBuilder<T> copyChain(String chainId, VariableChainPipelineImpl<?> chain, ChainTypeReference<T> chainTypeReference) {
+        verifyChainTypeReference(chainId, chain.getChainTypeReference(), chainTypeReference);
+        ChainStrategy<?> chainStrategy = chain.getChainStrategy();
+        ChainFallBack<?> chainFallBack = chain.getChainFallBack();
+        UniqueList<? extends ChainHandler<?>> handlerList = chain.getHandlerList();
         VariableChainPipelineBuilder<T> newChain = ChainPipelineFactory.createChain(chainTypeReference).variableChain();
-        newChain.addHandler(handlerList);
-        newChain.globalFallback(chainFallBack);
-        newChain.strategy(chainStrategy);
+        newChain.addHandler((ChainHandler<T>) handlerList);
+        newChain.globalFallback((ChainFallBack<T>) chainFallBack);
+        newChain.strategy((StrategyKey) chainStrategy);
         return newChain;
+    }
+
+    /**
+     * 验证提供的chainTypeReference是否与原chainTypeReference匹配
+     *
+     * @param chainId    唯一标识
+     * @param sourceType 原chainTypeReference
+     * @param targetType 提供的chainTypeReference
+     * @param <T>        <T>
+     */
+    private static <T> void verifyChainTypeReference(String chainId, ChainTypeReference<?> sourceType, ChainTypeReference<T> targetType) {
+        if (!sourceType.getGenericClass().equals(targetType.getGenericClass())) {
+            throw new ChainException("The chainTypeReference provided does not match the original chainTypeReference " +
+                    "whose chainId is [" + chainId + "]. Please provide the correct parameters");
+        }
     }
 }
