@@ -10,6 +10,7 @@ import com.rpamis.pattern.chain.entity.ChainException;
 import com.rpamis.pattern.chain.entity.UniqueList;
 import com.rpamis.pattern.chain.fallback.GlobalChainFallBack;
 import com.rpamis.pattern.chain.generic.ChainTypeReference;
+import com.rpamis.pattern.chain.plugin.ChainCache;
 import com.rpamis.pattern.chain.strategy.StrategyKey;
 
 import java.util.HashMap;
@@ -21,6 +22,7 @@ import java.util.Map;
  * @author benym
  * @date 2023/12/21 15:21
  */
+@ChainCache
 public class ChainPipelineCache {
 
     private ChainPipelineCache() {

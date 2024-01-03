@@ -1,11 +1,14 @@
 package com.rpamis.pattern.chain.builder;
 
+import com.rpamis.pattern.chain.plugin.ChainBuilderManager;
+
 /**
  * 责任链Builder接口
  *
  * @author benym
  * @date 2023/8/21 16:55
  */
+@ChainBuilderManager
 public interface ChainPipelineBuilder<T> {
 
     /**

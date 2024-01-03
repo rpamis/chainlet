@@ -1,6 +1,7 @@
 package com.rpamis.pattern.chain.builder;
 
 import com.rpamis.pattern.chain.generic.ChainTypeReference;
+import com.rpamis.pattern.chain.plugin.ChainFactory;
 
 /**
  * 责任链工厂
@@ -8,6 +9,7 @@ import com.rpamis.pattern.chain.generic.ChainTypeReference;
  * @author benym
  * @date 2023/8/21 17:45
  */
+@ChainFactory
 public class ChainPipelineFactory {
 
     private ChainPipelineFactory() {
