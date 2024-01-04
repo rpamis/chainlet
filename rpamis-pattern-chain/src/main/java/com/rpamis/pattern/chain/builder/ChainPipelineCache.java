@@ -13,8 +13,8 @@ import com.rpamis.pattern.chain.generic.ChainTypeReference;
 import com.rpamis.pattern.chain.plugin.ChainCache;
 import com.rpamis.pattern.chain.strategy.StrategyKey;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 责任链实例缓存
@@ -29,11 +29,11 @@ public class ChainPipelineCache {
         throw new IllegalStateException("ChainPipelineFactory class prohibited instantiation");
     }
 
-    private static final Map<String, SerialChainPipelineImpl<?>> CHAIN_MAP = new HashMap<>();
+    private static final Map<String, SerialChainPipelineImpl<?>> CHAIN_MAP = new ConcurrentHashMap<>();
 
-    private static final Map<String, ParallelChainPipelineImpl<?>> PARALLEL_CHAIN_MAP = new HashMap<>();
+    private static final Map<String, ParallelChainPipelineImpl<?>> PARALLEL_CHAIN_MAP = new ConcurrentHashMap<>();
 
-    private static final Map<String, VariableChainPipelineImpl<?>> VARIABLE_CHAIN_MAP = new HashMap<>();
+    private static final Map<String, VariableChainPipelineImpl<?>> VARIABLE_CHAIN_MAP = new ConcurrentHashMap<>();
 
     /**
      * 注册一个串行责任链

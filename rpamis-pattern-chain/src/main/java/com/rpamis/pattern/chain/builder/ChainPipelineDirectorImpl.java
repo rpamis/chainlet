@@ -4,7 +4,7 @@ import com.rpamis.pattern.chain.ParallelChainPipelineImpl;
 import com.rpamis.pattern.chain.SerialChainPipelineImpl;
 import com.rpamis.pattern.chain.VariableChainPipelineImpl;
 import com.rpamis.pattern.chain.generic.ChainTypeReference;
-import com.rpamis.pattern.chain.plugin.ChainBuilderManagerImpl;
+import com.rpamis.pattern.chain.plugin.ChainDirectorImpl;
 
 /**
  * 责任链Builder接口实现
@@ -12,12 +12,12 @@ import com.rpamis.pattern.chain.plugin.ChainBuilderManagerImpl;
  * @author benym
  * @date 2023/8/21 17:10
  */
-@ChainBuilderManagerImpl
-public class ChainPipelineBuilderImpl<T> implements ChainPipelineBuilder<T> {
+@ChainDirectorImpl
+public class ChainPipelineDirectorImpl<T> implements ChainPipelineDirector<T> {
 
     private final ChainTypeReference<T> chainTypeReference;
 
-    public ChainPipelineBuilderImpl(ChainTypeReference<T> chainTypeReference) {
+    public ChainPipelineDirectorImpl(ChainTypeReference<T> chainTypeReference) {
         this.chainTypeReference = chainTypeReference;
     }
 

@@ -21,10 +21,10 @@ public class ChainPipelineFactory {
      *
      * @param chainTypeReference 责任链泛型包装类
      * @param <T>                责任链泛型
-     * @return ChainPipelineBuilder 责任链Builder实例
+     * @return ChainPipelineDirector 责任链Builder实例
      */
-    public static <T> ChainPipelineBuilder<T> createChain(ChainTypeReference<T> chainTypeReference) {
-        return new ChainPipelineBuilderImpl<>(chainTypeReference);
+    public static <T> ChainPipelineDirector<T> createChain(ChainTypeReference<T> chainTypeReference) {
+        return new ChainPipelineDirectorImpl<>(chainTypeReference);
     }
 
     /**

@@ -1,6 +1,6 @@
 package com.rpamis.pattern.chain;
 
-import com.rpamis.pattern.chain.builder.ChainPipelineBuilder;
+import com.rpamis.pattern.chain.builder.ChainPipelineDirector;
 import com.rpamis.pattern.chain.builder.ChainPipelineFactory;
 import com.rpamis.pattern.chain.builder.SerialChainPipelineBuilder;
 import com.rpamis.pattern.chain.definition.ChainPipeline;
@@ -208,9 +208,9 @@ public class DemoChainPipelineTest {
     public void should_throwException_when_addSameHandler_given_anyChain() {
         ChainTypeReference<DemoUser> reference = new ChainTypeReference<DemoUser>() {};
         // given
-        ChainPipelineBuilder<DemoUser> chainPipelineBuilder = ChainPipelineFactory.createChain(reference);
+        ChainPipelineDirector<DemoUser> chainPipelineDirector = ChainPipelineFactory.createChain(reference);
         // given
-        SerialChainPipelineBuilder<DemoUser> demoChain = chainPipelineBuilder.chain();
+        SerialChainPipelineBuilder<DemoUser> demoChain = chainPipelineDirector.chain();
         // when
         demoChain.addHandler(mock(ValidateHandler.class));
         // then

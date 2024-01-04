@@ -8,9 +8,6 @@ import com.rpamis.pattern.chain.entity.ChainException;
 import com.rpamis.pattern.chain.entity.ChainResult;
 import com.rpamis.pattern.chain.entity.LocalFallBackContext;
 import com.rpamis.pattern.chain.generic.ChainTypeReference;
-import com.rpamis.pattern.chain.strategy.FastFailedStrategy;
-import com.rpamis.pattern.chain.strategy.FastReturnStrategy;
-import com.rpamis.pattern.chain.strategy.FullExecutionStrategy;
 import com.rpamis.pattern.chain.support.InstanceOfCache;
 
 import java.util.List;
