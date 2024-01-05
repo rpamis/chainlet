@@ -1,3 +1,0 @@
-serialChainPipelineImpl=com.rpamis.pattern.chain.SerialChainPipelineImpl
-parallelChainPipelineImpl=com.rpamis.pattern.chain.ParallelChainPipelineImpl
-variableChainPipelineImpl=com.rpamis.pattern.chain.VariableChainPipelineImpl

@@ -14,6 +14,7 @@
     <modules>
         <module>rpamis-pattern-chain</module>
         <module>rpamis-pattern-test</module>
+        <module>rpamis-pattern-chain-plugin</module>
     </modules>
 
     <licenses>

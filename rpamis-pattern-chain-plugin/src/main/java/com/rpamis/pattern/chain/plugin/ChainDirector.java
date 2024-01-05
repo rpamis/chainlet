@@ -6,13 +6,13 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * 用于标记责任链缓存类
+ * 标记ChainDirector管理者的注解
  *
  * @author benym
- * @date 2024/1/3 23:38
+ * @date 2024/1/3 23:46
  */
 @Target(ElementType.TYPE)
-@Retention(RetentionPolicy.RUNTIME)
-public @interface ChainCache {
+@Retention(RetentionPolicy.SOURCE)
+public @interface ChainDirector {
 
 }

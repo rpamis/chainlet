@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
  * @date 2024/1/3 23:35
  */
 @Target(ElementType.TYPE)
-@Retention(RetentionPolicy.RUNTIME)
+@Retention(RetentionPolicy.SOURCE)
 public @interface ChainFactory {
 
 }
