@@ -15,7 +15,9 @@ import javax.tools.StandardLocation;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 责任链工厂代码生成
@@ -25,16 +27,16 @@ import java.util.Set;
  */
 @SupportedSourceVersion(SourceVersion.RELEASE_8)
 @SupportedAnnotationTypes(value = {
-        "com.rpamis.pattern.chain.plugin.ChainFactory",
-        "com.rpamis.pattern.chain.plugin.ChainBuilder",
-        "com.rpamis.pattern.chain.plugin.ChainCache",
-        "com.rpamis.pattern.chain.plugin.ChainDirector"
+        "com.rpamis.pattern.chain.plugin.ChainFactory"
 })
 public class ChainCodeProcessor extends AbstractProcessor {
 
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
-        System.out.printf("开始了=================");
+        if (annotations.isEmpty()) {
+            return true;
+        }
+        System.out.printf("开始了=================, 当前参数是"+ annotations +"另外："+roundEnv.toString());
         Set<TypeElement> factoryClasses = new HashSet<>();
         for (Element element : roundEnv.getElementsAnnotatedWith(ChainFactory.class)) {
             if (element.getKind() == ElementKind.CLASS) {
@@ -42,38 +44,57 @@ public class ChainCodeProcessor extends AbstractProcessor {
             }
         }
 
+        Set<String> builderNameSet = new HashSet<>();
+        Map<String, String> buidlerClassToPackageNameMap = new ConcurrentHashMap<>();
         for (Element element : roundEnv.getElementsAnnotatedWith(ChainBuilder.class)) {
             if (element.getKind() == ElementKind.INTERFACE) {
                 TypeElement builderTypeElement = (TypeElement) element;
-                checkAndGenerateCode(factoryClasses, builderTypeElement);
+                String builderClassName = builderTypeElement.getSimpleName().toString();
+                builderNameSet.add(builderClassName);
+                String builderPackageName = getPackageName(builderTypeElement);
+                buidlerClassToPackageNameMap.put(builderClassName, builderPackageName);
             } else {
                 processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR,
                         "@ChainBuilder can only be applied to interfaces", element);
             }
         }
+        System.out.printf("当前builder"+builderNameSet.toString());
+        checkAndGenerateCode(factoryClasses, builderNameSet, buidlerClassToPackageNameMap);
         return true;
     }
 
-    private void checkAndGenerateCode(Set<TypeElement> factoryClasses, TypeElement builderTypeElement) {
-        String builderClassName = builderTypeElement.getSimpleName().toString();
-        String methodName = "get" + builderClassName;
-        for (TypeElement factoryClass : factoryClasses) {
-            if (doesMethodExist(factoryClass, methodName)) {
-                processingEnv.getMessager().printMessage(Diagnostic.Kind.WARNING,
-                        methodName + " already exists in " + factoryClass.getSimpleName());
-                continue;
+    private void checkAndGenerateCode(Set<TypeElement> factoryClasses, Set<String> builderNameSet, Map<String, String> buidlerClassToPackageNameMap) {
+        try {
+            JavaFileObject fileObject = processingEnv.getFiler().createSourceFile("com.rpamis.pattern.chain.builder.ChainPipelineFactory");
+            try (PrintWriter writer = new PrintWriter(fileObject.openWriter())) {
+                for (TypeElement factoryClass : factoryClasses) {
+                    for (String builderClassName : builderNameSet) {
+                        String methodName = "get" + builderClassName;
+                        if (doesMethodExist(factoryClass, methodName)) {
+                            processingEnv.getMessager().printMessage(Diagnostic.Kind.WARNING,
+                                    methodName + " already exists in " + factoryClass.getSimpleName());
+                            continue;
+                        }
+                        String generatedCode = String.format(
+                                "import com.rpamis.pattern.chain.generic.ChainTypeReference;\n" +
+                                        "import com.rpamis.pattern.chain.builder.SerialChainPipelineBuilder;\n" +
+                                        "import com.rpamis.pattern.chain.builder.ChainPipelineCache;\n\n" +
+                                        "public class ChainPipelineFactory {\n" +
+                                        "public static <T> %s<T> %s(String chainId, ChainTypeReference<T> chainTypeReference) {\n" +
+                                        "    return ChainPipelineCache.getChain(chainId, chainTypeReference);\n" +
+                                        "}\n" +
+                                        "}",
+                                builderClassName, builderClassName, builderClassName, methodName, builderClassName,
+                                factoryClass.getSimpleName());
+                        // Print the generated code for demonstration (you should write it to a file in practice)
+                        appendCodeToFactoryClass(fileObject, generatedCode, writer);
+
+                    }
+                }
             }
-
-            String builderPackageName = getPackageName(builderTypeElement);
-
-            String generatedCode = String.format(
-                    "public static <%s> %s<%s> %s(String chainId, ChainTypeReference<%s> chainTypeReference) {\n" +
-                            "    return %s.getChain(chainId, chainTypeReference);\n" +
-                            "}\n",
-                    builderClassName, builderClassName, builderClassName, methodName, builderClassName,
-                    factoryClass.getSimpleName());
-            // Print the generated code for demonstration (you should write it to a file in practice)
-            appendCodeToFactoryClass(builderPackageName, factoryClass.getSimpleName().toString(), generatedCode);
+        } catch (IOException e) {
+            processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR,
+                    "Failed to append code to ChainPipelineFactory: " + e.getMessage());
         }
     }
 
@@ -95,27 +116,14 @@ public class ChainCodeProcessor extends AbstractProcessor {
         return ((PackageElement) enclosingElement).getQualifiedName().toString();
     }
 
-    private void appendCodeToFactoryClass(String builderPackageName, String factoryClassName, String generatedCode) {
-        try {
-            // Get the source file for the existing class
-            JavaFileObject fileObject = processingEnv.getFiler().createSourceFile(builderPackageName + "." + factoryClassName);
-
-            // Check if the file already exists
-            if (fileObject.getLastModified() > 0) {
-                // File already exists, open it for appending
-                try (PrintWriter writer = new PrintWriter(fileObject.openWriter())) {
-                    writer.print(generatedCode);
-                }
-            } else {
-                // File doesn't exist, write the full content
-                try (PrintWriter writer = new PrintWriter(fileObject.openWriter())) {
-                    writer.print(generatedCode);
-                }
-            }
-
-        } catch (IOException e) {
-            processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR,
-                    "Failed to append code to ChainPipelineFactory: " + e.getMessage());
+    private void appendCodeToFactoryClass(JavaFileObject fileObject, String generatedCode, PrintWriter writer) throws IOException {
+        // Check if the file already exists
+        if (fileObject.getLastModified() > 0) {
+            // File already exists, open it for appending
+            writer.print(generatedCode);
+        } else {
+            // File doesn't exist, write the full content
+            writer.print(generatedCode);
         }
     }
 
