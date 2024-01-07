@@ -1,6 +1,5 @@
 package com.rpamis.pattern.chain.builder;
 
-import com.rpamis.pattern.chain.fluent.Add;
 import com.rpamis.pattern.chain.plugin.ChainBuilder;
 
 /**
@@ -10,6 +9,6 @@ import com.rpamis.pattern.chain.plugin.ChainBuilder;
  * @date 2023/8/21 17:04
  */
 @ChainBuilder
-public interface SerialChainPipelineBuilder<T> extends Add<T> {
+public interface SerialChainPipelineBuilder<T> extends ChainPipelineBuilder<T> {
 
 }

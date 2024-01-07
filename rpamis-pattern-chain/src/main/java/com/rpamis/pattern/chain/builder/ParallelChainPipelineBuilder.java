@@ -12,7 +12,7 @@ import java.util.concurrent.ForkJoinPool;
  * @date 2023/8/21 17:09
  */
 @ChainBuilder
-public interface ParallelChainPipelineBuilder<T> extends Add<T> {
+public interface ParallelChainPipelineBuilder<T> extends ChainPipelineBuilder<T> {
 
     /**
      * 替换并行责任链的ForkJoinPool
