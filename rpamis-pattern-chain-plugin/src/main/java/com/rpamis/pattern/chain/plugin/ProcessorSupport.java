@@ -2,6 +2,11 @@ package com.rpamis.pattern.chain.plugin;
 
 import com.sun.tools.javac.tree.JCTree;
 
+import javax.lang.model.element.Element;
+import javax.lang.model.element.ElementKind;
+import javax.lang.model.element.PackageElement;
+import javax.lang.model.element.TypeElement;
+
 /**
  * Processor支持类
  *
@@ -33,6 +38,21 @@ public class ProcessorSupport {
         return "get" + Character.toUpperCase(builderName.charAt(0)) + builderName.substring(1);
     }
 
+    public static String getPackageName(TypeElement typeElement) {
+        Element enclosingElement = typeElement.getEnclosingElement();
+        while (enclosingElement.getKind() != ElementKind.PACKAGE) {
+            enclosingElement = enclosingElement.getEnclosingElement();
+        }
+        return ((PackageElement) enclosingElement).getQualifiedName().toString();
+    }
+
+    /**
+     * 判断方法是否存在
+     *
+     * @param methodName 方法名
+     * @param classDecl  类声明
+     * @return 是否存在
+     */
     public static boolean methodExists(String methodName, JCTree.JCClassDecl classDecl) {
         for (JCTree def : classDecl.defs) {
             if (def instanceof JCTree.JCMethodDecl) {

@@ -103,7 +103,7 @@
                     <showWarnings>true</showWarnings>
                     <compilerArgs>
                         <arg>
-                            -Alombok.verbose=true
+                            -Achain.verbose=true
                         </arg>
                     </compilerArgs>
                 </configuration>
