@@ -15,7 +15,19 @@ import javax.lang.model.element.TypeElement;
  */
 public class ProcessorSupport {
 
-    public static String getChainBuilderMethodName(String builderName) {
+    public static String getNameForFactory(String builderName) {
+        String name = preCheck(builderName);
+        // 将 builderName 的首字母小写，然后拼接 "get"
+        return "get" + Character.toUpperCase(name.charAt(0)) + name.substring(1);
+    }
+
+    public static String getNameForDirector(String builderName) {
+        String name = preCheck(builderName);
+        return Character.toLowerCase(name.charAt(0)) + name.substring(1);
+    }
+
+    public static String preCheck(String builderName){
+
         // 假设所有的 Builder 类名都以 "Builder" 结尾
         String builderSuffix = "Builder";
 
@@ -31,11 +43,9 @@ public class ProcessorSupport {
         }
 
         if ("SerialChain".equals(builderName)) {
-            return "getChain";
+            builderName = "Chain";
         }
-
-        // 将 builderName 的首字母小写，然后拼接 "get"
-        return "get" + Character.toUpperCase(builderName.charAt(0)) + builderName.substring(1);
+        return builderName;
     }
 
     public static String getPackageName(TypeElement typeElement) {

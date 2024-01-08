@@ -4,25 +4,23 @@ import com.google.auto.service.AutoService;
 import com.sun.source.util.TreePath;
 import com.sun.tools.javac.api.JavacTrees;
 import com.sun.tools.javac.code.Flags;
-import com.sun.tools.javac.code.Type;
 import com.sun.tools.javac.processing.JavacProcessingEnvironment;
 import com.sun.tools.javac.tree.JCTree;
 import com.sun.tools.javac.tree.TreeMaker;
 import com.sun.tools.javac.util.Context;
 import com.sun.tools.javac.util.List;
-import com.sun.tools.javac.util.Name;
 import com.sun.tools.javac.util.Names;
 
 import javax.annotation.processing.*;
 import javax.lang.model.SourceVersion;
-import javax.lang.model.element.*;
+import javax.lang.model.element.Element;
+import javax.lang.model.element.ElementKind;
+import javax.lang.model.element.TypeElement;
 import javax.lang.model.util.Elements;
 import javax.tools.Diagnostic;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 
 import static com.rpamis.pattern.chain.plugin.ChainCodeProcessor.VERBOSE;
 import static javax.tools.Diagnostic.Kind.NOTE;
@@ -36,6 +34,7 @@ import static javax.tools.Diagnostic.Kind.NOTE;
 @AutoService(Processor.class)
 @SupportedSourceVersion(SourceVersion.RELEASE_8)
 @SupportedAnnotationTypes(value = {
+        "com.rpamis.pattern.chain.plugin.ChainDirector",
         "com.rpamis.pattern.chain.plugin.ChainFactory"
 })
 @SupportedOptions({VERBOSE})
@@ -86,8 +85,136 @@ public class ChainCodeProcessor extends AbstractProcessor {
         if (annotations.isEmpty() || roundEnv.processingOver()) {
             return true;
         }
+        ProcessorContext context = new ProcessorContext();
+        // 初始化上下文
+        initContext(context, roundEnv);
+        Set<TypeElement> chainDirectorClasses = context.getChainDirectorClasses();
+        Set<TypeElement> factoryClasses = context.getFactoryClasses();
+        Set<String> builderNameSet = context.getBuilderNameSet();
+        Map<String, String> buidlerClassToPackageNameMap = context.getBuidlerClassToPackageNameMap();
+        // 遍历所有ChainDirector进行代码生成
+        for (TypeElement chainDirectorElement : chainDirectorClasses) {
+            if (verbose) {
+                messager.printMessage(NOTE, "@ChainDirector, process class: " + chainDirectorElement.getSimpleName(), chainDirectorElement);
+            }
+            JCTree.JCClassDecl classDecl = trees.getTree(chainDirectorElement);
+            TreePath treePath = trees.getPath(chainDirectorElement);
+            // 导入所有必要的Builder包
+            importAllBuilder(treePath, builderNameSet, buidlerClassToPackageNameMap);
+            generateForChainDirector(classDecl, builderNameSet);
+
+        }
+        // 遍历所有ChainFactory进行代码生成
+        for (TypeElement factoryElement : factoryClasses) {
+            if (verbose) {
+                messager.printMessage(NOTE, "@ChainFactory, process class: " + factoryElement.getSimpleName(), factoryElement);
+            }
+            JCTree.JCClassDecl classDecl = trees.getTree(factoryElement);
+            TreePath treePath = trees.getPath(factoryElement);
+            importNeedClass(treePath, "com.rpamis.pattern.chain.builder", "ChainPipelineCache");
+            generateForChainFactory(classDecl, builderNameSet);
+        }
+        return true;
+    }
+
+    private void generateForChainDirector(JCTree.JCClassDecl classDecl, Set<String> builderNameSet) {
+        List<JCTree> methodDecls = List.nil();
+        // 记录初始pos
+        int pos = classDecl.pos;
+        // 遍历所有builder
+        for (String builderName : builderNameSet) {
+            String builderMethodName = ProcessorSupport.getNameForDirector(builderName);
+            // 判断该方法是否已经存在
+            if (!ProcessorSupport.methodExists(builderMethodName, classDecl)) {
+                // 不存在则创建
+                JCTree.JCMethodDecl methodBuilder = this.createForDirector(builderName, builderMethodName, pos);
+//                JCTree.JCMethodDecl methodBuilderWithParams = this.createForDirectorWithParams(builderName, builderMethodName, pos);
+                methodDecls = methodDecls.append(methodBuilder);
+                if (verbose) {
+                    messager.printMessage(NOTE, "createBuilder in ChainDirector: " + methodBuilder);
+                }
+            } else {
+                if (verbose) {
+                    messager.printMessage(NOTE, "methodExists in ChainDirector: " + builderMethodName);
+                }
+            }
+        }
+        // 追加定义
+        classDecl.defs = classDecl.defs.appendList(methodDecls);
+    }
+
+    /**
+     * 生成builder同名小写方法接口
+     * 如
+     * <p>
+     * ParallelChainPipelineBuilder<T> parallelChain();
+     * <p/>
+     */
+    private JCTree.JCMethodDecl createForDirector(String builderName, String builderMethodName, int pos) {
+        JCTree.JCModifiers modifiers = maker.Modifiers(0);
+        // 获取方法返回类型，这里假设返回类型为 builderName<T>
+        JCTree.JCExpression returnType = maker.TypeApply(maker.Ident(names.fromString(builderName)), List.of(maker.Ident(names.fromString("T"))));
+        JCTree.JCMethodDecl methodDecl = maker.MethodDef(
+                modifiers,
+                names.fromString(builderMethodName),
+                returnType,
+                List.nil(),  // 不再需要参数列表
+                List.nil(),  // 不再需要抛出的异常列表
+                List.nil(),
+                null,
+                null
+        );
+        return methodDecl;
+    }
+
+    /**
+     * 生成builder同名方法接口，带有chainId参数
+     * 如
+     * <p>
+     * ParallelChainPipelineBuilder<T> parallelChain(String chainId);
+     * <p/>
+     */
+    private JCTree.JCMethodDecl createForDirectorWithParams(String builderName, String builderMethodName, int pos) {
+        JCTree.JCModifiers modifiers = maker.Modifiers(0);
+        // 获取方法返回类型，这里假设返回类型为 builderName<T>
+        JCTree.JCExpression returnType = maker.TypeApply(maker.Ident(names.fromString(builderName)), List.of(maker.Ident(names.fromString("T"))));
+        // 创建方法参数列表
+        List<JCTree.JCVariableDecl> params = List.of(
+                maker.VarDef(maker.Modifiers(Flags.PARAMETER), names.fromString("chainId"), maker.Ident(names.fromString("String")), null)
+        );
+        params.forEach(param -> param.pos = pos);
+        JCTree.JCMethodDecl methodDecl = maker.MethodDef(
+                modifiers,
+                names.fromString(builderMethodName),
+                returnType,
+                List.nil(),
+                params,
+                List.nil(),
+                null,
+                null
+        );
+        return methodDecl;
+    }
+
+    private void importAllBuilder(TreePath treePath, Set<String> builderNameSet, Map<String, String> buidlerClassToPackageNameMap) {
+        for (String builderName : builderNameSet) {
+            importNeedClass(treePath, buidlerClassToPackageNameMap.get(builderName), builderName);
+        }
+    }
+
+    private void initContext(ProcessorContext context, RoundEnvironment roundEnv) {
+        // 获取所有ChainDirector类
+        Set<TypeElement> chainDirectorClasses = context.getChainDirectorClasses();
+        for (Element element : roundEnv.getElementsAnnotatedWith(ChainDirector.class)) {
+            if (element.getKind() == ElementKind.INTERFACE) {
+                chainDirectorClasses.add((TypeElement) element);
+            } else {
+                messager.printMessage(Diagnostic.Kind.ERROR,
+                        "@ChainDirector can only be applied to interface", element);
+            }
+        }
         // 获取所有ChainFactory类
-        Set<TypeElement> factoryClasses = new HashSet<>();
+        Set<TypeElement> factoryClasses = context.getFactoryClasses();
         for (Element element : roundEnv.getElementsAnnotatedWith(ChainFactory.class)) {
             if (element.getKind() == ElementKind.CLASS) {
                 factoryClasses.add((TypeElement) element);
@@ -97,8 +224,8 @@ public class ChainCodeProcessor extends AbstractProcessor {
             }
         }
         // 获取所有ChainBuilder类
-        Set<String> builderNameSet = new HashSet<>();
-        Map<String, String> buidlerClassToPackageNameMap = new ConcurrentHashMap<>();
+        Set<String> builderNameSet = context.getBuilderNameSet();
+        Map<String, String> buidlerClassToPackageNameMap = context.getBuidlerClassToPackageNameMap();
         for (Element element : roundEnv.getElementsAnnotatedWith(ChainBuilder.class)) {
             if (element.getKind() == ElementKind.INTERFACE) {
                 TypeElement builderTypeElement = (TypeElement) element;
@@ -111,17 +238,6 @@ public class ChainCodeProcessor extends AbstractProcessor {
                         "@ChainBuilder can only be applied to interfaces", element);
             }
         }
-        // 遍历所有ChainFactory进行代码生成
-        for (TypeElement factoryElement : factoryClasses) {
-            if (verbose) {
-                messager.printMessage(NOTE, "@ChainFactory, process class: " + factoryElement.getSimpleName(), factoryElement);
-            }
-            JCTree.JCClassDecl classDecl = trees.getTree(factoryElement);
-            TreePath treePath = trees.getPath(factoryElement);
-            importNeedClass(treePath, "com.rpamis.pattern.chain.builder", "ChainPipelineCache");
-            handlerChainFactory(classDecl, builderNameSet);
-        }
-        return true;
     }
 
     /**
@@ -132,6 +248,9 @@ public class ChainCodeProcessor extends AbstractProcessor {
      * @param className   类名
      */
     private void importNeedClass(TreePath treePath, String packageName, String className) {
+        if (packageName == null || className == null) {
+            return;
+        }
         JCTree.JCCompilationUnit jccu = (JCTree.JCCompilationUnit) treePath.getCompilationUnit();
         // 遍历所有的导入语句
         for (JCTree.JCImport jcTree : jccu.getImports()) {
@@ -163,29 +282,29 @@ public class ChainCodeProcessor extends AbstractProcessor {
 
 
     /**
-     * 处理ChainFactory
+     * 为ChainFactory生成代码
      *
      * @param classDecl      classDecl
      * @param builderNameSet builderNameSet
      */
-    private void handlerChainFactory(JCTree.JCClassDecl classDecl, Set<String> builderNameSet) {
+    private void generateForChainFactory(JCTree.JCClassDecl classDecl, Set<String> builderNameSet) {
         List<JCTree> methodDecls = List.nil();
         // 记录初始pos
         int pos = classDecl.pos;
         // 遍历所有builder
         for (String builderName : builderNameSet) {
-            String builderMethodName = ProcessorSupport.getChainBuilderMethodName(builderName);
+            String builderMethodName = ProcessorSupport.getNameForFactory(builderName);
             // 判断该方法是否已经存在
             if (!ProcessorSupport.methodExists(builderMethodName, classDecl)) {
                 // 不存在则创建
                 JCTree.JCMethodDecl methodBuilder = this.createChainBuilder(builderName, builderMethodName, pos);
                 methodDecls = methodDecls.append(methodBuilder);
                 if (verbose) {
-                    messager.printMessage(NOTE, "createBuilder: " + methodBuilder);
+                    messager.printMessage(NOTE, "createBuilder in ChainFactory: " + methodBuilder);
                 }
             } else {
                 if (verbose) {
-                    messager.printMessage(NOTE, "methodExists: " + builderMethodName);
+                    messager.printMessage(NOTE, "methodExists in ChainFactory: " + builderMethodName);
                 }
             }
         }
@@ -203,7 +322,6 @@ public class ChainCodeProcessor extends AbstractProcessor {
      * </p>
      */
     private JCTree.JCMethodDecl createChainBuilder(String builderName, String builderMethodName, int pos) {
-        System.out.printf("当前builderName：" + builderName + "当前builderMethodName" + builderMethodName);
         // 创建泛型参数 <T>
         JCTree.JCTypeParameter typeParam = maker.TypeParameter(names.fromString("T"), List.nil(), List.nil());
 
