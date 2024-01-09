@@ -4,13 +4,15 @@ import com.rpamis.pattern.chain.ParallelChainPipelineImpl;
 import com.rpamis.pattern.chain.SerialChainPipelineImpl;
 import com.rpamis.pattern.chain.VariableChainPipelineImpl;
 import com.rpamis.pattern.chain.generic.ChainTypeReference;
+import com.rpamis.pattern.chain.plugin.ChainDirectorService;
 
 /**
- * 责任链Builder接口实现
+ * 责任链Director接口实现
  *
  * @author benym
  * @date 2023/8/21 17:10
  */
+@ChainDirectorService
 public class ChainPipelineDirectorImpl<T> implements ChainPipelineDirector<T> {
 
     private final ChainTypeReference<T> chainTypeReference;

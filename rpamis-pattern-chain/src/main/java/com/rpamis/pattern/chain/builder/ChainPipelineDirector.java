@@ -3,7 +3,7 @@ package com.rpamis.pattern.chain.builder;
 import com.rpamis.pattern.chain.plugin.ChainDirector;
 
 /**
- * 责任链Builder接口
+ * 责任链Director接口
  *
  * @author benym
  * @date 2023/8/21 16:55

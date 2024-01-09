@@ -1,75 +1,151 @@
 package com.rpamis.pattern.chain.plugin;
 
-import javax.lang.model.element.TypeElement;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import com.sun.tools.javac.api.JavacTrees;
+import com.sun.tools.javac.tree.TreeMaker;
+import com.sun.tools.javac.util.Names;
+
+import javax.annotation.processing.Messager;
+import javax.annotation.processing.RoundEnvironment;
+import javax.lang.model.util.Elements;
 
 /**
  * Processor上下文
  *
  * @author benym
- * @date 2024/1/8 16:53
+ * @date 2024/1/9 16:28
  */
 public class ProcessorContext {
 
     /**
-     * 所有ChainDirector类
+     * 环境
      */
-    private Set<TypeElement> chainDirectorClasses;
+    private RoundEnvironment roundEnv;
 
     /**
-     * 所有ChainFactory类
+     * Javac树解析工具
      */
-    private Set<TypeElement> factoryClasses;
+    private JavacTrees trees;
+    /**
+     * TreeMaker实例，用于创建语法树
+     */
+    private TreeMaker maker;
+    /**
+     * 名称解析工具
+     */
+    private Names names;
+    /**
+     * 日志工具
+     */
+    private Messager messager;
 
     /**
-     * 所有ChainBuilder名称
+     * 元素解析器
      */
-    private Set<String> builderNameSet;
-
+    private Elements elements;
     /**
-     * 所有ChainBuilder名称与包名的映射
+     * 打印详细信息参数
      */
-    private Map<String, String> buidlerClassToPackageNameMap;
+    private boolean verbose;
 
-    public ProcessorContext() {
-        this.chainDirectorClasses = new HashSet<>();
-        this.factoryClasses = new HashSet<>();
-        this.builderNameSet = new HashSet<>();
-        this.buidlerClassToPackageNameMap = new HashMap<>();
+    public JavacTrees getTrees() {
+        return trees;
     }
 
-    public Set<TypeElement> getChainDirectorClasses() {
-        return chainDirectorClasses;
+    public void setTrees(JavacTrees trees) {
+        this.trees = trees;
     }
 
-    public void setChainDirectorClasses(Set<TypeElement> chainDirectorClasses) {
-        this.chainDirectorClasses = chainDirectorClasses;
+    public TreeMaker getMaker() {
+        return maker;
     }
 
-    public Set<TypeElement> getFactoryClasses() {
-        return factoryClasses;
+    public void setMaker(TreeMaker maker) {
+        this.maker = maker;
     }
 
-    public void setFactoryClasses(Set<TypeElement> factoryClasses) {
-        this.factoryClasses = factoryClasses;
+    public Names getNames() {
+        return names;
     }
 
-    public Set<String> getBuilderNameSet() {
-        return builderNameSet;
+    public void setNames(Names names) {
+        this.names = names;
     }
 
-    public void setBuilderNameSet(Set<String> builderNameSet) {
-        this.builderNameSet = builderNameSet;
+    public Messager getMessager() {
+        return messager;
     }
 
-    public Map<String, String> getBuidlerClassToPackageNameMap() {
-        return buidlerClassToPackageNameMap;
+    public void setMessager(Messager messager) {
+        this.messager = messager;
     }
 
-    public void setBuidlerClassToPackageNameMap(Map<String, String> buidlerClassToPackageNameMap) {
-        this.buidlerClassToPackageNameMap = buidlerClassToPackageNameMap;
+    public Elements getElements() {
+        return elements;
+    }
+
+    public void setElements(Elements elements) {
+        this.elements = elements;
+    }
+
+    public boolean isVerbose() {
+        return verbose;
+    }
+
+    public void setVerbose(boolean verbose) {
+        this.verbose = verbose;
+    }
+
+    public RoundEnvironment getRoundEnv() {
+        return roundEnv;
+    }
+
+    public void setRoundEnv(RoundEnvironment roundEnv) {
+        this.roundEnv = roundEnv;
+    }
+
+    public static final class ProcessorContextBuilder {
+        private final ProcessorContext processorContext;
+
+        private ProcessorContextBuilder() {
+            processorContext = new ProcessorContext();
+        }
+
+        public static ProcessorContextBuilder aProcessorContext() {
+            return new ProcessorContextBuilder();
+        }
+
+        public ProcessorContextBuilder withTrees(JavacTrees trees) {
+            processorContext.setTrees(trees);
+            return this;
+        }
+
+        public ProcessorContextBuilder withMaker(TreeMaker maker) {
+            processorContext.setMaker(maker);
+            return this;
+        }
+
+        public ProcessorContextBuilder withNames(Names names) {
+            processorContext.setNames(names);
+            return this;
+        }
+
+        public ProcessorContextBuilder withMessager(Messager messager) {
+            processorContext.setMessager(messager);
+            return this;
+        }
+
+        public ProcessorContextBuilder withElements(Elements elements) {
+            processorContext.setElements(elements);
+            return this;
+        }
+
+        public ProcessorContextBuilder withVerbose(boolean verbose) {
+            processorContext.setVerbose(verbose);
+            return this;
+        }
+
+        public ProcessorContext build() {
+            return processorContext;
+        }
     }
 }

@@ -9,6 +9,7 @@ import com.rpamis.pattern.chain.entity.ChainResult;
 import com.rpamis.pattern.chain.entity.UniqueList;
 import com.rpamis.pattern.chain.fluent.Add;
 import com.rpamis.pattern.chain.generic.ChainTypeReference;
+import com.rpamis.pattern.chain.plugin.ChainBuilderService;
 import com.rpamis.pattern.chain.strategy.FullExecutionStrategy;
 import com.rpamis.pattern.chain.thread.ParallelChainTask;
 
@@ -22,6 +23,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @author benym
  * @date 2023/12/20 17:08
  */
+@ChainBuilderService
 public class ParallelChainPipelineImpl<T> extends AbstractChainPipeline<T> implements ParallelChainPipelineBuilder<T> {
 
     private ForkJoinPool forkJoinPool;

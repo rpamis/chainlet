@@ -8,6 +8,7 @@ import com.rpamis.pattern.chain.entity.ChainException;
 import com.rpamis.pattern.chain.entity.ChainResult;
 import com.rpamis.pattern.chain.entity.LocalFallBackContext;
 import com.rpamis.pattern.chain.generic.ChainTypeReference;
+import com.rpamis.pattern.chain.plugin.ChainBuilderService;
 import com.rpamis.pattern.chain.support.InstanceOfCache;
 
 import java.util.List;
@@ -18,6 +19,7 @@ import java.util.List;
  * @author benym
  * @date 2023/12/25 17:26
  */
+@ChainBuilderService
 public class VariableChainPipelineImpl<T> extends AbstractChainPipeline<T> implements VariableChainPipelineBuilder<T> {
 
     public VariableChainPipelineImpl(ChainTypeReference<T> chainTypeReference) {
