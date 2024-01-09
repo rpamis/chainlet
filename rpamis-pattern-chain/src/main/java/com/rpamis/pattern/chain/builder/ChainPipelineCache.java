@@ -190,7 +190,7 @@ public class ChainPipelineCache {
         VariableChainPipelineBuilder<T> newChain = ChainPipelineFactory.createChain(chainTypeReference).variableChain();
         newChain.addHandler((ChainHandler<T>) handlerList);
         newChain.globalFallback((GlobalChainFallBack<T>) chainFallBack);
-        newChain.strategy((StrategyKey) chainStrategy);
+        newChain.strategy((ChainStrategy<T>) chainStrategy);
         return newChain;
     }
 
