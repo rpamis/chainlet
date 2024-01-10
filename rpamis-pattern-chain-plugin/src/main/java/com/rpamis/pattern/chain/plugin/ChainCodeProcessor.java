@@ -192,12 +192,14 @@ public class ChainCodeProcessor extends AbstractProcessor {
         // 获取所有ChainBuilderService类
         Set<String> builderServiceNameSet = genContext.getBuilderServiceNameSet();
         Map<String, String> builderNameToServiceMap = genContext.getBuilderNameToServiceMap();
+        Map<String, String> builderServiceToPackageNameMap = genContext.getBuilderServiceToPackageNameMap();
         for (Element element : roundEnv.getElementsAnnotatedWith(ChainBuilderService.class)) {
             if (element.getKind() == ElementKind.CLASS) {
                 TypeElement builderServiceTypeElement = (TypeElement) element;
                 String builderServiceClassName = builderServiceTypeElement.getSimpleName().toString();
                 // 获取ChainBuilderService实现的ChainBuilder接口的类名
                 String interfaceName = getInterfaceName(builderServiceTypeElement);
+                String builderServicePackageName = ChainCodeProcessor.getPackageName(builderServiceTypeElement);
                 if (interfaceName == null) {
                     messager.printMessage(Diagnostic.Kind.ERROR,
                             "@ChainBuilderService can only be applied to class implements ChainBuilder", element);
@@ -211,6 +213,7 @@ public class ChainCodeProcessor extends AbstractProcessor {
                 } else {
                     builderNameToServiceMap.put(interfaceName, builderServiceClassName);
                     builderServiceNameSet.add(builderServiceClassName);
+                    builderServiceToPackageNameMap.put(builderServiceClassName, builderServicePackageName);
                 }
             } else {
                 messager.printMessage(Diagnostic.Kind.ERROR,

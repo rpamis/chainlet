@@ -47,6 +47,10 @@ public class GenContext {
      * 所有ChainBuilder名称与包名的映射
      */
     private Map<String, String> buidlerClassToPackageNameMap;
+    /**
+     * 所有ChainBuilderService名称与包名的映射
+     */
+    private Map<String, String> builderServiceToPackageNameMap;
 
     /**
      * 所有ChainBuilder名称与Service类名的映射
@@ -61,6 +65,7 @@ public class GenContext {
         this.builderNameSet = new HashSet<>();
         this.builderServiceNameSet = new HashSet<>();
         this.buidlerClassToPackageNameMap = new HashMap<>();
+        this.builderServiceToPackageNameMap = new HashMap<>();
         this.builderNameToServiceMap = new HashMap<>();
     }
 
@@ -110,6 +115,14 @@ public class GenContext {
 
     public void setBuilderServiceNameSet(Set<String> builderServiceNameSet) {
         this.builderServiceNameSet = builderServiceNameSet;
+    }
+
+    public Map<String, String> getBuilderServiceToPackageNameMap() {
+        return builderServiceToPackageNameMap;
+    }
+
+    public void setBuilderServiceToPackageNameMap(Map<String, String> builderServiceToPackageNameMap) {
+        this.builderServiceToPackageNameMap = builderServiceToPackageNameMap;
     }
 
     public Map<String, String> getBuidlerClassToPackageNameMap() {

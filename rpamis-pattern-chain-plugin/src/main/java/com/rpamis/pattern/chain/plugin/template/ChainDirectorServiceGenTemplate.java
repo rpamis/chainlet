@@ -51,6 +51,11 @@ public class ChainDirectorServiceGenTemplate extends AbstractGenCodeTemplate {
         for (String builderName : builderNameSet) {
             ChainCodeProcessor.importNeedClass(treePath, buidlerClassToPackageNameMap.get(builderName), builderName);
         }
+        Set<String> builderServiceNameSet = genContext.getBuilderServiceNameSet();
+        Map<String, String> builderServiceToPackageNameMap = genContext.getBuilderServiceToPackageNameMap();
+        for (String builderServiceName : builderServiceNameSet) {
+            ChainCodeProcessor.importNeedClass(treePath, builderServiceToPackageNameMap.get(builderServiceName), builderServiceName);
+        }
     }
 
     @Override
@@ -67,7 +72,11 @@ public class ChainDirectorServiceGenTemplate extends AbstractGenCodeTemplate {
             String builderMethodName = ChainCodeProcessor.getNameForDirector(builderName);
             String registerName = ChainCodeProcessor.getNameForDirectorServiceCache(builderMethodName);
             // 判断该方法是否已经存在
-            if (!ChainCodeProcessor.methodExists(builderMethodName, classDecl)) {
+            if (ChainCodeProcessor.methodExists(builderMethodName, classDecl)) {
+                if (verbose) {
+                    messager.printMessage(NOTE, "methodExists in ChainDirectorService: " + builderMethodName);
+                }
+            } else {
                 String serviceName = builderNameToServiceMap.get(builderName);
                 // 不存在则创建
                 JCTree.JCMethodDecl methodBuilder = this.createForDirectorService(builderName, builderMethodName, serviceName, processorContext);
@@ -75,10 +84,6 @@ public class ChainDirectorServiceGenTemplate extends AbstractGenCodeTemplate {
                 methodDecls = methodDecls.append(methodBuilder).append(methodWithParamsBuilder);
                 if (verbose) {
                     messager.printMessage(NOTE, "createBuilder in ChainDirectorService: " + methodBuilder);
-                }
-            } else {
-                if (verbose) {
-                    messager.printMessage(NOTE, "methodExists in ChainDirectorService: " + builderMethodName);
                 }
             }
         }

@@ -67,17 +67,17 @@ public class ChainDirectorGenTemplate extends AbstractGenCodeTemplate {
         for (String builderName : builderNameSet) {
             String builderMethodName = ChainCodeProcessor.getNameForDirector(builderName);
             // 判断该方法是否已经存在
-            if (!ChainCodeProcessor.methodExists(builderMethodName, classDecl)) {
+            if (ChainCodeProcessor.methodExists(builderMethodName, classDecl)) {
+                if (verbose) {
+                    messager.printMessage(NOTE, "methodExists in ChainDirector: " + builderMethodName);
+                }
+            } else {
                 // 不存在则创建
                 JCTree.JCMethodDecl methodBuilder = this.createForDirector(builderName, builderMethodName, processorContext);
                 JCTree.JCMethodDecl methodBuilderWithParams = this.createForDirectorWithParams(builderName, builderMethodName, pos, processorContext);
                 methodDecls = methodDecls.append(methodBuilder).append(methodBuilderWithParams);
                 if (verbose) {
                     messager.printMessage(NOTE, "createBuilder in ChainDirector: " + methodBuilder);
-                }
-            } else {
-                if (verbose) {
-                    messager.printMessage(NOTE, "methodExists in ChainDirector: " + builderMethodName);
                 }
             }
         }

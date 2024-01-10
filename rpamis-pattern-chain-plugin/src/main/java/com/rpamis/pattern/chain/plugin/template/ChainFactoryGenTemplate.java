@@ -60,16 +60,16 @@ public class ChainFactoryGenTemplate extends AbstractGenCodeTemplate {
         for (String builderName : builderNameSet) {
             String builderMethodName = ChainCodeProcessor.getNameForFactory(builderName);
             // 判断该方法是否已经存在
-            if (!ChainCodeProcessor.methodExists(builderMethodName, classDecl)) {
+            if (ChainCodeProcessor.methodExists(builderMethodName, classDecl)) {
+                if (verbose) {
+                    messager.printMessage(NOTE, "methodExists in ChainFactory: " + builderMethodName);
+                }
+            } else {
                 // 不存在则创建
                 JCTree.JCMethodDecl methodBuilder = this.createChainBuilder(builderName, builderMethodName, pos, processorContext);
                 methodDecls = methodDecls.append(methodBuilder);
                 if (verbose) {
                     messager.printMessage(NOTE, "createBuilder in ChainFactory: " + methodBuilder);
-                }
-            } else {
-                if (verbose) {
-                    messager.printMessage(NOTE, "methodExists in ChainFactory: " + builderMethodName);
                 }
             }
         }
