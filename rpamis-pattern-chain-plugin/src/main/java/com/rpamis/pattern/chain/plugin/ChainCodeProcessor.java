@@ -2,10 +2,10 @@ package com.rpamis.pattern.chain.plugin;
 
 import com.google.auto.service.AutoService;
 import com.rpamis.pattern.chain.plugin.template.ChainDirectorGenTemplate;
+import com.rpamis.pattern.chain.plugin.template.ChainDirectorServiceGenTemplate;
 import com.rpamis.pattern.chain.plugin.template.ChainFactoryGenTemplate;
 import com.sun.source.util.TreePath;
 import com.sun.tools.javac.api.JavacTrees;
-import com.sun.tools.javac.code.Type;
 import com.sun.tools.javac.processing.JavacProcessingEnvironment;
 import com.sun.tools.javac.tree.JCTree;
 import com.sun.tools.javac.tree.TreeMaker;
@@ -24,7 +24,6 @@ import javax.lang.model.util.Elements;
 import javax.lang.model.util.Types;
 import javax.tools.Diagnostic;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -40,6 +39,7 @@ import static com.rpamis.pattern.chain.plugin.ChainCodeProcessor.VERBOSE;
 @SupportedSourceVersion(SourceVersion.RELEASE_8)
 @SupportedAnnotationTypes(value = {
         "com.rpamis.pattern.chain.plugin.ChainDirector",
+        "com.rpamis.pattern.chain.plugin.ChainDirectorService",
         "com.rpamis.pattern.chain.plugin.ChainFactory"
 })
 @SupportedOptions({VERBOSE})
@@ -157,7 +157,7 @@ public class ChainCodeProcessor extends AbstractProcessor {
             }
         }
         // 获取所有ChainBuilderService类
-        Set<String> builderServiceNameSet = genContext.getBuilderNameSet();
+        Set<String> builderServiceNameSet = genContext.getBuilderServiceNameSet();
         Map<String, String> builderNameToServiceMap = genContext.getBuilderNameToServiceMap();
         for (Element element : roundEnv.getElementsAnnotatedWith(ChainBuilderService.class)) {
             if (element.getKind() == ElementKind.CLASS) {
@@ -177,8 +177,8 @@ public class ChainCodeProcessor extends AbstractProcessor {
                             message, element);
                 } else {
                     builderNameToServiceMap.put(interfaceName, builderServiceClassName);
+                    builderServiceNameSet.add(builderServiceClassName);
                 }
-                builderServiceNameSet.add(builderServiceClassName);
             } else {
                 messager.printMessage(Diagnostic.Kind.ERROR,
                         "@ChainBuilderService can only be applied to class", element);
@@ -187,11 +187,17 @@ public class ChainCodeProcessor extends AbstractProcessor {
         return genContext;
     }
 
+    /**
+     * 获取ChainBuilderService实现的ChainBuilder接口的类名
+     *
+     * @param builderServiceTypeElement builderServiceTypeElement
+     * @return String
+     */
     private String getInterfaceName(TypeElement builderServiceTypeElement) {
         for (TypeMirror interfaceType : builderServiceTypeElement.getInterfaces()) {
             Element interfaceElement = typeUtils.asElement(interfaceType);
             if (interfaceElement.getAnnotation(ChainBuilder.class) != null) {
-                return interfaceElement.toString();
+                return interfaceElement.getSimpleName().toString();
             }
         }
         return null;
@@ -205,9 +211,11 @@ public class ChainCodeProcessor extends AbstractProcessor {
         this.processorContext.setRoundEnv(roundEnv);
         this.genContext = initContext(new GenContext(), processorContext);
         ChainDirectorGenTemplate directorGenTemplate = new ChainDirectorGenTemplate();
+        ChainDirectorServiceGenTemplate directorServiceGenTemplate = new ChainDirectorServiceGenTemplate();
         ChainFactoryGenTemplate factoryGenTemplate = new ChainFactoryGenTemplate();
         directorGenTemplate.execute(genContext, processorContext);
-        factoryGenTemplate.execute(genContext, processorContext);
+        directorServiceGenTemplate.execute(genContext, processorContext);
+//        factoryGenTemplate.execute(genContext, processorContext);
         return true;
     }
 
@@ -251,39 +259,69 @@ public class ChainCodeProcessor extends AbstractProcessor {
         jccu.defs = List.from(trees);
     }
 
+    /**
+     * 获取ChainFactory中需要生成的Builder方法名
+     *
+     * @param builderName builderName
+     * @return String
+     */
     public static String getNameForFactory(String builderName) {
         String name = preCheck(builderName);
         // 将 builderName 的首字母小写，然后拼接 "get"
         return "get" + Character.toUpperCase(name.charAt(0)) + name.substring(1);
     }
 
+    /**
+     * 获取ChainDirectorService中需要生成的Builder方法名
+     *
+     * @param builderName builderName
+     * @return String
+     */
     public static String getNameForDirector(String builderName) {
         String name = preCheck(builderName);
         return Character.toLowerCase(name.charAt(0)) + name.substring(1);
     }
 
-    public static String preCheck(String builderName) {
+    /**
+     * 获取ChainDirectorService中缓存Builder的方法名
+     *
+     * @param builderMethodName builderMethodName
+     * @return String
+     */
+    public static String getNameForDirectorServiceCache(String builderMethodName) {
+        return "register" + Character.toUpperCase(builderMethodName.charAt(0)) + builderMethodName.substring(1);
+    }
 
+    /**
+     * builder合法性检查
+     *
+     * @param builderName builderName
+     * @return String
+     */
+    public static String preCheck(String builderName) {
         // 假设所有的 Builder 类名都以 "Builder" 结尾
         String builderSuffix = "Builder";
-
         // 如果 builderName 以 "Builder" 结尾，去掉这个后缀
         if (builderName.endsWith(builderSuffix)) {
             builderName = builderName.substring(0, builderName.length() - builderSuffix.length());
         }
-
         // 如果 builderName 以 "Pipeline" 结尾，去掉这个后缀
         String pipelineSuffix = "Pipeline";
         if (builderName.endsWith(pipelineSuffix)) {
             builderName = builderName.substring(0, builderName.length() - pipelineSuffix.length());
         }
-
         if ("SerialChain".equals(builderName)) {
             builderName = "Chain";
         }
         return builderName;
     }
 
+    /**
+     * 获取包名
+     *
+     * @param typeElement 类
+     * @return 包名
+     */
     public static String getPackageName(TypeElement typeElement) {
         Element enclosingElement = typeElement.getEnclosingElement();
         while (enclosingElement.getKind() != ElementKind.PACKAGE) {
