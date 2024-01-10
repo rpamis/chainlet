@@ -1,6 +1,6 @@
 package com.rpamis.pattern.chain.builder;
 
-import com.rpamis.pattern.chain.generic.ChainTypeReference;
+import com.rpamis.pattern.chain.support.ChainTypeReference;
 import com.rpamis.pattern.chain.plugin.ChainFactory;
 
 /**

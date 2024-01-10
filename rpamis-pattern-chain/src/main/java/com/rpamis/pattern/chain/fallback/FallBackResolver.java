@@ -4,7 +4,7 @@ import com.rpamis.pattern.chain.definition.ChainHandler;
 import com.rpamis.pattern.chain.entity.CompleteChainResult;
 import com.rpamis.pattern.chain.entity.GlobalFallBackContext;
 import com.rpamis.pattern.chain.entity.LocalFallBackContext;
-import com.rpamis.pattern.chain.generic.ChainTypeReference;
+import com.rpamis.pattern.chain.support.ChainTypeReference;
 import com.rpamis.pattern.chain.support.InstanceOfCache;
 
 import java.lang.reflect.Method;

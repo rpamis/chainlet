@@ -1,4 +1,4 @@
-package com.rpamis.pattern.chain.thread;
+package com.rpamis.pattern.chain.support;
 
 import com.rpamis.pattern.chain.ParallelChainPipelineImpl;
 import com.rpamis.pattern.chain.definition.ChainHandler;

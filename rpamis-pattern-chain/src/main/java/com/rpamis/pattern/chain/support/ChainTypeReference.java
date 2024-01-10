@@ -1,4 +1,4 @@
-package com.rpamis.pattern.chain.generic;
+package com.rpamis.pattern.chain.support;
 
 import com.rpamis.pattern.chain.entity.ChainException;
 

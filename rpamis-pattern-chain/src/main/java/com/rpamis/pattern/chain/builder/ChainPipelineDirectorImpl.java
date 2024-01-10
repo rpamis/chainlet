@@ -3,7 +3,7 @@ package com.rpamis.pattern.chain.builder;
 import com.rpamis.pattern.chain.ParallelChainPipelineImpl;
 import com.rpamis.pattern.chain.SerialChainPipelineImpl;
 import com.rpamis.pattern.chain.VariableChainPipelineImpl;
-import com.rpamis.pattern.chain.generic.ChainTypeReference;
+import com.rpamis.pattern.chain.support.ChainTypeReference;
 import com.rpamis.pattern.chain.plugin.ChainDirectorService;
 
 /**

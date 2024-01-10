@@ -8,10 +8,10 @@ import com.rpamis.pattern.chain.entity.ChainException;
 import com.rpamis.pattern.chain.entity.ChainResult;
 import com.rpamis.pattern.chain.entity.UniqueList;
 import com.rpamis.pattern.chain.fluent.Add;
-import com.rpamis.pattern.chain.generic.ChainTypeReference;
+import com.rpamis.pattern.chain.support.ChainTypeReference;
 import com.rpamis.pattern.chain.plugin.ChainBuilderService;
 import com.rpamis.pattern.chain.strategy.FullExecutionStrategy;
-import com.rpamis.pattern.chain.thread.ParallelChainTask;
+import com.rpamis.pattern.chain.support.ParallelChainTask;
 
 import java.util.List;
 import java.util.concurrent.ForkJoinPool;

@@ -7,7 +7,7 @@ import com.rpamis.pattern.chain.entity.ChainContext;
 import com.rpamis.pattern.chain.entity.ChainException;
 import com.rpamis.pattern.chain.entity.ChainResult;
 import com.rpamis.pattern.chain.entity.LocalFallBackContext;
-import com.rpamis.pattern.chain.generic.ChainTypeReference;
+import com.rpamis.pattern.chain.support.ChainTypeReference;
 import com.rpamis.pattern.chain.plugin.ChainBuilderService;
 import com.rpamis.pattern.chain.support.InstanceOfCache;
 

@@ -9,9 +9,8 @@ import com.rpamis.pattern.chain.definition.ChainStrategy;
 import com.rpamis.pattern.chain.entity.ChainException;
 import com.rpamis.pattern.chain.entity.UniqueList;
 import com.rpamis.pattern.chain.fallback.GlobalChainFallBack;
-import com.rpamis.pattern.chain.generic.ChainTypeReference;
+import com.rpamis.pattern.chain.support.ChainTypeReference;
 import com.rpamis.pattern.chain.plugin.ChainCache;
-import com.rpamis.pattern.chain.strategy.StrategyKey;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

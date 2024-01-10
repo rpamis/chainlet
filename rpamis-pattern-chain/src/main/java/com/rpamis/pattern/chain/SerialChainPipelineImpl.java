@@ -1,7 +1,7 @@
 package com.rpamis.pattern.chain;
 
 import com.rpamis.pattern.chain.builder.SerialChainPipelineBuilder;
-import com.rpamis.pattern.chain.generic.ChainTypeReference;
+import com.rpamis.pattern.chain.support.ChainTypeReference;
 import com.rpamis.pattern.chain.plugin.ChainBuilderService;
 
 /**

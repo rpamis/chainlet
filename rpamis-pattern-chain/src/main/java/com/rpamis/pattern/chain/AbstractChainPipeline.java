@@ -6,7 +6,7 @@ import com.rpamis.pattern.chain.definition.*;
 import com.rpamis.pattern.chain.entity.*;
 import com.rpamis.pattern.chain.fallback.FallBackResolver;
 import com.rpamis.pattern.chain.fallback.GlobalChainFallBack;
-import com.rpamis.pattern.chain.generic.ChainTypeReference;
+import com.rpamis.pattern.chain.support.ChainTypeReference;
 import com.rpamis.pattern.chain.fluent.*;
 import com.rpamis.pattern.chain.strategy.*;
 import com.rpamis.pattern.chain.support.InstanceOfCache;

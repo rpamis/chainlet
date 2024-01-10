@@ -6,7 +6,7 @@ import com.rpamis.pattern.chain.builder.SerialChainPipelineBuilder;
 import com.rpamis.pattern.chain.definition.ChainPipeline;
 import com.rpamis.pattern.chain.entity.ChainException;
 import com.rpamis.pattern.chain.entity.CompleteChainResult;
-import com.rpamis.pattern.chain.generic.ChainTypeReference;
+import com.rpamis.pattern.chain.support.ChainTypeReference;
 import com.rpamis.pattern.chain.handler.*;
 import com.rpamis.pattern.chain.strategy.Strategy;
 import org.junit.Assert;
