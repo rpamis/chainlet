@@ -40,6 +40,9 @@ import static com.rpamis.pattern.chain.plugin.ChainCodeProcessor.VERBOSE;
 @SupportedAnnotationTypes(value = {
         "com.rpamis.pattern.chain.plugin.ChainDirector",
         "com.rpamis.pattern.chain.plugin.ChainDirectorService",
+        "com.rpamis.pattern.chain.plugin.ChainBuilder",
+        "com.rpamis.pattern.chain.plugin.ChainBuilderService",
+        "com.rpamis.pattern.chain.plugin.ChainCache",
         "com.rpamis.pattern.chain.plugin.ChainFactory"
 })
 @SupportedOptions({VERBOSE})
@@ -88,6 +91,8 @@ public class ChainCodeProcessor extends AbstractProcessor {
      */
     private ProcessorContext processorContext;
 
+    private static final String PACKAGE_NAME = "com.rpamis.pattern.chain.builder";
+
     @Override
     public synchronized void init(ProcessingEnvironment processingEnv) {
         super.init(processingEnv);
@@ -111,31 +116,59 @@ public class ChainCodeProcessor extends AbstractProcessor {
     private GenContext initContext(GenContext genContext, ProcessorContext processorContext) {
         RoundEnvironment roundEnv = processorContext.getRoundEnv();
         Messager messager = processorContext.getMessager();
-        // 获取所有ChainDirector类
+        // 获取内部所有ChainDirector类
         Set<TypeElement> chainDirectorClasses = genContext.getChainDirectorClasses();
         for (Element element : roundEnv.getElementsAnnotatedWith(ChainDirector.class)) {
-            if (element.getKind() == ElementKind.INTERFACE) {
-                chainDirectorClasses.add((TypeElement) element);
+            Element enclosingElement = element.getEnclosingElement();
+            if (element.getKind() == ElementKind.INTERFACE && enclosingElement instanceof PackageElement) {
+                String packageName = ((PackageElement) enclosingElement).getQualifiedName().toString();
+                if (PACKAGE_NAME.equals(packageName)) {
+                    chainDirectorClasses.add((TypeElement) element);
+                }
             } else {
                 messager.printMessage(Diagnostic.Kind.ERROR,
                         "@ChainDirector can only be applied to interface", element);
             }
         }
-        // 获取所有ChainDirectorService类
+        // 获取内部所有ChainCache类
+        Set<TypeElement> chainCacheClasses = genContext.getChainCacheClasses();
+        for (Element element : roundEnv.getElementsAnnotatedWith(ChainCache.class)) {
+            Element enclosingElement = element.getEnclosingElement();
+            if (element.getKind() == ElementKind.INTERFACE && enclosingElement instanceof PackageElement) {
+                String packageName = ((PackageElement) enclosingElement).getQualifiedName().toString();
+                if (PACKAGE_NAME.equals(packageName)) {
+                    chainCacheClasses.add((TypeElement) element);
+                }
+            } else {
+                messager.printMessage(Diagnostic.Kind.ERROR,
+                        "@ChainCache can only be applied to interface", element);
+            }
+        }
+        // 获取内部所有ChainDirectorService类
         Set<TypeElement> chainDirectorServiceClasses = genContext.getChainDirectorServiceClasses();
         for (Element element : roundEnv.getElementsAnnotatedWith(ChainDirectorService.class)) {
-            if (element.getKind() == ElementKind.CLASS) {
-                chainDirectorServiceClasses.add((TypeElement) element);
+            Element enclosingElement = element.getEnclosingElement();
+            if (element.getKind() == ElementKind.INTERFACE && enclosingElement instanceof PackageElement) {
+                String packageName = ((PackageElement) enclosingElement).getQualifiedName().toString();
+                if (PACKAGE_NAME.equals(packageName)) {
+                    chainDirectorServiceClasses.add((TypeElement) element);
+                }
             } else {
                 messager.printMessage(Diagnostic.Kind.ERROR,
                         "@ChainDirectorService can only be applied to class", element);
             }
         }
-        // 获取所有ChainFactory类
+        // 获取内部所有ChainFactory类
         Set<TypeElement> factoryClasses = genContext.getFactoryClasses();
         for (Element element : roundEnv.getElementsAnnotatedWith(ChainFactory.class)) {
             if (element.getKind() == ElementKind.CLASS) {
-                factoryClasses.add((TypeElement) element);
+                Element enclosingElement = element.getEnclosingElement();
+                if (element.getKind() == ElementKind.INTERFACE && enclosingElement instanceof PackageElement) {
+                    String packageName = ((PackageElement) enclosingElement).getQualifiedName().toString();
+                    if (PACKAGE_NAME.equals(packageName)) {
+                        factoryClasses.add((TypeElement) element);
+                    }
+                }
             } else {
                 messager.printMessage(Diagnostic.Kind.ERROR,
                         "@ChainFactory can only be applied to class", element);
@@ -210,6 +243,10 @@ public class ChainCodeProcessor extends AbstractProcessor {
         }
         this.processorContext.setRoundEnv(roundEnv);
         this.genContext = initContext(new GenContext(), processorContext);
+        Set<String> builderNameSet = genContext.getBuilderNameSet();
+        if (builderNameSet.isEmpty()) {
+            return true;
+        }
         ChainDirectorGenTemplate directorGenTemplate = new ChainDirectorGenTemplate();
         ChainDirectorServiceGenTemplate directorServiceGenTemplate = new ChainDirectorServiceGenTemplate();
         ChainFactoryGenTemplate factoryGenTemplate = new ChainFactoryGenTemplate();

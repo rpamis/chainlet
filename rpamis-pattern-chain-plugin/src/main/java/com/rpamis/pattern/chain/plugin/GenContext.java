@@ -15,6 +15,11 @@ import java.util.Set;
 public class GenContext {
 
     /**
+     * 所有ChainCache类
+     */
+    private Set<TypeElement> chainCacheClasses;
+
+    /**
      * 所有ChainDirector类
      */
     private Set<TypeElement> chainDirectorClasses;
@@ -49,6 +54,7 @@ public class GenContext {
     private Map<String, String> builderNameToServiceMap;
 
     public GenContext() {
+        this.chainCacheClasses = new HashSet<>();
         this.chainDirectorClasses = new HashSet<>();
         this.chainDirectorServiceClasses = new HashSet<>();
         this.factoryClasses = new HashSet<>();
@@ -56,6 +62,14 @@ public class GenContext {
         this.builderServiceNameSet = new HashSet<>();
         this.buidlerClassToPackageNameMap = new HashMap<>();
         this.builderNameToServiceMap = new HashMap<>();
+    }
+
+    public Set<TypeElement> getChainCacheClasses() {
+        return chainCacheClasses;
+    }
+
+    public void setChainCacheClasses(Set<TypeElement> chainCacheClasses) {
+        this.chainCacheClasses = chainCacheClasses;
     }
 
     public Set<TypeElement> getChainDirectorClasses() {
