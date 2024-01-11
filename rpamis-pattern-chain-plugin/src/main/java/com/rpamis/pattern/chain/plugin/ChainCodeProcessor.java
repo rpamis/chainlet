@@ -387,4 +387,21 @@ public class ChainCodeProcessor extends AbstractProcessor {
         }
         return false;
     }
+
+    /**
+     * 判断类中是否定义了名为variableName的变量
+     *
+     * @param classDecl 类声明
+     * @return 是否存在
+     */
+    public static boolean variableExists(String variableName, JCTree.JCClassDecl classDecl) {
+        for (JCTree def : classDecl.defs) {
+            if (def instanceof JCTree.JCVariableDecl) {
+                if (((JCTree.JCVariableDecl) def).name.contentEquals(variableName)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 }
