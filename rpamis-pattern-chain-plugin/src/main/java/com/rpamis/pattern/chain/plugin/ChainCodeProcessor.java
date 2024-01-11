@@ -1,6 +1,7 @@
 package com.rpamis.pattern.chain.plugin;
 
 import com.google.auto.service.AutoService;
+import com.rpamis.pattern.chain.plugin.template.ChainCacheGenTemplate;
 import com.rpamis.pattern.chain.plugin.template.ChainDirectorGenTemplate;
 import com.rpamis.pattern.chain.plugin.template.ChainDirectorServiceGenTemplate;
 import com.rpamis.pattern.chain.plugin.template.ChainFactoryGenTemplate;
@@ -134,7 +135,7 @@ public class ChainCodeProcessor extends AbstractProcessor {
         Set<TypeElement> chainCacheClasses = genContext.getChainCacheClasses();
         for (Element element : roundEnv.getElementsAnnotatedWith(ChainCache.class)) {
             Element enclosingElement = element.getEnclosingElement();
-            if (element.getKind() == ElementKind.INTERFACE && enclosingElement instanceof PackageElement) {
+            if (element.getKind() == ElementKind.CLASS && enclosingElement instanceof PackageElement) {
                 String packageName = ((PackageElement) enclosingElement).getQualifiedName().toString();
                 if (PACKAGE_NAME.equals(packageName)) {
                     chainCacheClasses.add((TypeElement) element);
@@ -148,7 +149,7 @@ public class ChainCodeProcessor extends AbstractProcessor {
         Set<TypeElement> chainDirectorServiceClasses = genContext.getChainDirectorServiceClasses();
         for (Element element : roundEnv.getElementsAnnotatedWith(ChainDirectorService.class)) {
             Element enclosingElement = element.getEnclosingElement();
-            if (element.getKind() == ElementKind.INTERFACE && enclosingElement instanceof PackageElement) {
+            if (element.getKind() == ElementKind.CLASS && enclosingElement instanceof PackageElement) {
                 String packageName = ((PackageElement) enclosingElement).getQualifiedName().toString();
                 if (PACKAGE_NAME.equals(packageName)) {
                     chainDirectorServiceClasses.add((TypeElement) element);
@@ -252,10 +253,12 @@ public class ChainCodeProcessor extends AbstractProcessor {
         }
         ChainDirectorGenTemplate directorGenTemplate = new ChainDirectorGenTemplate();
         ChainDirectorServiceGenTemplate directorServiceGenTemplate = new ChainDirectorServiceGenTemplate();
+        ChainCacheGenTemplate cacheGenTemplate = new ChainCacheGenTemplate();
         ChainFactoryGenTemplate factoryGenTemplate = new ChainFactoryGenTemplate();
         directorGenTemplate.execute(genContext, processorContext);
         directorServiceGenTemplate.execute(genContext, processorContext);
-//        factoryGenTemplate.execute(genContext, processorContext);
+        cacheGenTemplate.execute(genContext, processorContext);
+        factoryGenTemplate.execute(genContext, processorContext);
         return true;
     }
 
