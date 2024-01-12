@@ -122,7 +122,7 @@ public class ChainDirectorServiceGenTemplate extends AbstractGenCodeTemplate {
         JCTree.JCExpression newClassExpression = maker.Return(newClass).getExpression();
         // 构建临时变量SerialChainPipelineImpl<T> serialChainPipeline = new SerialChainPipelineImpl<>(chainTypeReference)
         JCTree.JCVariableDecl tempVariable = maker.VarDef(
-                maker.Modifiers(Flags.FINAL),
+                maker.Modifiers(Flags.PARAMETER),
                 names.fromString(builderMethodName),
                 maker.Ident(names.fromString(serviceName)),
                 newClassExpression);

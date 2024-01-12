@@ -77,7 +77,6 @@ public class ChainCacheGenTemplate extends AbstractGenCodeTemplate {
     @Override
     protected void genCode(JCTree.JCClassDecl classDecl, GenContext genContext, ProcessorContext processorContext) {
         Set<String> builderNameSet = genContext.getBuilderNameSet();
-        List<JCTree> methodDecls = List.nil();
         // 记录初始pos
         int pos = classDecl.pos;
         // 遍历所有builder
@@ -94,17 +93,16 @@ public class ChainCacheGenTemplate extends AbstractGenCodeTemplate {
             String copyChainName = "copy" + Character.toUpperCase(builderMethodName.charAt(0)) + builderMethodName.substring(1);
 
             // 生成代码
-            genMapDefine(methodDecls, classDecl, processorContext, genContext, builderName, cacheMapName, pos);
-            genRegisterChain(methodDecls, classDecl, processorContext, genContext, builderName, cacheMapName, registerName, pos);
-            getCopyChain(methodDecls, classDecl, processorContext, genContext, builderName, copyChainName, pos);
-            getGetChain(methodDecls, classDecl, processorContext, genContext, builderName, cacheMapName, copyChainName, builderGetMethodName, pos);
+            genMapDefine(classDecl, processorContext, genContext, builderName, cacheMapName, pos);
+            genRegisterChain(classDecl, processorContext, genContext, builderName, cacheMapName, registerName, pos);
+            getCopyChain(classDecl, processorContext, genContext, builderName, copyChainName, pos);
+            getGetChain(classDecl, processorContext, genContext, builderName, cacheMapName, copyChainName, builderGetMethodName, pos);
         }
-        // 追加定义
-        classDecl.defs = classDecl.defs.appendList(methodDecls);
     }
 
-    private void genMapDefine(List<JCTree> methodDecls, JCTree.JCClassDecl classDecl, ProcessorContext processorContext,
+    private void genMapDefine(JCTree.JCClassDecl classDecl, ProcessorContext processorContext,
                               GenContext genContext, String builderName, String cacheMapName, int pos) {
+        List<JCTree> methodDecls = List.nil();
         boolean verbose = processorContext.isVerbose();
         Messager messager = processorContext.getMessager();
         Map<String, String> builderNameToServiceMap = genContext.getBuilderNameToServiceMap();
@@ -116,11 +114,13 @@ public class ChainCacheGenTemplate extends AbstractGenCodeTemplate {
         } else {
             // 不存在则创建
             JCTree.JCVariableDecl methodBuilder = this.createMap(cacheMapName, serviceName, pos, processorContext);
-            methodDecls.append(methodBuilder);
+            methodDecls = methodDecls.append(methodBuilder);
             if (verbose) {
                 messager.printMessage(NOTE, "createVariable in ChainCache: " + methodBuilder);
             }
         }
+        // 追加定义
+        classDecl.defs = classDecl.defs.appendList(methodDecls);
     }
 
     private JCTree.JCVariableDecl createMap(String cacheMapName, String serviceName, int pos, ProcessorContext processorContext) {
@@ -129,28 +129,34 @@ public class ChainCacheGenTemplate extends AbstractGenCodeTemplate {
         // 构建泛型类型，比如SerialChainPipelineImpl<?>
         JCTree.JCExpression serviceNameType = maker.Ident(names.fromString(serviceName));
         JCTree.JCExpression wildcardType = maker.Wildcard(maker.TypeBoundKind(BoundKind.UNBOUND), null);
-        JCTree.JCTypeApply mapGenericType = maker.TypeApply(serviceNameType, List.of(wildcardType));
-        // 构建初始化语句
+        JCTree.JCTypeApply serviceGenericType = maker.TypeApply(serviceNameType, List.of(wildcardType));
+        // 构建Map类型，比如 Map<String, SerialChainPipelineImpl<?>>
+        JCTree.JCExpression mapType = maker.TypeApply(maker.Ident(names.fromString("Map")), List.of(maker.Ident(names.fromString("String")), serviceGenericType));
+
+        // 构建初始化语句，使用空的泛型参数列表表示钻石运算符<>
+        JCTree.JCExpression newMapType = maker.TypeApply(maker.Ident(names.fromString("ConcurrentHashMap")), List.nil());
         JCTree.JCNewClass newMapExpression = maker.NewClass(
                 null,
                 List.nil(),
-                maker.Ident(names.fromString("ConcurrentHashMap")),
-                List.of(maker.Ident(names.fromString("String")), mapGenericType),
+                newMapType, // 使用空的泛型参数列表
+                List.nil(),
                 null
         );
 
+        // 创建变量声明
         JCTree.JCVariableDecl mapInitializer = maker.VarDef(
                 maker.Modifiers(Flags.PRIVATE | Flags.STATIC | Flags.FINAL),
                 names.fromString(cacheMapName),
-                maker.TypeApply(maker.Ident(names.fromString("Map")), List.of(maker.Ident(names.fromString("String")), mapGenericType)),
+                mapType,
                 newMapExpression
         );
         mapInitializer.pos = pos;
         return mapInitializer;
     }
 
-    private void genRegisterChain(List<JCTree> methodDecls, JCTree.JCClassDecl classDecl, ProcessorContext processorContext,
+    private void genRegisterChain(JCTree.JCClassDecl classDecl, ProcessorContext processorContext,
                                   GenContext genContext, String builderName, String cacheMapName, String registerName, int pos) {
+        List<JCTree> methodDecls = List.nil();
         boolean verbose = processorContext.isVerbose();
         Messager messager = processorContext.getMessager();
         Map<String, String> builderNameToServiceMap = genContext.getBuilderNameToServiceMap();
@@ -163,20 +169,24 @@ public class ChainCacheGenTemplate extends AbstractGenCodeTemplate {
         } else {
             // 不存在则创建
             JCTree.JCMethodDecl methodBuilder = this.createRegister(serviceName, cacheMapName, registerName, pos, processorContext);
-            methodDecls.append(methodBuilder);
+            methodDecls = methodDecls.append(methodBuilder);
             if (verbose) {
                 messager.printMessage(NOTE, "createRegister in ChainCache: " + methodBuilder);
             }
         }
+        // 追加定义
+        classDecl.defs = classDecl.defs.appendList(methodDecls);
     }
 
     private JCTree.JCMethodDecl createRegister(String serviceName, String cacheMapName, String registerName, int pos, ProcessorContext processorContext) {
         TreeMaker maker = processorContext.getMaker();
         Names names = processorContext.getNames();
-        // 生成代码
+        // 创建泛型参数 T
+        JCTree.JCTypeParameter typeParameterT = maker.TypeParameter(names.fromString("T"), List.nil());
+
+        // 生成参数 SerialChainPipelineImpl<T> chain
         JCTree.JCExpression serviceNameType = maker.Ident(names.fromString(serviceName));
-        JCTree.JCExpression wildcardType = maker.Wildcard(maker.TypeBoundKind(BoundKind.UNBOUND), null);
-        JCTree.JCExpression chainType = maker.TypeApply(serviceNameType, List.of(wildcardType));
+        JCTree.JCExpression chainType = maker.TypeApply(serviceNameType, List.of(maker.Ident(names.fromString("T"))));
 
         // 构建 registerChain 方法的参数列表
         List<JCTree.JCVariableDecl> parameters = List.of(
@@ -213,10 +223,13 @@ public class ChainCacheGenTemplate extends AbstractGenCodeTemplate {
                 null
         );
 
-        JCTree.JCExpressionStatement throwStatement = maker.Exec(chainException);
+        JCTree.JCThrow throwStatement = maker.Throw(chainException);
+
+        // 包装 throw 语句在一个块中
+        JCTree.JCBlock throwBlock = maker.Block(0, List.of(throwStatement));
 
         // 构建 if 语句
-        JCTree.JCIf ifStatement = maker.If(condition, throwStatement, null);
+        JCTree.JCIf ifStatement = maker.If(condition, throwBlock, null);
 
         // 构建 put 方法调用
         JCTree.JCExpression putMethod = maker.Apply(
@@ -235,7 +248,7 @@ public class ChainCacheGenTemplate extends AbstractGenCodeTemplate {
                 maker.Modifiers(Flags.PUBLIC | Flags.STATIC),
                 names.fromString(registerName),
                 maker.TypeIdent(TypeTag.VOID),
-                List.nil(),
+                List.of(typeParameterT), // 添加泛型参数
                 parameters,
                 List.nil(),
                 methodBody,
@@ -243,8 +256,9 @@ public class ChainCacheGenTemplate extends AbstractGenCodeTemplate {
         );
     }
 
-    private void getCopyChain(List<JCTree> methodDecls, JCTree.JCClassDecl classDecl, ProcessorContext processorContext,
+    private void getCopyChain(JCTree.JCClassDecl classDecl, ProcessorContext processorContext,
                               GenContext genContext, String builderName, String copyChainName, int pos) {
+        List<JCTree> methodDecls = List.nil();
         boolean verbose = processorContext.isVerbose();
         Messager messager = processorContext.getMessager();
         Map<String, String> builderNameToServiceMap = genContext.getBuilderNameToServiceMap();
@@ -258,21 +272,23 @@ public class ChainCacheGenTemplate extends AbstractGenCodeTemplate {
             String directorChainName = ChainCodeProcessor.getNameForDirector(builderName);
             // 不存在则创建
             JCTree.JCMethodDecl methodBuilder = this.createCopyChain(serviceName, builderName, directorChainName, copyChainName, pos, processorContext);
-            methodDecls.append(methodBuilder);
+            methodDecls = methodDecls.append(methodBuilder);
             if (verbose) {
                 messager.printMessage(NOTE, "createCopyChain in ChainCache: " + methodBuilder);
             }
         }
+        // 追加定义
+        classDecl.defs = classDecl.defs.appendList(methodDecls);
     }
 
     private JCTree.JCMethodDecl createCopyChain(String serviceName, String builderName, String directorChainName, String copyChainName, int pos, ProcessorContext processorContext) {
-        String verifyMethodName = "verifyChainTypeReference";
-        String createChainMethodName = "createChain";
         TreeMaker maker = processorContext.getMaker();
         Names names = processorContext.getNames();
-        JCTree.JCExpression serviceNameType = maker.Ident(names.fromString(serviceName));
+        // 创建泛型参数 T
+        JCTree.JCTypeParameter typeParameterT = maker.TypeParameter(names.fromString("T"), List.nil());
+
+        // 生成方法返回类型 SerialChainPipelineBuilder<T>
         JCTree.JCExpression builderType = maker.Ident(names.fromString(builderName));
-        JCTree.JCExpression chainTypeReferenceType = maker.Ident(names.fromString("ChainTypeReference"));
         JCTree.JCExpression returnType = maker.TypeApply(builderType, List.of(maker.Ident(names.fromString("T"))));
 
         // 构建 copyChain 方法的参数列表
@@ -284,79 +300,120 @@ public class ChainCacheGenTemplate extends AbstractGenCodeTemplate {
                 maker.VarDef(
                         maker.Modifiers(Flags.PARAMETER),
                         names.fromString("chain"),
-                        maker.TypeApply(serviceNameType, List.of(maker.Wildcard(maker.TypeBoundKind(BoundKind.UNBOUND), null))), null),
+                        maker.TypeApply(maker.Ident(names.fromString(serviceName)), List.of(maker.Wildcard(maker.TypeBoundKind(BoundKind.UNBOUND), null))), null),
                 maker.VarDef(
                         maker.Modifiers(Flags.PARAMETER),
                         names.fromString("chainTypeReference"),
-                        maker.TypeApply(chainTypeReferenceType, List.of(maker.Ident(names.fromString("T")))), null)
+                        maker.TypeApply(maker.Ident(names.fromString("ChainTypeReference")), List.of(maker.Ident(names.fromString("T")))), null)
         );
+
         parameters.forEach(param -> param.pos = pos);
 
-        // 构建 verifyChainTypeReference 方法调用
-        JCTree.JCExpression verifyMethod = maker.Apply(
+        // 构建方法体内的各个语句
+        List<JCTree.JCStatement> statements = List.nil();
+
+        // 1. verifyChainTypeReference 方法调用
+        JCTree.JCMethodInvocation verifyCall = maker.Apply(
                 List.nil(),
-                maker.Select(maker.Ident(names.fromString("this")), names.fromString(verifyMethodName)),
+                maker.Ident(names.fromString("verifyChainTypeReference")),
                 List.of(maker.Ident(names.fromString("chainId")),
-                        maker.Select(maker.Apply(List.nil(), maker.Select(maker.Ident(names.fromString("chain")),
-                                        names.fromString("getChainTypeReference")), List.nil()),
-                                names.fromString("chainTypeReference")),
+                        maker.Apply(List.nil(),
+                                maker.Select(maker.Ident(names.fromString("chain")),
+                                        names.fromString("getChainTypeReference")),
+                                List.nil()),
                         maker.Ident(names.fromString("chainTypeReference")))
         );
+        statements = statements.append(maker.Exec(verifyCall));
 
-        JCTree.JCExpressionStatement verifyStatement = maker.Exec(verifyMethod);
+        // 2. 获取 chainStrategy、chainFallBack、handlerList 的语句
+        JCTree.JCVariableDecl chainStrategyDecl = maker.VarDef(
+                maker.Modifiers(0),
+                names.fromString("chainStrategy"),
+                maker.TypeApply(maker.Ident(names.fromString("ChainStrategy")), List.of(maker.Wildcard(maker.TypeBoundKind(BoundKind.UNBOUND), null))),
+                maker.Apply(
+                        List.nil(),
+                        maker.Select(maker.Ident(names.fromString("chain")), names.fromString("getChainStrategy")),
+                        List.nil()
+                )
+        );
+        chainStrategyDecl.pos = pos;
+        statements = statements.append(chainStrategyDecl);
+        JCTree.JCVariableDecl chainFallBackDecl = maker.VarDef(
+                maker.Modifiers(0),
+                names.fromString("chainFallBack"),
+                maker.TypeApply(maker.Ident(names.fromString("ChainFallBack")), List.of(maker.Wildcard(maker.TypeBoundKind(BoundKind.UNBOUND), null))),
+                maker.Apply(
+                        List.nil(),
+                        maker.Select(maker.Ident(names.fromString("chain")), names.fromString("getChainFallBack")),
+                        List.nil()
+                )
+        );
+        chainFallBackDecl.pos = pos;
+        statements = statements.append(chainFallBackDecl);
 
-        // 构建获取 chainStrategy、chainFallBack、handlerList 的语句
-        JCTree.JCExpression chainStrategyMethod = maker.Apply(
+        JCTree.JCVariableDecl handlerListDecl = maker.VarDef(
+                maker.Modifiers(0),
+                names.fromString("handlerList"),
+                maker.TypeApply(maker.Ident(names.fromString("UniqueList")), List.of(maker.Wildcard(maker.TypeBoundKind(BoundKind.EXTENDS), maker.Ident(names.fromString("ChainHandler"))))),
+                maker.Apply(
+                        List.nil(),
+                        maker.Select(maker.Ident(names.fromString("chain")), names.fromString("getHandlerList")),
+                        List.nil()
+                )
+        );
+        handlerListDecl.pos = pos;
+        statements = statements.append(handlerListDecl);
+
+        // 3. 创建新链的语句
+        JCTree.JCExpression createChainExpression = maker.Apply(
                 List.nil(),
-                maker.Select(maker.Ident(names.fromString("chain")), names.fromString("getChainStrategy")),
+                maker.Select(maker.Ident(names.fromString("ChainPipelineFactory")), names.fromString("createChain")),
+                List.of(maker.Ident(names.fromString("chainTypeReference")))
+        );
+
+        // 使用 directorChainName 变量来确定方法名
+        JCTree.JCMethodInvocation chainMethodCall = maker.Apply(
+                List.nil(),
+                maker.Select(createChainExpression, names.fromString(directorChainName)),
                 List.nil()
         );
-        JCTree.JCExpression chainFallBackMethod = maker.Apply(
-                List.nil(),
-                maker.Select(maker.Ident(names.fromString("chain")), names.fromString("getChainFallBack")),
-                List.nil()
+
+        JCTree.JCVariableDecl newChainDecl = maker.VarDef(
+                maker.Modifiers(0),
+                names.fromString("newChain"),
+                returnType,
+                chainMethodCall
         );
-        JCTree.JCExpression handlerListMethod = maker.Apply(
+        newChainDecl.pos = pos;
+        statements = statements.append(newChainDecl);
+
+        // 4. 添加 handler、globalFallback、strategy 的语句
+        JCTree.JCExpression addHandlerCall = maker.Apply(
                 List.nil(),
-                maker.Select(maker.Ident(names.fromString("chain")), names.fromString("getHandlerList")),
-                List.nil()
+                maker.Select(maker.Ident(names.fromString("newChain")), names.fromString("addHandler")),
+                List.of(maker.TypeCast(maker.TypeApply(maker.Ident(names.fromString("ChainHandler")), List.of(maker.Ident(names.fromString("T")))), maker.Ident(names.fromString("handlerList"))))
         );
+        statements = statements.append(maker.Exec(addHandlerCall));
 
-        // 构建创建新链的语句
-        JCTree.JCExpression createChainMethod = maker.Select(maker.Apply(List.nil(), maker.Select(maker.Ident(names.fromString("ChainPipelineFactory")), names.fromString(createChainMethodName)), List.of(maker.Ident(names.fromString("chainTypeReference")))), names.fromString(directorChainName));
-        JCTree.JCExpression newChainMethod = maker.Select(createChainMethod, names.fromString("chain"));
+        JCTree.JCExpression globalFallbackCall = maker.Apply(
+                List.nil(),
+                maker.Select(maker.Ident(names.fromString("newChain")), names.fromString("globalFallback")),
+                List.of(maker.TypeCast(maker.TypeApply(maker.Ident(names.fromString("GlobalChainFallBack")), List.of(maker.Ident(names.fromString("T")))), maker.Ident(names.fromString("chainFallBack"))))
+        );
+        statements = statements.append(maker.Exec(globalFallbackCall));
 
-        // 构建添加 handler、globalFallback、strategy 的语句
-        JCTree.JCExpression addHandlerMethod = maker.Apply(List.nil(),
-                maker.Select(maker.Ident(names.fromString("newChain")),
-                        names.fromString("addHandler")),
-                List.of(maker.TypeCast(maker.TypeApply(maker.Ident(names.fromString("ChainHandler")),
-                                List.of(maker.Ident(names.fromString("T")))),
-                        handlerListMethod)));
-        JCTree.JCExpression globalFallbackMethod = maker.Apply(List.nil(),
-                maker.Select(maker.Ident(names.fromString("newChain")),
-                        names.fromString("globalFallback")),
-                List.of(maker.TypeCast(maker.TypeApply(maker.Ident(names.fromString("GlobalChainFallBack")),
-                                List.of(maker.Ident(names.fromString("T")))),
-                        chainFallBackMethod)));
-        JCTree.JCExpression strategyMethod = maker.Apply(List.nil(),
-                maker.Select(maker.Ident(names.fromString("newChain")),
-                        names.fromString("strategy")),
-                List.of(maker.TypeCast(maker.TypeApply(maker.Ident(names.fromString("ChainStrategy")),
-                                List.of(maker.Ident(names.fromString("T")))),
-                        chainStrategyMethod)));
+        JCTree.JCExpression strategyCall = maker.Apply(
+                List.nil(),
+                maker.Select(maker.Ident(names.fromString("newChain")), names.fromString("strategy")),
+                List.of(maker.TypeCast(maker.TypeApply(maker.Ident(names.fromString("ChainStrategy")), List.of(maker.Ident(names.fromString("T")))), maker.Ident(names.fromString("chainStrategy"))))
+        );
+        statements = statements.append(maker.Exec(strategyCall));
 
-        // 构建 return 语句
-        JCTree.JCReturn returnStatement = maker.Return(newChainMethod);
+        // 5. 返回新链
+        JCTree.JCReturn returnStatement = maker.Return(maker.Ident(names.fromString("newChain")));
+        statements = statements.append(returnStatement);
 
         // 构建方法体
-        List<JCTree.JCStatement> statements = List.of(
-                verifyStatement,
-                maker.Exec(addHandlerMethod),
-                maker.Exec(globalFallbackMethod),
-                maker.Exec(strategyMethod),
-                returnStatement
-        );
         JCTree.JCBlock methodBody = maker.Block(0, statements);
 
         // 构建 copyChain 方法
@@ -364,7 +421,7 @@ public class ChainCacheGenTemplate extends AbstractGenCodeTemplate {
                 maker.Modifiers(Flags.PUBLIC | Flags.STATIC),
                 names.fromString(copyChainName),
                 returnType,
-                List.nil(),
+                List.of(typeParameterT),
                 parameters,
                 List.nil(),
                 methodBody,
@@ -372,9 +429,10 @@ public class ChainCacheGenTemplate extends AbstractGenCodeTemplate {
         );
     }
 
-    private void getGetChain(List<JCTree> methodDecls, JCTree.JCClassDecl classDecl, ProcessorContext processorContext,
+    private void getGetChain(JCTree.JCClassDecl classDecl, ProcessorContext processorContext,
                              GenContext genContext, String builderName, String cacheMapName, String copyChainName,
                              String builderGetMethodName, int pos) {
+        List<JCTree> methodDecls = List.nil();
         boolean verbose = processorContext.isVerbose();
         Messager messager = processorContext.getMessager();
         Map<String, String> builderNameToServiceMap = genContext.getBuilderNameToServiceMap();
@@ -387,24 +445,29 @@ public class ChainCacheGenTemplate extends AbstractGenCodeTemplate {
         } else {
             // 不存在则创建
             JCTree.JCMethodDecl methodBuilder = this.createGetChain(builderName, serviceName, cacheMapName, copyChainName, builderGetMethodName, pos, processorContext);
-            methodDecls.append(methodBuilder);
+            methodDecls = methodDecls.append(methodBuilder);
             if (verbose) {
                 messager.printMessage(NOTE, "createGetChain in ChainCache: " + methodBuilder);
             }
         }
+        // 追加定义
+        classDecl.defs = classDecl.defs.appendList(methodDecls);
     }
 
     private JCTree.JCMethodDecl createGetChain(String builderName, String serviceName, String cacheMapName, String copyChainName,
                                                String builderGetMethodName, int pos, ProcessorContext processorContext) {
         TreeMaker maker = processorContext.getMaker();
         Names names = processorContext.getNames();
+        // 创建泛型参数 T
+        JCTree.JCTypeParameter typeParameterT = maker.TypeParameter(names.fromString("T"), List.nil());
+
+        // 类型
         JCTree.JCExpression serviceNameType = maker.Ident(names.fromString(serviceName));
         JCTree.JCExpression builderType = maker.Ident(names.fromString(builderName));
-        JCTree.JCExpression cacheMapType = maker.Ident(names.fromString("Map"));
         JCTree.JCExpression chainTypeReferenceType = maker.Ident(names.fromString("ChainTypeReference"));
         JCTree.JCExpression returnType = maker.TypeApply(builderType, List.of(maker.Ident(names.fromString("T"))));
 
-        // 构建 getVariableChain 方法的参数列表
+        // 构建方法参数
         List<JCTree.JCVariableDecl> parameters = List.of(
                 maker.VarDef(
                         maker.Modifiers(Flags.PARAMETER),
@@ -415,7 +478,7 @@ public class ChainCacheGenTemplate extends AbstractGenCodeTemplate {
                         names.fromString("chainTypeReference"),
                         maker.TypeApply(chainTypeReferenceType, List.of(maker.Ident(names.fromString("T")))), null)
         );
-
+        parameters.forEach(param-> param.pos = pos);
         // 构建获取 chain 的语句
         JCTree.JCExpression chainMapMethod = maker.Apply(
                 List.nil(),
@@ -423,55 +486,58 @@ public class ChainCacheGenTemplate extends AbstractGenCodeTemplate {
                 List.of(maker.Ident(names.fromString("chainId")))
         );
         JCTree.JCVariableDecl chainVar = maker.VarDef(
-                maker.Modifiers(Flags.PARAMETER),
+                maker.Modifiers(0),
                 names.fromString("chain"),
                 maker.TypeApply(serviceNameType, List.of(maker.Wildcard(maker.TypeBoundKind(BoundKind.UNBOUND), null))),
-                chainMapMethod);
+                chainMapMethod
+        );
+        chainVar.pos = pos;
 
-        // 构建判断 chain 是否为 null 的语句
-        JCTree.JCExpression nullCheck = maker.If(
-                maker.Binary(JCTree.Tag.EQ, maker.Ident(names.fromString("chain")),
-                        null),
-                maker.Throw(
-                        maker.NewClass(
-                                null,
-                                List.nil(),
-                                maker.Ident(names.fromString("ChainException")),
-                                List.of(maker.Binary(JCTree.Tag.PLUS,
-                                        maker.Literal("There is no chain instance for "),
-                                        maker.Binary(JCTree.Tag.PLUS,
-                                                maker.Ident(names.fromString("chainId")),
-                                                maker.Literal(", please create chain with chainId")))),
-                                null
-                        )
-                ),
-                null
-        ).getCondition();
+        // 构建判断 chain 是否为 null 的 if 语句
+        JCTree.JCExpression nullCondition = maker.Binary(JCTree.Tag.EQ, maker.Ident(names.fromString("chain")),
+                maker.Literal(TypeTag.BOT, null));
+        JCTree.JCExpression exceptionMessage = maker.Binary(
+                JCTree.Tag.PLUS,
+                maker.Literal("There is no chain instance for "),
+                maker.Binary(
+                        JCTree.Tag.PLUS,
+                        maker.Ident(names.fromString("chainId")),
+                        maker.Literal(", please create chain with chainId")
+                )
+        );
+        JCTree.JCStatement throwStatement = maker.Throw(
+                maker.NewClass(
+                        null,
+                        List.nil(),
+                        maker.Ident(names.fromString("ChainException")),
+                        List.of(exceptionMessage),
+                        null
+                )
+        );
+        JCTree.JCIf nullCheckIf = maker.If(nullCondition, maker.Block(0, List.of(throwStatement)), null);
 
         // 构建调用 copyChain 方法的语句
         JCTree.JCExpression copyChainMethodCall = maker.Apply(
                 List.nil(),
-                maker.Select(maker.Ident(names.fromString("this")), names.fromString(copyChainName)),
-                List.of(maker.Ident(names.fromString("chainId")),
-                        maker.Ident(names.fromString("chain")),
-                        maker.Ident(names.fromString("chainTypeReference")))
+                maker.Ident(names.fromString(copyChainName)), // 直接使用方法名
+                List.of(maker.Ident(names.fromString("chainId")), maker.Ident(names.fromString("chain")), maker.Ident(names.fromString("chainTypeReference")))
         );
 
         // 构建 return 语句
-        JCTree.JCExpression returnStatement = maker.Return(copyChainMethodCall).getExpression();
+        JCTree.JCReturn returnStatement = maker.Return(copyChainMethodCall);
 
         // 构建方法体
-        List<JCTree.JCStatement> statements = List.of(chainVar, maker.Exec(nullCheck), maker.Exec(returnStatement));
+        List<JCTree.JCStatement> statements = List.of(chainVar, nullCheckIf, returnStatement);
         JCTree.JCBlock methodBody = maker.Block(0, statements);
 
-        // 构建 getVariableChain 方法
+        // 构建 getChain 方法
         return maker.MethodDef(
                 maker.Modifiers(Flags.PUBLIC | Flags.STATIC),
                 names.fromString(builderGetMethodName),
                 returnType,
-                List.nil(),
+                List.of(typeParameterT), // 添加泛型参数
                 parameters,
-                List.nil(),
+                List.nil(), // 抛出的异常
                 methodBody,
                 null
         );

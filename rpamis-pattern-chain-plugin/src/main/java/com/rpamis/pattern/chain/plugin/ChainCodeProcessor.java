@@ -164,7 +164,7 @@ public class ChainCodeProcessor extends AbstractProcessor {
         for (Element element : roundEnv.getElementsAnnotatedWith(ChainFactory.class)) {
             if (element.getKind() == ElementKind.CLASS) {
                 Element enclosingElement = element.getEnclosingElement();
-                if (element.getKind() == ElementKind.INTERFACE && enclosingElement instanceof PackageElement) {
+                if (element.getKind() == ElementKind.CLASS && enclosingElement instanceof PackageElement) {
                     String packageName = ((PackageElement) enclosingElement).getQualifiedName().toString();
                     if (PACKAGE_NAME.equals(packageName)) {
                         factoryClasses.add((TypeElement) element);
@@ -256,8 +256,8 @@ public class ChainCodeProcessor extends AbstractProcessor {
         ChainCacheGenTemplate cacheGenTemplate = new ChainCacheGenTemplate();
         ChainFactoryGenTemplate factoryGenTemplate = new ChainFactoryGenTemplate();
         directorGenTemplate.execute(genContext, processorContext);
-        directorServiceGenTemplate.execute(genContext, processorContext);
         cacheGenTemplate.execute(genContext, processorContext);
+        directorServiceGenTemplate.execute(genContext, processorContext);
         factoryGenTemplate.execute(genContext, processorContext);
         return true;
     }
