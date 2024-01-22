@@ -15,6 +15,7 @@
         <module>rpamis-pattern-chain</module>
         <module>rpamis-pattern-test</module>
         <module>rpamis-pattern-chain-plugin</module>
+        <module>rpamis-chain-plugin-annotation</module>
     </modules>
 
     <licenses>
@@ -65,12 +66,6 @@
                 <groupId>com.google.auto.service</groupId>
                 <artifactId>auto-service</artifactId>
                 <version>1.1.1</version>
-                <optional>true</optional>
-            </dependency>
-            <dependency>
-                <groupId>com.squareup</groupId>
-                <artifactId>javapoet</artifactId>
-                <version>1.13.0</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

@@ -1,7 +1,7 @@
 package com.rpamis.pattern.chain.builder;
 
+import com.rpamis.pattern.chain.annotations.ChainBuilder;
 import com.rpamis.pattern.chain.fluent.Add;
-import com.rpamis.pattern.chain.plugin.ChainBuilder;
 
 import java.util.concurrent.ForkJoinPool;
 

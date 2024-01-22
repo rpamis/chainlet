@@ -3,6 +3,7 @@ package com.rpamis.pattern.chain.builder;
 import com.rpamis.pattern.chain.ParallelChainPipelineImpl;
 import com.rpamis.pattern.chain.SerialChainPipelineImpl;
 import com.rpamis.pattern.chain.VariableChainPipelineImpl;
+import com.rpamis.pattern.chain.annotations.ChainCache;
 import com.rpamis.pattern.chain.definition.ChainFallBack;
 import com.rpamis.pattern.chain.definition.ChainHandler;
 import com.rpamis.pattern.chain.definition.ChainStrategy;
@@ -10,7 +11,6 @@ import com.rpamis.pattern.chain.entity.ChainException;
 import com.rpamis.pattern.chain.entity.UniqueList;
 import com.rpamis.pattern.chain.fallback.GlobalChainFallBack;
 import com.rpamis.pattern.chain.support.ChainTypeReference;
-import com.rpamis.pattern.chain.plugin.ChainCache;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

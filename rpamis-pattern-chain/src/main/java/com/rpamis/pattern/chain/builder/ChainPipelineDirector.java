@@ -1,6 +1,7 @@
 package com.rpamis.pattern.chain.builder;
 
-import com.rpamis.pattern.chain.plugin.ChainDirector;
+
+import com.rpamis.pattern.chain.annotations.ChainDirector;
 
 /**
  * 责任链Director接口

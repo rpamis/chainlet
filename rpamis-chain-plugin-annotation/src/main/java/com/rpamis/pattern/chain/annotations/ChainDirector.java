@@ -1,4 +1,4 @@
-package com.rpamis.pattern.chain.plugin;
+package com.rpamis.pattern.chain.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

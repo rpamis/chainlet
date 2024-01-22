@@ -1,8 +1,8 @@
 package com.rpamis.pattern.chain;
 
+import com.rpamis.pattern.chain.annotations.ChainBuilderService;
 import com.rpamis.pattern.chain.builder.SerialChainPipelineBuilder;
 import com.rpamis.pattern.chain.support.ChainTypeReference;
-import com.rpamis.pattern.chain.plugin.ChainBuilderService;
 
 /**
  * 串行责任链实现类

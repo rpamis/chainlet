@@ -1,6 +1,7 @@
 package com.rpamis.pattern.chain.builder;
 
-import com.rpamis.pattern.chain.plugin.ChainBuilder;
+
+import com.rpamis.pattern.chain.annotations.ChainBuilder;
 
 /**
  * 可变数据责任链Builder

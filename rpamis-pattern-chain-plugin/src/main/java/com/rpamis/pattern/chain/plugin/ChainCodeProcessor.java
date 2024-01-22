@@ -1,6 +1,7 @@
 package com.rpamis.pattern.chain.plugin;
 
 import com.google.auto.service.AutoService;
+import com.rpamis.pattern.chain.annotations.*;
 import com.rpamis.pattern.chain.plugin.template.ChainCacheGenTemplate;
 import com.rpamis.pattern.chain.plugin.template.ChainDirectorGenTemplate;
 import com.rpamis.pattern.chain.plugin.template.ChainDirectorServiceGenTemplate;
@@ -147,7 +148,7 @@ public class ChainCodeProcessor extends AbstractProcessor {
         }
         // 获取内部所有ChainDirectorService类
         Set<TypeElement> chainDirectorServiceClasses = genContext.getChainDirectorServiceClasses();
-        for (Element element : roundEnv.getElementsAnnotatedWith(ChainDirectorService.class)) {
+        for (Element element : roundEnv.getElementsAnnotatedWith(com.rpamis.pattern.chain.plugin.ChainDirectorService.class)) {
             Element enclosingElement = element.getEnclosingElement();
             if (element.getKind() == ElementKind.CLASS && enclosingElement instanceof PackageElement) {
                 String packageName = ((PackageElement) enclosingElement).getQualifiedName().toString();

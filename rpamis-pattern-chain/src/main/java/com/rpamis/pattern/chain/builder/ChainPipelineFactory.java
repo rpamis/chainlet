@@ -1,7 +1,7 @@
 package com.rpamis.pattern.chain.builder;
 
+import com.rpamis.pattern.chain.annotations.ChainFactory;
 import com.rpamis.pattern.chain.support.ChainTypeReference;
-import com.rpamis.pattern.chain.plugin.ChainFactory;
 
 /**
  * 责任链工厂

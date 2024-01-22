@@ -10,7 +10,7 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <version>1.0.0</version>
+    <version>0.0.1</version>
     <artifactId>rpamis-pattern-chain-plugin</artifactId>
 
     <properties>
@@ -29,7 +29,11 @@
         <dependency>
             <groupId>com.google.auto.service</groupId>
             <artifactId>auto-service</artifactId>
-            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>com.rpamis</groupId>
+            <artifactId>rpamis-chain-plugin-annotation</artifactId>
+            <version>1.0.0</version>
         </dependency>
     </dependencies>
 

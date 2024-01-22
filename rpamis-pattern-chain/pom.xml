@@ -28,7 +28,7 @@
         </dependency>
         <dependency>
             <groupId>com.rpamis</groupId>
-            <artifactId>rpamis-pattern-chain-plugin</artifactId>
+            <artifactId>rpamis-chain-plugin-annotation</artifactId>
             <version>1.0.0</version>
         </dependency>
     </dependencies>

@@ -1,5 +1,6 @@
 package com.rpamis.pattern.chain;
 
+import com.rpamis.pattern.chain.annotations.ChainBuilderService;
 import com.rpamis.pattern.chain.builder.ParallelChainPipelineBuilder;
 import com.rpamis.pattern.chain.definition.ChainHandler;
 import com.rpamis.pattern.chain.definition.ChainInnerPipeline;
@@ -9,7 +10,6 @@ import com.rpamis.pattern.chain.entity.ChainResult;
 import com.rpamis.pattern.chain.entity.UniqueList;
 import com.rpamis.pattern.chain.fluent.Add;
 import com.rpamis.pattern.chain.support.ChainTypeReference;
-import com.rpamis.pattern.chain.plugin.ChainBuilderService;
 import com.rpamis.pattern.chain.strategy.FullExecutionStrategy;
 import com.rpamis.pattern.chain.support.ParallelChainTask;
 
