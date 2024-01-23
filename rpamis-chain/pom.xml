@@ -6,7 +6,7 @@
     <parent>
         <groupId>com.rpamis</groupId>
         <artifactId>rpamis-chain-parent</artifactId>
-        <version>1.0.0</version>
+        <version>1.0.1</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <version>${rpamis-chain.version}</version>
@@ -23,12 +23,12 @@
         <dependency>
             <groupId>com.rpamis</groupId>
             <artifactId>rpamis-extension-spi</artifactId>
-            <version>1.0.1</version>
+            <version>${rpamis-extension-spi.version}</version>
         </dependency>
         <dependency>
             <groupId>com.rpamis</groupId>
             <artifactId>rpamis-chain-plugin-annotation</artifactId>
-            <version>1.0.0</version>
+            <version>${rpamis-chain-plugin-annotation.version}</version>
         </dependency>
     </dependencies>
 
