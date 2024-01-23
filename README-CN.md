@@ -1,18 +1,18 @@
-## Rpamis-pattern
+## Rpamis-chain
 
-🌱Rpamis-pattern项目是一组设计模式框架集合，为开发者带来开箱即用的设计模式
+🌱Rpamis-chain项目是一款轻量、高扩展性的责任链模式框架，内置多种责任链形态及执行策略
 
 <p align="center">
-  <a href="https://central.sonatype.com/artifact/com.rpamis/rpamis-pattern-chain/1.0.0">
-    <img alt="maven" src="https://img.shields.io/maven-central/v/com.rpamis/rpamis-pattern-chain?style=flat-square">
+  <a href="https://central.sonatype.com/artifact/com.rpamis/rpamis-chain/1.0.0">
+    <img alt="maven" src="https://img.shields.io/maven-central/v/com.rpamis/rpamis-chain?style=flat-square">
   </a>
 
   <a href="https://www.apache.org/licenses/LICENSE-2.0">
     <img alt="code style" src="https://img.shields.io/badge/license-Apache%202-4EB1BA.svg?style=flat-square">
   </a>
 
-  <a href="https://codecov.io/gh/benym/rpamis-pattern" > 
-    <img alt="codecov" src="https://img.shields.io/codecov/c/gh/benym/rpamis-pattern?color=%23&style=flat-square"/> 
+  <a href="https://codecov.io/gh/benym/rpamis-chain" > 
+    <img alt="codecov" src="https://img.shields.io/codecov/c/gh/benym/rpamis-chain?color=%23&style=flat-square"/> 
   </a>
 </p>
 
@@ -21,9 +21,6 @@
 [**中文**](README-CN.md)|[**English**](README.md)
 
 -------------------------------------------------------------------------------
-### Rpamis-pattern-chain
-
-提供0依赖的责任链模式框架
 
 ### 快速开始
 
@@ -32,8 +29,8 @@
 ```xml
 <dependency>
     <groupId>com.rpamis</groupId>
-    <artifactId>rpamis-pattern-chain</artifactId>
-    <version>1.0.5</version>
+    <artifactId>rpamis-chain</artifactId>
+    <version>1.0.0</version>
 </dependency>
 ```
 
@@ -172,10 +169,3 @@ ChainPipeline<List<User>> chain = new UserChainPipline()
                 .addHandler(new AuthHandler())
                 .strategy(new CustomStrategy<>());
 ```
-
-### 参考实现
-
-- `AOP`:`org.springframework.aop.framework.ReflectiveMethodInvocation` 
-- `Tomcat`: `org.apache.catalina.core.ApplicationFilterChain`
-- `SpringMVC Interceptor`: `org.springframework.web.servlet.HandlerExecutionChain`,`org.springframework.web.servlet.HandlerInterceptor`
-- `Servlet Filter`:`javax.servlet.FilterChain`,`javax.servlet.Filter`

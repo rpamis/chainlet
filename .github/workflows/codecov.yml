@@ -28,7 +28,7 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           fail_ci_if_error: true
-          files: ./rpamis-pattern-test/target/site/jacoco-aggregate/jacoco.xml
+          files: ./rpamis-chain-test/target/site/jacoco-aggregate/jacoco.xml
           flags: unittests
           name: codecov-jacoco-rpamis
           verbose: true
