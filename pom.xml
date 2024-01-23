@@ -38,16 +38,16 @@
         <maven-site-plugin.version>3.7.1</maven-site-plugin.version>
         <maven-javadoc-plugin.version>3.0.1</maven-javadoc-plugin.version>
         <maven-gpg-plugin.version>1.6</maven-gpg-plugin.version>
-        <rpamis-chain.version>1.0.0-SNAPSHOT</rpamis-chain.version>
-        <rpamis-chain-test.version>1.0.0-SNAPSHOT</rpamis-chain-test.version>
     </properties>
 
     <profiles>
         <profile>
             <id>release</id>
             <properties>
-                <rpamis-chain.version>1.0.0</rpamis-chain.version>
-                <rpamis-chain-test.version>1.0.0</rpamis-chain-test.version>
+                <rpamis-chain.version>1.0.1</rpamis-chain.version>
+                <rpamis-chain-test.version>1.0.1</rpamis-chain-test.version>
+                <rpamis-chain-plugin.version>1.0.0</rpamis-chain-plugin.version>
+                <rpamis-chain-plugin-annotation.version>1.0.0</rpamis-chain-plugin-annotation.version>
             </properties>
             <distributionManagement>
                 <!--这两个id需要和setting.xml文件中的server字段的id进行对应-->
@@ -74,8 +74,10 @@
         <profile>
             <id>sonatype</id>
             <properties>
-                <rpamis-chain.version>1.0.0-SNAPSHOT</rpamis-chain.version>
-                <rpamis-chain-test.version>1.0.0-SNAPSHOT</rpamis-chain-test.version>
+                <rpamis-chain.version>1.0.1-SNAPSHOT</rpamis-chain.version>
+                <rpamis-chain-test.version>1.0.1-SNAPSHOT</rpamis-chain-test.version>
+                <rpamis-chain-plugin.version>1.0.0-SNAPSHOT</rpamis-chain-plugin.version>
+                <rpamis-chain-plugin-annotation.version>1.0.0-SNAPSHOT</rpamis-chain-plugin-annotation.version>
             </properties>
             <distributionManagement>
                 <!--这两个id需要和setting.xml文件中的server字段的id进行对应-->

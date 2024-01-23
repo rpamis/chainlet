@@ -40,12 +40,12 @@ import static com.rpamis.chain.plugin.ChainCodeProcessor.VERBOSE;
 @AutoService(Processor.class)
 @SupportedSourceVersion(SourceVersion.RELEASE_8)
 @SupportedAnnotationTypes(value = {
-        "com.rpamis.pattern.chain.plugin.ChainDirector",
-        "com.rpamis.pattern.chain.plugin.ChainDirectorService",
-        "com.rpamis.pattern.chain.plugin.ChainBuilder",
-        "com.rpamis.pattern.chain.plugin.ChainBuilderService",
-        "com.rpamis.pattern.chain.plugin.ChainCache",
-        "com.rpamis.pattern.chain.plugin.ChainFactory"
+        "com.rpamis.chain.plugin.annotations.ChainDirector",
+        "com.rpamis.chain.plugin.annotations.ChainDirectorService",
+        "com.rpamis.chain.plugin.annotations.ChainBuilder",
+        "com.rpamis.chain.plugin.annotations.ChainBuilderService",
+        "com.rpamis.chain.plugin.annotations.ChainCache",
+        "com.rpamis.chain.plugin.annotations.ChainFactory"
 })
 @SupportedOptions({VERBOSE})
 public class ChainCodeProcessor extends AbstractProcessor {
@@ -93,7 +93,7 @@ public class ChainCodeProcessor extends AbstractProcessor {
      */
     private ProcessorContext processorContext;
 
-    private static final String PACKAGE_NAME = "com.rpamis.pattern.chain.builder";
+    private static final String PACKAGE_NAME = "com.rpamis.chain.core.builder";
 
     @Override
     public synchronized void init(ProcessingEnvironment processingEnv) {

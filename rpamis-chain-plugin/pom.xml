@@ -10,7 +10,7 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <version>0.0.1</version>
+    <version>${rpamis-chain-plugin.version}</version>
     <artifactId>rpamis-chain-plugin</artifactId>
 
     <properties>

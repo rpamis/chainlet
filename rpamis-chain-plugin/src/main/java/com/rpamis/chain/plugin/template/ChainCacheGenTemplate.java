@@ -62,13 +62,13 @@ public class ChainCacheGenTemplate extends AbstractGenCodeTemplate {
             ChainCodeProcessor.importNeedClass(treePath, builderServiceToPackageNameMap.get(builderServiceName), builderServiceName);
         }
         // 导入内部包
-        ChainCodeProcessor.importNeedClass(treePath, "com.rpamis.pattern.chain.definition", "ChainFallBack");
-        ChainCodeProcessor.importNeedClass(treePath, "com.rpamis.pattern.chain.definition", "ChainHandler");
-        ChainCodeProcessor.importNeedClass(treePath, "com.rpamis.pattern.chain.definition", "ChainStrategy");
-        ChainCodeProcessor.importNeedClass(treePath, "com.rpamis.pattern.chain.entity", "ChainException");
-        ChainCodeProcessor.importNeedClass(treePath, "com.rpamis.pattern.chain.entity", "UniqueList");
-        ChainCodeProcessor.importNeedClass(treePath, "com.rpamis.pattern.chain.fallback", "GlobalChainFallBack");
-        ChainCodeProcessor.importNeedClass(treePath, "com.rpamis.pattern.chain.support", "ChainTypeReference");
+        ChainCodeProcessor.importNeedClass(treePath, "com.rpamis.chain.core.definition", "ChainFallBack");
+        ChainCodeProcessor.importNeedClass(treePath, "com.rpamis.chain.core.definition", "ChainHandler");
+        ChainCodeProcessor.importNeedClass(treePath, "com.rpamis.chain.core.definition", "ChainStrategy");
+        ChainCodeProcessor.importNeedClass(treePath, "com.rpamis.chain.core.entity", "ChainException");
+        ChainCodeProcessor.importNeedClass(treePath, "com.rpamis.chain.core.entity", "UniqueList");
+        ChainCodeProcessor.importNeedClass(treePath, "com.rpamis.chain.core.fallback", "GlobalChainFallBack");
+        ChainCodeProcessor.importNeedClass(treePath, "com.rpamis.chain.core.support", "ChainTypeReference");
         // 导入必要java包
         ChainCodeProcessor.importNeedClass(treePath, "java.util", "Map");
         ChainCodeProcessor.importNeedClass(treePath, "java.util.concurrent", "ConcurrentHashMap");
