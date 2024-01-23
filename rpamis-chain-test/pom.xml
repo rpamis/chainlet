@@ -8,6 +8,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
+    <version>${rpamis-chain-test.version}</version>
     <artifactId>rpamis-chain-test</artifactId>
     <description>rpamis-chain-test</description>
 

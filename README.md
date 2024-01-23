@@ -1,28 +1,24 @@
-## Rpamis-pattern
+## Rpamis-chain
 
-🌱Rpamis-pattern project is a collection of design pattern frameworks that bring design patterns out of the box to developers
+🌱Rpamis-chain project is a lightweight and highly scalable responsibility chain model framework with a variety of built-in responsibility chain forms and execution strategies
 
 <p align="center">
-  <a href="https://central.sonatype.com/artifact/com.rpamis/rpamis-pattern-chain/1.0.0">
-    <img alt="maven" src="https://img.shields.io/maven-central/v/com.rpamis/rpamis-pattern-chain?style=flat-square">
+  <a href="https://central.sonatype.com/artifact/com.rpamis/rpamis-chain/1.0.0">
+    <img alt="maven" src="https://img.shields.io/maven-central/v/com.rpamis/rpamis-chain?style=flat-square">
   </a>
 
   <a href="https://www.apache.org/licenses/LICENSE-2.0">
     <img alt="license" src="https://img.shields.io/badge/license-Apache%202-4EB1BA.svg?style=flat-square">
   </a>
 
-  <a href="https://codecov.io/gh/benym/rpamis-pattern" > 
-    <img alt="codecov" src="https://img.shields.io/codecov/c/gh/benym/rpamis-pattern?color=%23&style=flat-square"/> 
+  <a href="https://codecov.io/gh/benym/rpamis-chain" > 
+    <img alt="codecov" src="https://img.shields.io/codecov/c/gh/rpamis/rpamis-chain?color=%23&style=flat-square"/> 
   </a>
 </p>
 
 -------------------------------------------------------------------------------
 [**中文**](README-CN.md)|[**English**](README.md)
 -------------------------------------------------------------------------------
-### Rpamis-pattern-chain
-
-Provides a framework for the Chain of Responsibility pattern with zero dependencies
-
 ### Usage
 
 - Import dependence
@@ -30,8 +26,8 @@ Provides a framework for the Chain of Responsibility pattern with zero dependenc
 ```xml
 <dependency>
     <groupId>com.rpamis</groupId>
-    <artifactId>rpamis-pattern-chain</artifactId>
-    <version>1.0.5</version>
+    <artifactId>rpamis-chain</artifactId>
+    <version>1.0.0</version>
 </dependency>
 ```
 
@@ -170,10 +166,3 @@ ChainPipeline<List<User>> chain = new UserChainPipline()
                 .addHandler(new AuthHandler())
                 .strategy(new CustomStrategy<>());
 ```
-
-### Reference
-
-- `AOP`:`org.springframework.aop.framework.ReflectiveMethodInvocation` 
-- `Tomcat`: `org.apache.catalina.core.ApplicationFilterChain`
-- `SpringMVC Interceptor`: `org.springframework.web.servlet.HandlerExecutionChain`,`org.springframework.web.servlet.HandlerInterceptor`
-- `Servlet Filter`:`javax.servlet.FilterChain`,`javax.servlet.Filter`
