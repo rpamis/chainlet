@@ -5,16 +5,16 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.rpamis</groupId>
-    <artifactId>rpamis-pattern</artifactId>
+    <artifactId>rpamis-chain-parent</artifactId>
     <packaging>pom</packaging>
-    <version>1.0.5</version>
-    <name>rpamis-pattern</name>
-    <description>rpamis-pattern</description>
+    <version>1.0.0</version>
+    <name>rpamis-chain-parent</name>
+    <description>rpamis-chain-parent</description>
     <url>https://github.com/benym/rpamis-pattern</url>
     <modules>
-        <module>rpamis-pattern-chain</module>
-        <module>rpamis-pattern-test</module>
-        <module>rpamis-pattern-chain-plugin</module>
+        <module>rpamis-chain</module>
+        <module>rpamis-chain-test</module>
+        <module>rpamis-chain-plugin</module>
         <module>rpamis-chain-plugin-annotation</module>
     </modules>
 
@@ -38,7 +38,7 @@
         <maven-site-plugin.version>3.7.1</maven-site-plugin.version>
         <maven-javadoc-plugin.version>3.0.1</maven-javadoc-plugin.version>
         <maven-gpg-plugin.version>1.6</maven-gpg-plugin.version>
-        <rpamis-pattern-chain.version>1.0.5</rpamis-pattern-chain.version>
+        <rpamis-chain.version>1.0.0</rpamis-chain.version>
     </properties>
 
     <distributionManagement>
