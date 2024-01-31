@@ -42,6 +42,9 @@
         <nexus-staging-maven-plugin.version>1.6.13</nexus-staging-maven-plugin.version>
         <com.sun.tools.version>1.8</com.sun.tools.version>
         <com.google.auto-service.version>1.1.1</com.google.auto-service.version>
+        <spring-boot-starter-test.version>2.7.10</spring-boot-starter-test.version>
+        <lombok.version>1.18.12</lombok.version>
+        <junit.version>4.13.2</junit.version>
     </properties>
 
     <profiles>
@@ -131,6 +134,48 @@
                 <groupId>com.google.auto.service</groupId>
                 <artifactId>auto-service</artifactId>
                 <version>${com.google.auto-service.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.rpamis</groupId>
+                <artifactId>rpamis-chain</artifactId>
+                <version>${rpamis-chain.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.rpamis</groupId>
+                <artifactId>rpamis-extension-spi</artifactId>
+                <version>${rpamis-extension-spi.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.rpamis</groupId>
+                <artifactId>rpamis-chain-processor-annotation</artifactId>
+                <version>${rpamis-chain-processor-annotation.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.rpamis</groupId>
+                <artifactId>rpamis-chain-processor</artifactId>
+                <version>${rpamis-chain-processor.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-test</artifactId>
+                <version>${spring-boot-starter-test.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <artifactId>spring-boot-starter-logging</artifactId>
+                        <groupId>org.springframework.boot</groupId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>${lombok.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>${junit.version}</version>
+                <scope>test</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>

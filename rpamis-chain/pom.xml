@@ -23,12 +23,10 @@
         <dependency>
             <groupId>com.rpamis</groupId>
             <artifactId>rpamis-extension-spi</artifactId>
-            <version>${rpamis-extension-spi.version}</version>
         </dependency>
         <dependency>
             <groupId>com.rpamis</groupId>
             <artifactId>rpamis-chain-processor-annotation</artifactId>
-            <version>${rpamis-chain-processor-annotation.version}</version>
         </dependency>
     </dependencies>
 

@@ -33,7 +33,6 @@
         <dependency>
             <groupId>com.rpamis</groupId>
             <artifactId>rpamis-chain-processor-annotation</artifactId>
-            <version>${rpamis-chain-processor-annotation.version}</version>
         </dependency>
     </dependencies>
 
