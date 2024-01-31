@@ -6,12 +6,12 @@
     <parent>
         <groupId>com.rpamis</groupId>
         <artifactId>rpamis-chain-parent</artifactId>
-        <version>1.0.1</version>
+        <version>1.0.2-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <version>${rpamis-chain-plugin-annotation.version}</version>
-    <artifactId>rpamis-chain-plugin-annotation</artifactId>
+    <version>${rpamis-chain-processor-annotation.version}</version>
+    <artifactId>rpamis-chain-processor-annotation</artifactId>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>

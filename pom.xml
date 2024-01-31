@@ -7,15 +7,15 @@
     <groupId>com.rpamis</groupId>
     <artifactId>rpamis-chain-parent</artifactId>
     <packaging>pom</packaging>
-    <version>1.0.1</version>
+    <version>1.0.2-SNAPSHOT</version>
     <name>rpamis-chain-parent</name>
     <description>rpamis-chain-parent</description>
     <url>https://github.com/benym/rpamis-chain</url>
     <modules>
         <module>rpamis-chain</module>
         <module>rpamis-chain-test</module>
-        <module>rpamis-chain-plugin</module>
-        <module>rpamis-chain-plugin-annotation</module>
+        <module>rpamis-chain-processor</module>
+        <module>rpamis-chain-processor-annotation</module>
     </modules>
 
     <licenses>
@@ -38,6 +38,10 @@
         <maven-site-plugin.version>3.7.1</maven-site-plugin.version>
         <maven-javadoc-plugin.version>3.0.1</maven-javadoc-plugin.version>
         <maven-gpg-plugin.version>1.6</maven-gpg-plugin.version>
+        <maven-release-plugin.version>2.5.3</maven-release-plugin.version>
+        <nexus-staging-maven-plugin.version>1.6.13</nexus-staging-maven-plugin.version>
+        <com.sun.tools.version>1.8</com.sun.tools.version>
+        <com.google.auto-service.version>1.1.1</com.google.auto-service.version>
     </properties>
 
     <profiles>
@@ -47,8 +51,8 @@
                 <rpamis-extension-spi.version>1.0.1</rpamis-extension-spi.version>
                 <rpamis-chain.version>1.0.1</rpamis-chain.version>
                 <rpamis-chain-test.version>1.0.1</rpamis-chain-test.version>
-                <rpamis-chain-plugin.version>1.0.0</rpamis-chain-plugin.version>
-                <rpamis-chain-plugin-annotation.version>1.0.0</rpamis-chain-plugin-annotation.version>
+                <rpamis-chain-processor.version>1.0.0</rpamis-chain-processor.version>
+                <rpamis-chain-processor-annotation.version>1.0.0</rpamis-chain-processor-annotation.version>
             </properties>
             <distributionManagement>
                 <!--这两个id需要和setting.xml文件中的server字段的id进行对应-->
@@ -62,6 +66,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-release-plugin</artifactId>
+                        <version>${maven-release-plugin.version}</version>
                         <configuration>
                             <autoVersionSubmodules>true</autoVersionSubmodules>
                             <useReleaseProfile>false</useReleaseProfile>
@@ -74,12 +79,15 @@
         </profile>
         <profile>
             <id>sonatype</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
             <properties>
-                <rpamis-extension-spi.version>1.0.1</rpamis-extension-spi.version>
+                <rpamis-extension-spi.version>1.0.0-SNAPSHOT</rpamis-extension-spi.version>
                 <rpamis-chain.version>1.0.1-SNAPSHOT</rpamis-chain.version>
                 <rpamis-chain-test.version>1.0.1-SNAPSHOT</rpamis-chain-test.version>
-                <rpamis-chain-plugin.version>1.0.0-SNAPSHOT</rpamis-chain-plugin.version>
-                <rpamis-chain-plugin-annotation.version>1.0.0-SNAPSHOT</rpamis-chain-plugin-annotation.version>
+                <rpamis-chain-processor.version>1.0.0-SNAPSHOT</rpamis-chain-processor.version>
+                <rpamis-chain-processor-annotation.version>1.0.0-SNAPSHOT</rpamis-chain-processor-annotation.version>
             </properties>
             <distributionManagement>
                 <!--这两个id需要和setting.xml文件中的server字段的id进行对应-->
@@ -97,7 +105,7 @@
                     <plugin>
                         <groupId>org.sonatype.plugins</groupId>
                         <artifactId>nexus-staging-maven-plugin</artifactId>
-                        <version>1.6.13</version>
+                        <version>${nexus-staging-maven-plugin.version}</version>
                         <extensions>true</extensions>
                         <configuration>
                             <serverId>sonatype</serverId>
@@ -115,14 +123,14 @@
             <dependency>
                 <groupId>com.sun</groupId>
                 <artifactId>tools</artifactId>
-                <version>1.8</version>
+                <version>${com.sun.tools.version}</version>
                 <scope>system</scope>
                 <systemPath>${java.home}/../lib/tools.jar</systemPath>
             </dependency>
             <dependency>
                 <groupId>com.google.auto.service</groupId>
                 <artifactId>auto-service</artifactId>
-                <version>1.1.1</version>
+                <version>${com.google.auto-service.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -229,14 +237,14 @@
 
     <!--url中配自己的项目地址,connection配自己项目地址加git,最后配自己对应账号主页-->
     <scm>
-        <url>git@github.com:benym/rpamis-chain.git</url>
-        <connection>scm:git@github.com:benym/rpamis-chain.git</connection>
-        <developerConnection>https://github.com/benym</developerConnection>
+        <url>git@github.com:rpamis/rpamis-chain.git</url>
+        <connection>scm:git@github.com:rpamis/rpamis-chain.git</connection>
+        <developerConnection>https://github.com/rpamis</developerConnection>
     </scm>
 
     <issueManagement>
         <system>Github Issue</system>
-        <url>https://github.com/benym/rpamis-chain/issues</url>
+        <url>https://github.com/rpamis/rpamis-chain/issues</url>
     </issueManagement>
 
     <!--开发者信息-->
