@@ -1,6 +1,6 @@
 package com.rpamis.chain.core.fallback;
 
-import com.rpamis.chain.core.entity.MethodRecord;
+import com.rpamis.chain.core.entities.MethodRecord;
 
 import java.lang.reflect.Method;
 import java.util.Map;

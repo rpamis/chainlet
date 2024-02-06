@@ -1,6 +1,6 @@
 package com.rpamis.chain.core.support;
 
-import com.rpamis.chain.core.entity.ChainException;
+import com.rpamis.chain.core.entities.ChainException;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;

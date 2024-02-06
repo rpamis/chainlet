@@ -1,4 +1,6 @@
-package com.rpamis.chain.core.entity;
+package com.rpamis.chain.core.context;
+
+import com.rpamis.chain.core.entities.CompleteChainResult;
 
 /**
  * 责任链全局降级上下文

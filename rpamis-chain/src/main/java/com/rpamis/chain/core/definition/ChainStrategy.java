@@ -1,7 +1,7 @@
 package com.rpamis.chain.core.definition;
 
 
-import com.rpamis.chain.core.entity.ChainStrategyContext;
+import com.rpamis.chain.core.context.ChainStrategyContext;
 import com.rpamis.extension.spi.RpamisSpi;
 
 /**

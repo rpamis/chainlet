@@ -1,6 +1,6 @@
 package com.rpamis.chain.core.definition;
 
-import com.rpamis.chain.core.entity.ChainResult;
+import com.rpamis.chain.core.entities.ChainResult;
 
 import java.util.List;
 

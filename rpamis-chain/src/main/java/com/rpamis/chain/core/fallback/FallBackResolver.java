@@ -1,8 +1,8 @@
 package com.rpamis.chain.core.fallback;
 
-import com.rpamis.chain.core.entity.CompleteChainResult;
-import com.rpamis.chain.core.entity.GlobalFallBackContext;
-import com.rpamis.chain.core.entity.LocalFallBackContext;
+import com.rpamis.chain.core.entities.CompleteChainResult;
+import com.rpamis.chain.core.context.GlobalFallBackContext;
+import com.rpamis.chain.core.context.LocalFallBackContext;
 import com.rpamis.chain.core.support.ChainTypeReference;
 import com.rpamis.chain.core.support.InstanceOfCache;
 import com.rpamis.chain.core.definition.ChainHandler;

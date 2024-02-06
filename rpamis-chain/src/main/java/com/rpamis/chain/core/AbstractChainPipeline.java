@@ -1,8 +1,11 @@
 package com.rpamis.chain.core;
 
 
+import com.rpamis.chain.core.context.ChainContext;
+import com.rpamis.chain.core.context.ChainStrategyContext;
+import com.rpamis.chain.core.context.LocalFallBackContext;
 import com.rpamis.chain.core.definition.*;
-import com.rpamis.chain.core.entity.*;
+import com.rpamis.chain.core.entities.*;
 import com.rpamis.chain.core.fallback.FallBackResolver;
 import com.rpamis.chain.core.fallback.GlobalChainFallBack;
 import com.rpamis.chain.core.fluent.Add;
@@ -14,10 +17,6 @@ import com.rpamis.chain.core.strategy.StrategyKey;
 import com.rpamis.chain.core.support.ChainTypeReference;
 import com.rpamis.chain.core.support.InstanceOfCache;
 import com.rpamis.extension.spi.SpiLoader;
-import com.rpamis.chain.core.definition.*;
-import com.rpamis.chain.core.entity.*;
-import com.rpamis.chain.core.fluent.*;
-import com.rpamis.chain.core.strategy.*;
 
 import java.util.ArrayList;
 import java.util.Collections;

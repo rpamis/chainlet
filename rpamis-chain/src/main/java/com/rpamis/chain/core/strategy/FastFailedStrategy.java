@@ -1,7 +1,7 @@
 package com.rpamis.chain.core.strategy;
 
-import com.rpamis.chain.core.entity.ChainResult;
-import com.rpamis.chain.core.entity.ChainStrategyContext;
+import com.rpamis.chain.core.entities.ChainResult;
+import com.rpamis.chain.core.context.ChainStrategyContext;
 import com.rpamis.chain.core.definition.ChainStrategy;
 
 import java.util.List;

@@ -1,6 +1,7 @@
-package com.rpamis.chain.core.entity;
+package com.rpamis.chain.core.context;
 
 import com.rpamis.chain.core.definition.ChainInnerPipeline;
+import com.rpamis.chain.core.entities.ChainResult;
 
 import java.util.List;
 

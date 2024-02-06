@@ -1,4 +1,4 @@
-package com.rpamis.chain.core.entity;
+package com.rpamis.chain.core.context;
 
 /**
  * 责任链局部降级上下文

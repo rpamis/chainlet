@@ -1,6 +1,6 @@
 package com.rpamis.chain.core.fluent;
 
-import com.rpamis.chain.core.entity.CompleteChainResult;
+import com.rpamis.chain.core.entities.CompleteChainResult;
 
 /**
  * Apply接口

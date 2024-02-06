@@ -1,13 +1,13 @@
 package com.rpamis.chain.core;
 
-import com.rpamis.chain.core.entity.ChainException;
-import com.rpamis.chain.core.entity.ChainResult;
+import com.rpamis.chain.core.entities.ChainException;
+import com.rpamis.chain.core.entities.ChainResult;
 import com.rpamis.chain.plugin.annotations.ChainBuilderService;
 import com.rpamis.chain.core.builder.VariableChainPipelineBuilder;
 import com.rpamis.chain.core.definition.ChainHandler;
 import com.rpamis.chain.core.definition.ChainStrategy;
-import com.rpamis.chain.core.entity.ChainContext;
-import com.rpamis.chain.core.entity.LocalFallBackContext;
+import com.rpamis.chain.core.context.ChainContext;
+import com.rpamis.chain.core.context.LocalFallBackContext;
 import com.rpamis.chain.core.support.ChainTypeReference;
 import com.rpamis.chain.core.support.InstanceOfCache;
 

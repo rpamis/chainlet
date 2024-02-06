@@ -1,6 +1,6 @@
 package com.rpamis.chain.core.fallback;
 
-import com.rpamis.chain.core.entity.GlobalFallBackContext;
+import com.rpamis.chain.core.context.GlobalFallBackContext;
 import com.rpamis.chain.core.definition.ChainFallBack;
 
 /**

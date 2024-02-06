@@ -1,6 +1,6 @@
 package com.rpamis.chain.test.fallback;
 
-import com.rpamis.chain.core.entity.GlobalFallBackContext;
+import com.rpamis.chain.core.context.GlobalFallBackContext;
 import com.rpamis.chain.core.fallback.GlobalChainFallBack;
 import com.rpamis.chain.test.DemoUser;
 

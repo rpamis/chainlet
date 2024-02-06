@@ -65,8 +65,8 @@ public class ChainCacheGenTemplate extends AbstractGenCodeTemplate {
         ChainCodeProcessor.importNeedClass(treePath, "com.rpamis.chain.core.definition", "ChainFallBack");
         ChainCodeProcessor.importNeedClass(treePath, "com.rpamis.chain.core.definition", "ChainHandler");
         ChainCodeProcessor.importNeedClass(treePath, "com.rpamis.chain.core.definition", "ChainStrategy");
-        ChainCodeProcessor.importNeedClass(treePath, "com.rpamis.chain.core.entity", "ChainException");
-        ChainCodeProcessor.importNeedClass(treePath, "com.rpamis.chain.core.entity", "UniqueList");
+        ChainCodeProcessor.importNeedClass(treePath, "com.rpamis.chain.core.entities", "ChainException");
+        ChainCodeProcessor.importNeedClass(treePath, "com.rpamis.chain.core.entities", "UniqueList");
         ChainCodeProcessor.importNeedClass(treePath, "com.rpamis.chain.core.fallback", "GlobalChainFallBack");
         ChainCodeProcessor.importNeedClass(treePath, "com.rpamis.chain.core.support", "ChainTypeReference");
         // 导入必要java包

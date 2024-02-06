@@ -1,8 +1,8 @@
 package com.rpamis.chain.core.fallback;
 
-import com.rpamis.chain.core.entity.ChainException;
-import com.rpamis.chain.core.entity.LocalFallBackContext;
-import com.rpamis.chain.core.entity.MethodRecord;
+import com.rpamis.chain.core.entities.ChainException;
+import com.rpamis.chain.core.context.LocalFallBackContext;
+import com.rpamis.chain.core.entities.MethodRecord;
 import com.rpamis.chain.core.definition.ChainHandler;
 
 import java.lang.reflect.InvocationTargetException;

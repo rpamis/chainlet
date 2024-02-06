@@ -1,4 +1,4 @@
-package com.rpamis.chain.core.entity;
+package com.rpamis.chain.core.entities;
 
 /**
  * 责任链Handler处理异常

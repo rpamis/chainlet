@@ -1,4 +1,4 @@
-package com.rpamis.chain.core.entity;
+package com.rpamis.chain.core.context;
 
 import java.io.Serializable;
 

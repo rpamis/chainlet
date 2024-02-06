@@ -1,4 +1,4 @@
-package com.rpamis.chain.core.entity;
+package com.rpamis.chain.core.entities;
 
 import java.io.Serializable;
 import java.lang.reflect.Constructor;

@@ -1,7 +1,7 @@
 package com.rpamis.chain.core.support;
 
 import com.rpamis.chain.core.ParallelChainPipelineImpl;
-import com.rpamis.chain.core.entity.ChainResult;
+import com.rpamis.chain.core.entities.ChainResult;
 import com.rpamis.chain.core.definition.ChainHandler;
 
 import java.util.List;
