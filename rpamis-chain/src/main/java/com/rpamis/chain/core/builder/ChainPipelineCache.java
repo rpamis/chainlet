@@ -44,7 +44,7 @@ public class ChainPipelineCache {
     public static <T> void registerChain(SerialChainPipelineImpl<T> chain, String chainId) {
         if (CHAIN_MAP.containsKey(chainId)) {
             throw new ChainException("There is already a serial chain with chainId [" + chainId + "], please change your chainId, " +
-                    "or use com.rpamis.pattern.chain.builder.ChainPipelineFactory.getChain method to obtain the existing chain");
+                    "or use com.rpamis.chain.core.builder.ChainPipelineFactory.getChain method to obtain the existing chain");
         }
         CHAIN_MAP.put(chainId, chain);
     }
@@ -59,7 +59,7 @@ public class ChainPipelineCache {
     public static <T> void registerParallelChain(ParallelChainPipelineImpl<T> chain, String chainId) {
         if (PARALLEL_CHAIN_MAP.containsKey(chainId)) {
             throw new ChainException("There is already a parallel chain with chainId [" + chainId + "], please change your chainId, " +
-                    "or use com.rpamis.pattern.chain.builder.ChainPipelineFactory.getParallelChain method to obtain the existing chain");
+                    "or use com.rpamis.chain.core.builder.ChainPipelineFactory.getParallelChain method to obtain the existing chain");
         }
         PARALLEL_CHAIN_MAP.put(chainId, chain);
     }
@@ -74,7 +74,7 @@ public class ChainPipelineCache {
     public static <T> void registerVariableChain(VariableChainPipelineImpl<T> chain, String chainId) {
         if (VARIABLE_CHAIN_MAP.containsKey(chainId)) {
             throw new ChainException("There is already a variable chain with chainId [" + chainId + "], please change your chainId, " +
-                    "or use com.rpamis.pattern.chain.builder.ChainPipelineFactory.getVariableChain method to obtain the existing chain");
+                    "or use com.rpamis.chain.core.builder.ChainPipelineFactory.getVariableChain method to obtain the existing chain");
         }
         VARIABLE_CHAIN_MAP.put(chainId, chain);
     }
