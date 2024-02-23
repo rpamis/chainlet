@@ -7,7 +7,7 @@
     <groupId>com.rpamis</groupId>
     <artifactId>rpamis-chain-parent</artifactId>
     <packaging>pom</packaging>
-    <version>1.0.2-SNAPSHOT</version>
+    <version>1.0.3-SNAPSHOT</version>
     <name>rpamis-chain-parent</name>
     <description>rpamis-chain-parent</description>
     <url>https://github.com/benym/rpamis-chain</url>
@@ -89,7 +89,7 @@
                 <rpamis-extension-spi.version>1.0.0-SNAPSHOT</rpamis-extension-spi.version>
                 <rpamis-chain.version>1.0.2-SNAPSHOT</rpamis-chain.version>
                 <rpamis-chain-test.version>1.0.2-SNAPSHOT</rpamis-chain-test.version>
-                <rpamis-chain-processor.version>1.0.1-SNAPSHOT</rpamis-chain-processor.version>
+                <rpamis-chain-processor.version>1.0.2-SNAPSHOT</rpamis-chain-processor.version>
                 <rpamis-chain-processor-annotation.version>1.0.0-SNAPSHOT</rpamis-chain-processor-annotation.version>
             </properties>
             <distributionManagement>
