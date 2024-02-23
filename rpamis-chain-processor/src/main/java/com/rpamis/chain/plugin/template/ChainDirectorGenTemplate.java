@@ -28,22 +28,8 @@ import static javax.tools.Diagnostic.Kind.NOTE;
 public class ChainDirectorGenTemplate extends AbstractGenCodeTemplate {
 
     @Override
-    protected void iterableProcess(GenContext genContext, ProcessorContext processorContext) {
-        boolean verbose = processorContext.isVerbose();
-        Messager messager = processorContext.getMessager();
-        JavacTrees trees = processorContext.getTrees();
-        Set<TypeElement> chainDirectorClasses = genContext.getChainDirectorClasses();
-        // 遍历所有ChainDirector进行代码生成
-        for (TypeElement chainDirectorElement : chainDirectorClasses) {
-            if (verbose) {
-                messager.printMessage(NOTE, "@ChainDirector, process class: " + chainDirectorElement.getSimpleName(),
-                        chainDirectorElement);
-            }
-            JCTree.JCClassDecl classDecl = trees.getTree(chainDirectorElement);
-            TreePath treePath = trees.getPath(chainDirectorElement);
-            importNeedPackage(genContext, treePath);
-            genCode(classDecl, genContext, processorContext);
-        }
+    protected Set<TypeElement> prepareClasses(GenContext genContext) {
+        return genContext.getChainDirectorClasses();
     }
 
     @Override

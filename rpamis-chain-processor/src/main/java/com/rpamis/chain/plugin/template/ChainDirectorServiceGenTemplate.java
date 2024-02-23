@@ -26,22 +26,8 @@ import static javax.tools.Diagnostic.Kind.NOTE;
  */
 public class ChainDirectorServiceGenTemplate extends AbstractGenCodeTemplate {
     @Override
-    protected void iterableProcess(GenContext genContext, ProcessorContext processorContext) {
-        boolean verbose = processorContext.isVerbose();
-        Messager messager = processorContext.getMessager();
-        JavacTrees trees = processorContext.getTrees();
-        Set<TypeElement> chainDirectorServiceClasses = genContext.getChainDirectorServiceClasses();
-        // 遍历所有ChainDirector进行代码生成
-        for (TypeElement serviceElement : chainDirectorServiceClasses) {
-            if (verbose) {
-                messager.printMessage(NOTE, "@ChainDirectorService, process class: " + serviceElement.getSimpleName(),
-                        serviceElement);
-            }
-            JCTree.JCClassDecl classDecl = trees.getTree(serviceElement);
-            TreePath treePath = trees.getPath(serviceElement);
-            importNeedPackage(genContext, treePath);
-            genCode(classDecl, genContext, processorContext);
-        }
+    protected Set<TypeElement> prepareClasses(GenContext genContext) {
+        return genContext.getChainDirectorServiceClasses();
     }
 
     @Override

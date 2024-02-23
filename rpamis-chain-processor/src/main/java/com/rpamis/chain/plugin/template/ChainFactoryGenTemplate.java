@@ -26,21 +26,8 @@ import static javax.tools.Diagnostic.Kind.NOTE;
 public class ChainFactoryGenTemplate extends AbstractGenCodeTemplate {
 
     @Override
-    protected void iterableProcess(GenContext genContext, ProcessorContext processorContext) {
-        Set<TypeElement> factoryClasses = genContext.getFactoryClasses();
-        JavacTrees trees = processorContext.getTrees();
-        Messager messager = processorContext.getMessager();
-        boolean verbose = processorContext.isVerbose();
-        // 遍历所有ChainFactory进行代码生成
-        for (TypeElement factoryElement : factoryClasses) {
-            if (verbose) {
-                messager.printMessage(NOTE, "@ChainFactory, process class: " + factoryElement.getSimpleName(), factoryElement);
-            }
-            JCTree.JCClassDecl classDecl = trees.getTree(factoryElement);
-            TreePath treePath = trees.getPath(factoryElement);
-            importNeedPackage(genContext, treePath);
-            genCode(classDecl, genContext, processorContext);
-        }
+    protected Set<TypeElement> prepareClasses(GenContext genContext) {
+        return genContext.getFactoryClasses();
     }
 
     @Override

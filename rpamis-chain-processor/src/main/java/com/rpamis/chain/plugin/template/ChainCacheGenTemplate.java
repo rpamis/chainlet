@@ -29,22 +29,8 @@ import static javax.tools.Diagnostic.Kind.NOTE;
 public class ChainCacheGenTemplate extends AbstractGenCodeTemplate {
 
     @Override
-    protected void iterableProcess(GenContext genContext, ProcessorContext processorContext) {
-        boolean verbose = processorContext.isVerbose();
-        Messager messager = processorContext.getMessager();
-        JavacTrees trees = processorContext.getTrees();
-        Set<TypeElement> chainCacheClasses = genContext.getChainCacheClasses();
-        // 遍历所有ChainCache进行代码生成
-        for (TypeElement serviceElement : chainCacheClasses) {
-            if (verbose) {
-                messager.printMessage(NOTE, "@ChainCache, process class: " + serviceElement.getSimpleName(),
-                        serviceElement);
-            }
-            JCTree.JCClassDecl classDecl = trees.getTree(serviceElement);
-            TreePath treePath = trees.getPath(serviceElement);
-            importNeedPackage(genContext, treePath);
-            genCode(classDecl, genContext, processorContext);
-        }
+    protected Set<TypeElement> prepareClasses(GenContext genContext) {
+        return genContext.getChainCacheClasses();
     }
 
     @Override
