@@ -3,6 +3,7 @@ package com.rpamis.chain.core.context;
 import com.rpamis.chain.core.definition.ChainInnerPipeline;
 import com.rpamis.chain.core.entities.ChainResult;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -11,7 +12,9 @@ import java.util.List;
  * @author benym
  * @date 2023/12/19 17:47
  */
-public class ChainStrategyContext<T> {
+public class ChainStrategyContext<T> implements Serializable {
+    private static final long serialVersionUID = -2540886042216154901L;
+
     /**
      * 责任链处理的数据
      */

@@ -1,6 +1,8 @@
 package com.rpamis.chain.core.definition;
 
 
+import com.rpamis.chain.core.context.ChainHandlerContext;
+
 /**
  * 泛型责任链Handler接口
  *
@@ -15,29 +17,17 @@ public interface ChainHandler<T> {
      * 执行具体handler,true表示执行成功,false表示执行失败
      *
      * @param handlerData handlerData
+     * @param context     context
      * @return boolean
      */
-    boolean process(T handlerData);
+    boolean process(T handlerData, ChainHandlerContext<T> context);
 
     /**
-     * 责任链处理器执行接口
-     * 同时支持可变数据传递，当processedData为null时，默认使用handlerData
-     * 执行具体handler,true表示执行成功,false表示执行失败
-     *
-     * @param handlerData   handlerData
-     * @param processedData processedData
-     * @return boolean
-     */
-    default boolean process(T handlerData, Object processedData) {
-        return false;
-    }
-
-    /**
-     * 责任链处理器自定义提示消息
+     * 责任链处理器自定义全局提示消息
      *
      * @return String
      */
-    default String message() {
+    default String globalMessage() {
         return "";
     }
 }

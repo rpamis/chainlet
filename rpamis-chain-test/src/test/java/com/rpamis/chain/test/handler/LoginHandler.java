@@ -1,5 +1,6 @@
 package com.rpamis.chain.test.handler;
 
+import com.rpamis.chain.core.context.ChainHandlerContext;
 import com.rpamis.chain.core.definition.ChainHandler;
 import com.rpamis.chain.core.context.LocalFallBackContext;
 import com.rpamis.chain.core.fallback.Fallback;
@@ -15,7 +16,7 @@ public class LoginHandler implements ChainHandler<DemoUser> {
 
     @Override
     @Fallback(fallbackMethod = "testFallback")
-    public boolean process(DemoUser demoUser) {
+    public boolean process(DemoUser demoUser, ChainHandlerContext<DemoUser> context) {
         if ("test".equals(demoUser.getName()) && "123".equals(demoUser.getPwd())) {
             System.out.println("login success");
             return true;

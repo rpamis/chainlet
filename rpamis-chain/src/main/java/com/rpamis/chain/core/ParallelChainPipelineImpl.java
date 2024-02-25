@@ -1,8 +1,10 @@
 package com.rpamis.chain.core;
 
 import com.rpamis.chain.core.context.ChainContext;
+import com.rpamis.chain.core.context.ChainHandlerContext;
 import com.rpamis.chain.core.entities.ChainException;
 import com.rpamis.chain.core.entities.ChainResult;
+import com.rpamis.chain.core.support.InstanceOfCache;
 import com.rpamis.chain.plugin.annotations.ChainBuilderService;
 import com.rpamis.chain.core.builder.ParallelChainPipelineBuilder;
 import com.rpamis.chain.core.definition.ChainHandler;
@@ -28,21 +30,25 @@ public class ParallelChainPipelineImpl<T> extends AbstractChainPipeline<T> imple
 
     private ForkJoinPool forkJoinPool;
 
+    private ChainHandlerContext<T> handlerContext;
+
     private final AtomicBoolean inParallel = new AtomicBoolean(false);
 
     public ParallelChainPipelineImpl(ChainTypeReference<T> chainTypeReference) {
         super(chainTypeReference);
         this.forkJoinPool = new ForkJoinPool();
+        this.handlerContext = new ChainHandlerContext<>();
     }
 
     @Override
     public void doHandler(T handlerData, List<ChainResult> checkResults) {
-        if (!(super.chainStrategy instanceof FullExecutionStrategy)) {
+        if (!(InstanceOfCache.instanceofCheck(super.chainStrategy.getClass(), FullExecutionStrategy.class))) {
             throw new ChainException("Parallel chains can only be executed under the FullExecutionStrategy. Consider changing your execution strategy");
         }
         if (!inParallel.compareAndSet(false, true)) {
             return;
         }
+        this.handlerContext.setHandlerData(handlerData);
         UniqueList<ChainHandler<T>> handlerList = super.handlerList;
         ParallelChainTask<T> parallelChainTask = new ParallelChainTask<>(handlerList, handlerData, checkResults, this);
         this.forkJoinPool.invoke(parallelChainTask);
@@ -60,7 +66,7 @@ public class ParallelChainPipelineImpl<T> extends AbstractChainPipeline<T> imple
     public void assembleAndExecute(T handlerData, ChainInnerPipeline<T> chain, ChainHandler<T> chainHandler, List<ChainResult> checkResults) {
         ChainContext<T> chainContext = new ChainContext<>(handlerData, chain,
                 super.chainStrategy, chainHandler, checkResults);
-        super.handlePipeline(chainContext);
+        super.handlePipeline(chainContext, handlerContext);
     }
 
     @Override

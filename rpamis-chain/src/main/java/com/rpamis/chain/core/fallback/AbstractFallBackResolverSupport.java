@@ -1,5 +1,6 @@
 package com.rpamis.chain.core.fallback;
 
+import com.rpamis.chain.core.context.ChainHandlerContext;
 import com.rpamis.chain.core.entities.ChainException;
 import com.rpamis.chain.core.context.LocalFallBackContext;
 import com.rpamis.chain.core.entities.MethodRecord;
@@ -53,7 +54,7 @@ public abstract class AbstractFallBackResolverSupport {
         try {
             MethodRecord processRecord = MethodMetaDataRegistry.getProcessRecord(chainHandlerClass, actualGenericClass);
             if (processRecord == null) {
-                Method method = chainHandlerClass.getMethod("process", actualGenericClass);
+                Method method = chainHandlerClass.getMethod("process", actualGenericClass, ChainHandlerContext.class);
                 MethodMetaDataRegistry.initProcessRecord(chainHandlerClass, actualGenericClass, method);
                 return method;
             }

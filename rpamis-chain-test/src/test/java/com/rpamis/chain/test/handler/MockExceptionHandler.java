@@ -1,5 +1,6 @@
 package com.rpamis.chain.test.handler;
 
+import com.rpamis.chain.core.context.ChainHandlerContext;
 import com.rpamis.chain.core.definition.ChainHandler;
 import com.rpamis.chain.test.DemoUser;
 
@@ -12,7 +13,7 @@ import com.rpamis.chain.test.DemoUser;
 public class MockExceptionHandler implements ChainHandler<DemoUser> {
 
     @Override
-    public boolean process(DemoUser handlerData) {
+    public boolean process(DemoUser handlerData, ChainHandlerContext<DemoUser> context) {
         int i = 1 / 0;
         return false;
     }

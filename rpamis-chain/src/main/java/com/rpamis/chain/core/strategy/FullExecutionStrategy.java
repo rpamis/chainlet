@@ -1,10 +1,12 @@
 package com.rpamis.chain.core.strategy;
 
 
+import com.rpamis.chain.core.VariableChainPipelineImpl;
 import com.rpamis.chain.core.entities.ChainResult;
 import com.rpamis.chain.core.context.ChainStrategyContext;
 import com.rpamis.chain.core.definition.ChainInnerPipeline;
 import com.rpamis.chain.core.definition.ChainStrategy;
+import com.rpamis.chain.core.support.InstanceOfCache;
 
 import java.util.List;
 
@@ -25,7 +27,7 @@ public class FullExecutionStrategy<T> implements ChainStrategy<T> {
         List<ChainResult> checkResults = chainStrategyContext.getCheckResults();
         checkResults.add(chainResult);
         Object processedData = chainResult.getProcessedData();
-        if (processedData != null) {
+        if (processedData != null && InstanceOfCache.instanceofCheck(chain.getClass(), VariableChainPipelineImpl.class)) {
             chain.doHandler(handlerData, processedData, checkResults);
         } else {
             chain.doHandler(handlerData, checkResults);

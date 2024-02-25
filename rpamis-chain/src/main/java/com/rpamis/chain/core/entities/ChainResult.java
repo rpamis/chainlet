@@ -77,7 +77,7 @@ public class ChainResult implements Serializable {
                 "handlerClass=" + handlerClass +
                 ", processResult=" + processResult +
                 ", processedData=" + processedData +
-                ", message='" + message + '\'' +
+                ", globalMessage='" + message + '\'' +
                 '}';
     }
 }

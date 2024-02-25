@@ -2,6 +2,7 @@ package com.rpamis.chain.core;
 
 
 import com.rpamis.chain.core.context.ChainContext;
+import com.rpamis.chain.core.context.ChainHandlerContext;
 import com.rpamis.chain.core.context.ChainStrategyContext;
 import com.rpamis.chain.core.context.LocalFallBackContext;
 import com.rpamis.chain.core.definition.*;
@@ -153,12 +154,13 @@ public abstract class AbstractChainPipeline<T> implements ChainInnerPipeline<T>,
      */
     @Override
     public void doHandler(T handlerData, List<ChainResult> checkResults) {
+        ChainHandlerContext<T> handlerContext = new ChainHandlerContext<>(handlerData);
         // 如果当前的handler的位置小于链上所有handler数量，则说明还没执行完，继续向前推进handler
         if (this.pos < this.n) {
             ChainHandler<T> chainHandler = handlerList.get(this.pos++);
             ChainContext<T> chainContext = new ChainContext<>(handlerData, this,
                     this.chainStrategy, chainHandler, checkResults);
-            this.handlePipeline(chainContext);
+            this.handlePipeline(chainContext, handlerContext);
             if (InstanceOfCache.instanceofCheck(chainStrategy.getClass(), ChainStrategy.class)) {
                 this.pos = this.n;
             }
@@ -168,33 +170,50 @@ public abstract class AbstractChainPipeline<T> implements ChainInnerPipeline<T>,
     /**
      * handler链式处理
      *
-     * @param chainContext chainContext
+     * @param chainContext   chainContext
+     * @param handlerContext handlerContext
      */
-    protected void handlePipeline(ChainContext<T> chainContext) {
+    protected void handlePipeline(ChainContext<T> chainContext, ChainHandlerContext<T> handlerContext) {
         ChainStrategy<T> strategy = chainContext.getStrategy();
         T handlerData = chainContext.getHandlerData();
         ChainInnerPipeline<T> chain = chainContext.getChain();
         ChainHandler<T> chainHandler = chainContext.getChainHandler();
         List<ChainResult> checkResults = chainContext.getCheckResults();
-        Boolean processResult = this.concreteHandlerProcess(chainContext);
+        Boolean processResult = this.concreteHandlerProcess(chainContext, handlerContext);
+        String message = this.getMessage(handlerContext.getLocalMessage(), chainHandler.globalMessage());
         // 根据策略进行返回值包装
         ChainResult chainResult = this.initSingleChainResult(chainHandler.getClass(), processResult,
-                chainContext.getProcessedData(), chainHandler.message());
+                handlerContext.getProcessedData(), message);
         ChainStrategyContext<T> chainStrategyContext = new ChainStrategyContext<>(handlerData, chain, chainResult, checkResults);
         strategy.doStrategy(chainStrategyContext);
     }
 
     /**
+     * 获取消息策略
+     *
+     * @param localMessage  局部消息
+     * @param globalMessage 全局消息
+     * @return String
+     */
+    protected String getMessage(String localMessage, String globalMessage) {
+        if (localMessage != null && !localMessage.isEmpty()) {
+            return localMessage;
+        }
+        return globalMessage;
+    }
+
+    /**
      * 具体handler实现类处理，如果处理不成功或发生异常则触发局部降级策略
      *
-     * @param chainContext 责任链上下文
+     * @param chainContext   责任链上下文
+     * @param handlerContext 责任链handler上下文
      * @return Boolean
      */
-    protected Boolean concreteHandlerProcess(ChainContext<T> chainContext) {
+    protected Boolean concreteHandlerProcess(ChainContext<T> chainContext, ChainHandlerContext<T> handlerContext) {
         T handlerData = chainContext.getHandlerData();
         ChainHandler<T> chainHandler = chainContext.getChainHandler();
         try {
-            boolean processResult = chainHandler.process(handlerData);
+            boolean processResult = chainHandler.process(handlerData, handlerContext);
             // 如果处理不成功则调用降级方法，具体是否调用需查看降级注解中enabled值
             if (!processResult) {
                 LocalFallBackContext<T> localFallBackContext = new LocalFallBackContext<>(handlerData, false);

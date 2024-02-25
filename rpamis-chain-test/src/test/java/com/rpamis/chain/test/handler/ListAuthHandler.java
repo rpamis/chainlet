@@ -1,5 +1,6 @@
 package com.rpamis.chain.test.handler;
 
+import com.rpamis.chain.core.context.ChainHandlerContext;
 import com.rpamis.chain.core.definition.ChainHandler;
 import com.rpamis.chain.core.context.LocalFallBackContext;
 import com.rpamis.chain.core.fallback.Fallback;
@@ -16,7 +17,7 @@ import java.util.List;
 public class ListAuthHandler implements ChainHandler<List<DemoUser>> {
     @Override
     @Fallback(fallbackMethod = "fallback")
-    public boolean process(List<DemoUser> demoUserList) {
+    public boolean process(List<DemoUser> demoUserList, ChainHandlerContext<List<DemoUser>> context) {
         if (!"admin".equals(demoUserList.get(0).getRole())) {
             System.out.println("auth failed");
             return false;

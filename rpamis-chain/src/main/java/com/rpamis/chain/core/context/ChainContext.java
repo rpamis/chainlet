@@ -5,6 +5,7 @@ import com.rpamis.chain.core.definition.ChainInnerPipeline;
 import com.rpamis.chain.core.definition.ChainStrategy;
 import com.rpamis.chain.core.entities.ChainResult;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -13,17 +14,14 @@ import java.util.List;
  * @author benym
  * @date 2023/8/16 17:01
  */
-public class ChainContext<T> {
+public class ChainContext<T> implements Serializable {
+
+    private static final long serialVersionUID = 4424283192522709548L;
 
     /**
      * 责任链处理的数据
      */
     private T handlerData;
-
-    /**
-     * 责任链可变数据，处理后返回的数据
-     */
-    private Object processedData;
 
     /**
      * 责任链
@@ -47,15 +45,6 @@ public class ChainContext<T> {
 
     public ChainContext(T handlerData, ChainInnerPipeline<T> chain, ChainStrategy<T> strategy, ChainHandler<T> chainHandler, List<ChainResult> checkResults) {
         this.handlerData = handlerData;
-        this.chain = chain;
-        this.strategy = strategy;
-        this.chainHandler = chainHandler;
-        this.checkResults = checkResults;
-    }
-
-    public ChainContext(T handlerData, Object processedData, ChainInnerPipeline<T> chain, ChainStrategy<T> strategy, ChainHandler<T> chainHandler, List<ChainResult> checkResults) {
-        this.handlerData = handlerData;
-        this.processedData = processedData;
         this.chain = chain;
         this.strategy = strategy;
         this.chainHandler = chainHandler;
@@ -102,19 +91,10 @@ public class ChainContext<T> {
         this.checkResults = checkResults;
     }
 
-    public Object getProcessedData() {
-        return processedData;
-    }
-
-    public void setProcessedData(Object processedData) {
-        this.processedData = processedData;
-    }
-
     @Override
     public String toString() {
         return "ChainContext{" +
                 "handlerData=" + handlerData +
-                ", processedData=" + processedData +
                 ", chain=" + chain +
                 ", strategy=" + strategy +
                 ", chainHandler=" + chainHandler +
