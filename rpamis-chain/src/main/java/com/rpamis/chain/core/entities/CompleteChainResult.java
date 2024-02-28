@@ -3,6 +3,7 @@ package com.rpamis.chain.core.entities;
 import java.io.Serializable;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
@@ -32,8 +33,16 @@ public class CompleteChainResult implements Serializable {
      */
     private final List<ChainResult> chainResults;
 
+    /**
+     * handlerClass集合
+     */
+    private final List<Class<?>> handlerClasses = new ArrayList<>();
+
     private void initMap(List<ChainResult> chainResults) {
-        chainResults.forEach(chainResult -> chainResultMap.putIfAbsent(chainResult.getHandlerClass(), chainResult));
+        chainResults.forEach(chainResult -> {
+            chainResultMap.putIfAbsent(chainResult.getHandlerClass(), chainResult);
+            handlerClasses.add(chainResult.getHandlerClass());
+        });
     }
 
     public CompleteChainResult(boolean allow, List<ChainResult> chainResults) {
@@ -48,6 +57,10 @@ public class CompleteChainResult implements Serializable {
 
     public List<ChainResult> getChainResults() {
         return chainResults;
+    }
+
+    public List<Class<?>> getHandlerClasses() {
+        return handlerClasses;
     }
 
     /**
