@@ -264,7 +264,10 @@ public abstract class AbstractChainPipeline<T> implements ChainInnerPipeline<T>,
         CompleteChainResult completeChainResult;
         try {
             this.doHandler(handlerData, checkResults);
-            completeChainResult = new CompleteChainResult(buildSuccess(checkResults), Collections.unmodifiableList(checkResults));
+            // 创建一个新列表，包含checkResults的当前内容
+            // 因为Collections.unmodifiableList会采用原始列表的内容，afterHandler内会clear掉，导致结果存储丢失
+            List<ChainResult> resultsCopy = new ArrayList<>(checkResults);
+            completeChainResult = new CompleteChainResult(buildSuccess(resultsCopy), Collections.unmodifiableList(resultsCopy));
             fallBackResolver.handleGlobalFallBack(chainFallBack, handlerData, completeChainResult, false);
             return completeChainResult;
         } catch (ChainException e) {

@@ -119,7 +119,7 @@ public class CompleteChainResult implements Serializable {
      * @param exceptionClass 任意exception class类
      * @param handlerClass   责任链处理类
      */
-    public void verifyAndThrow(Class<? extends Throwable> exceptionClass, Class<?> handlerClass) {
+    public <T extends Throwable> void verifyAndThrow(Class<T> exceptionClass, Class<?> handlerClass) throws T {
         try {
             if (!Throwable.class.isAssignableFrom(exceptionClass)) {
                 throw new ChainException("The provided class is not a subclass of Throwable");
@@ -131,9 +131,12 @@ public class CompleteChainResult implements Serializable {
                 throw constructor.newInstance(message);
             }
         } catch (NoSuchMethodException | InstantiationException
-                 | IllegalAccessException | InvocationTargetException e) {
+                 | IllegalAccessException | InvocationTargetException | IllegalArgumentException e) {
             throw new ChainException("The provided class have no single string constructor or unable to newInstance by reflection", e);
         } catch (Throwable e) {
+            if (exceptionClass.isInstance(e)) {
+                throw exceptionClass.cast(e);
+            }
             throw new ChainException("unknown exception in verifyAndThrow", e);
         }
     }
@@ -143,7 +146,7 @@ public class CompleteChainResult implements Serializable {
      *
      * @param exceptionClass 任意exception class类
      */
-    public void verifyAllAndThrow(Class<? extends Throwable> exceptionClass) {
+    public <T extends Throwable> void verifyAllAndThrow(Class<T> exceptionClass) throws T {
         try {
             if (!Throwable.class.isAssignableFrom(exceptionClass)) {
                 throw new ChainException("The provided class is not a subclass of Throwable");
@@ -157,9 +160,12 @@ public class CompleteChainResult implements Serializable {
                 }
             }
         } catch (NoSuchMethodException | InstantiationException
-                 | IllegalAccessException | InvocationTargetException e) {
+                 | IllegalAccessException | InvocationTargetException | IllegalArgumentException e) {
             throw new ChainException("The provided class have no single string constructor or unable to newInstance by reflection", e);
         } catch (Throwable e) {
+            if (exceptionClass.isInstance(e)) {
+                throw exceptionClass.cast(e);
+            }
             throw new ChainException("unknown exception in verifyAllAndThrow", e);
         }
     }
