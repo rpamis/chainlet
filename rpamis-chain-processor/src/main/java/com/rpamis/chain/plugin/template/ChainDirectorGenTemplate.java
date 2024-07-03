@@ -4,7 +4,6 @@ import com.rpamis.chain.plugin.ChainCodeProcessor;
 import com.rpamis.chain.plugin.GenContext;
 import com.rpamis.chain.plugin.ProcessorContext;
 import com.sun.source.util.TreePath;
-import com.sun.tools.javac.api.JavacTrees;
 import com.sun.tools.javac.code.Flags;
 import com.sun.tools.javac.tree.JCTree;
 import com.sun.tools.javac.tree.TreeMaker;
@@ -35,7 +34,7 @@ public class ChainDirectorGenTemplate extends AbstractGenCodeTemplate {
     @Override
     protected void importNeedPackage(GenContext genContext, TreePath treePath) {
         Set<String> builderNameSet = genContext.getBuilderNameSet();
-        Map<String, String> buidlerClassToPackageNameMap = genContext.getBuidlerClassToPackageNameMap();
+        Map<String, String> buidlerClassToPackageNameMap = genContext.getBuilderClassToPackageNameMap();
         for (String builderName : builderNameSet) {
             ChainCodeProcessor.importNeedClass(treePath, buidlerClassToPackageNameMap.get(builderName), builderName);
         }
@@ -88,8 +87,10 @@ public class ChainDirectorGenTemplate extends AbstractGenCodeTemplate {
                 modifiers,
                 names.fromString(builderMethodName),
                 returnType,
-                List.nil(),  // 不再需要参数列表
-                List.nil(),  // 不再需要抛出的异常列表
+                // 不再需要参数列表
+                List.nil(),
+                // 不再需要抛出的异常列表
+                List.nil(),
                 List.nil(),
                 null,
                 null

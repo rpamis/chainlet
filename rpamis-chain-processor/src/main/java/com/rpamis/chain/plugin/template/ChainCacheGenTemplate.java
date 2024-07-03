@@ -4,7 +4,6 @@ import com.rpamis.chain.plugin.ChainCodeProcessor;
 import com.rpamis.chain.plugin.GenContext;
 import com.rpamis.chain.plugin.ProcessorContext;
 import com.sun.source.util.TreePath;
-import com.sun.tools.javac.api.JavacTrees;
 import com.sun.tools.javac.code.BoundKind;
 import com.sun.tools.javac.code.Flags;
 import com.sun.tools.javac.code.TypeTag;
@@ -37,7 +36,7 @@ public class ChainCacheGenTemplate extends AbstractGenCodeTemplate {
     protected void importNeedPackage(GenContext genContext, TreePath treePath) {
         // 导入builder
         Set<String> builderNameSet = genContext.getBuilderNameSet();
-        Map<String, String> buidlerClassToPackageNameMap = genContext.getBuidlerClassToPackageNameMap();
+        Map<String, String> buidlerClassToPackageNameMap = genContext.getBuilderClassToPackageNameMap();
         for (String builderName : builderNameSet) {
             ChainCodeProcessor.importNeedClass(treePath, buidlerClassToPackageNameMap.get(builderName), builderName);
         }

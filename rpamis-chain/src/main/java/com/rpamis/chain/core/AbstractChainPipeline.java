@@ -286,6 +286,7 @@ public abstract class AbstractChainPipeline<T> implements ChainInnerPipeline<T>,
      * @param checkResult 责任链整链结果List
      * @return boolean
      */
+    @Override
     public boolean buildSuccess(List<ChainResult> checkResult) {
         return !checkResult.stream().map(ChainResult::isProcessResult)
                 .collect(Collectors.toList()).contains(Boolean.FALSE);

@@ -3,10 +3,6 @@ package com.rpamis.chain.plugin;
 import com.google.auto.service.AutoService;
 import com.rpamis.chain.plugin.annotations.*;
 import com.rpamis.chain.plugin.factory.GenCodeTemplateFactory;
-import com.rpamis.chain.plugin.template.ChainCacheGenTemplate;
-import com.rpamis.chain.plugin.template.ChainDirectorGenTemplate;
-import com.rpamis.chain.plugin.template.ChainDirectorServiceGenTemplate;
-import com.rpamis.chain.plugin.template.ChainFactoryGenTemplate;
 import com.sun.source.util.TreePath;
 import com.sun.tools.javac.api.JavacTrees;
 import com.sun.tools.javac.processing.JavacProcessingEnvironment;
@@ -189,7 +185,7 @@ public class ChainCodeProcessor extends AbstractProcessor {
         }
         // 获取所有ChainBuilder类
         Set<String> builderNameSet = genContext.getBuilderNameSet();
-        Map<String, String> buidlerClassToPackageNameMap = genContext.getBuidlerClassToPackageNameMap();
+        Map<String, String> buidlerClassToPackageNameMap = genContext.getBuilderClassToPackageNameMap();
         for (Element element : roundEnv.getElementsAnnotatedWith(ChainBuilder.class)) {
             if (element.getKind() == ElementKind.INTERFACE) {
                 TypeElement builderTypeElement = (TypeElement) element;

@@ -102,8 +102,10 @@ public class ChainFactoryGenTemplate extends AbstractGenCodeTemplate {
                 maker.Modifiers(Flags.PUBLIC | Flags.STATIC),
                 names.fromString(builderMethodName),
                 returnType,
-                List.of(typeParam), // 将泛型参数添加到类型参数列表中
-                params,             // 将参数列表添加到方法中
+                // 将泛型参数添加到类型参数列表中
+                List.of(typeParam),
+                // 将参数列表添加到方法中
+                params,
                 List.nil(),
                 methodBody,
                 null

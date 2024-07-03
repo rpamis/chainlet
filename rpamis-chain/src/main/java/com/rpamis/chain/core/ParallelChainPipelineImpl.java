@@ -30,7 +30,7 @@ public class ParallelChainPipelineImpl<T> extends AbstractChainPipeline<T> imple
 
     private ForkJoinPool forkJoinPool;
 
-    private ChainHandlerContext<T> handlerContext;
+    private final ChainHandlerContext<T> handlerContext;
 
     private final AtomicBoolean inParallel = new AtomicBoolean(false);
 
