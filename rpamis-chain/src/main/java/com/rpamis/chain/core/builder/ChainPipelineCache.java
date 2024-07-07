@@ -4,14 +4,13 @@ import com.rpamis.chain.core.ParallelChainPipelineImpl;
 import com.rpamis.chain.core.SerialChainPipelineImpl;
 import com.rpamis.chain.core.VariableChainPipelineImpl;
 import com.rpamis.chain.core.entities.ChainException;
-import com.rpamis.chain.core.entities.UniqueList;
 import com.rpamis.chain.plugin.annotations.ChainCache;
 import com.rpamis.chain.core.definition.ChainFallBack;
-import com.rpamis.chain.core.definition.ChainHandler;
 import com.rpamis.chain.core.definition.ChainStrategy;
 import com.rpamis.chain.core.fallback.GlobalChainFallBack;
 import com.rpamis.chain.core.support.ChainTypeReference;
 
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -136,14 +135,14 @@ public class ChainPipelineCache {
      * @param <T>                <T>
      * @return SerialChainPipelineBuilder<T>
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "rawtypes"})
     public static <T> SerialChainPipelineBuilder<T> copyChain(String chainId, SerialChainPipelineImpl<?> chain, ChainTypeReference<T> chainTypeReference) {
         verifyChainTypeReference(chainId, chain.getChainTypeReference(), chainTypeReference);
         ChainStrategy<?> chainStrategy = chain.getChainStrategy();
-        ChainFallBack<?> chainFallBack = chain.getChainFallBack();
-        UniqueList<? extends ChainHandler<?>> handlerList = chain.getHandlerList();
+        ChainFallBack<?> chainFallBack = chain.getGlobalChainFallBack();
+        List handlerList = chain.getHandlerList();
         SerialChainPipelineBuilder<T> newChain = ChainPipelineFactory.createChain(chainTypeReference).chain();
-        newChain.addHandler((ChainHandler<T>) handlerList);
+        newChain.addHandler(handlerList);
         newChain.globalFallback((GlobalChainFallBack<T>) chainFallBack);
         newChain.strategy((ChainStrategy<T>) chainStrategy);
         return newChain;
@@ -158,14 +157,14 @@ public class ChainPipelineCache {
      * @param <T>                <T>
      * @return ParallelChainPipelineBuilder<T>
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "rawtypes"})
     public static <T> ParallelChainPipelineBuilder<T> copyChain(String chainId, ParallelChainPipelineImpl<?> chain, ChainTypeReference<T> chainTypeReference) {
         verifyChainTypeReference(chainId, chain.getChainTypeReference(), chainTypeReference);
         ChainStrategy<?> chainStrategy = chain.getChainStrategy();
-        ChainFallBack<?> chainFallBack = chain.getChainFallBack();
-        UniqueList<? extends ChainHandler<?>> handlerList = chain.getHandlerList();
+        ChainFallBack<?> chainFallBack = chain.getGlobalChainFallBack();
+        List handlerList = chain.getHandlerList();
         ParallelChainPipelineBuilder<T> newChain = ChainPipelineFactory.createChain(chainTypeReference).parallelChain();
-        newChain.addHandler((ChainHandler<T>) handlerList);
+        newChain.addHandler(handlerList);
         newChain.globalFallback((GlobalChainFallBack<T>) chainFallBack);
         newChain.strategy((ChainStrategy<T>) chainStrategy);
         return newChain;
@@ -180,14 +179,14 @@ public class ChainPipelineCache {
      * @param <T>                <T>
      * @return VariableChainPipelineBuilder<T>
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "rawtypes"})
     public static <T> VariableChainPipelineBuilder<T> copyChain(String chainId, VariableChainPipelineImpl<?> chain, ChainTypeReference<T> chainTypeReference) {
         verifyChainTypeReference(chainId, chain.getChainTypeReference(), chainTypeReference);
         ChainStrategy<?> chainStrategy = chain.getChainStrategy();
-        ChainFallBack<?> chainFallBack = chain.getChainFallBack();
-        UniqueList<? extends ChainHandler<?>> handlerList = chain.getHandlerList();
+        ChainFallBack<?> chainFallBack = chain.getGlobalChainFallBack();
+        List handlerList = chain.getHandlerList();
         VariableChainPipelineBuilder<T> newChain = ChainPipelineFactory.createChain(chainTypeReference).variableChain();
-        newChain.addHandler((ChainHandler<T>) handlerList);
+        newChain.addHandler(handlerList);
         newChain.globalFallback((GlobalChainFallBack<T>) chainFallBack);
         newChain.strategy((ChainStrategy<T>) chainStrategy);
         return newChain;

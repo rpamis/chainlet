@@ -48,14 +48,13 @@ public class ChainCacheGenTemplate extends AbstractGenCodeTemplate {
         }
         // 导入内部包
         ChainCodeProcessor.importNeedClass(treePath, "com.rpamis.chain.core.definition", "ChainFallBack");
-        ChainCodeProcessor.importNeedClass(treePath, "com.rpamis.chain.core.definition", "ChainHandler");
         ChainCodeProcessor.importNeedClass(treePath, "com.rpamis.chain.core.definition", "ChainStrategy");
         ChainCodeProcessor.importNeedClass(treePath, "com.rpamis.chain.core.entities", "ChainException");
-        ChainCodeProcessor.importNeedClass(treePath, "com.rpamis.chain.core.entities", "UniqueList");
         ChainCodeProcessor.importNeedClass(treePath, "com.rpamis.chain.core.fallback", "GlobalChainFallBack");
         ChainCodeProcessor.importNeedClass(treePath, "com.rpamis.chain.core.support", "ChainTypeReference");
         // 导入必要java包
         ChainCodeProcessor.importNeedClass(treePath, "java.util", "Map");
+        ChainCodeProcessor.importNeedClass(treePath, "java.util", "List");
         ChainCodeProcessor.importNeedClass(treePath, "java.util.concurrent", "ConcurrentHashMap");
     }
 
@@ -339,7 +338,7 @@ public class ChainCacheGenTemplate extends AbstractGenCodeTemplate {
         JCTree.JCVariableDecl handlerListDecl = maker.VarDef(
                 maker.Modifiers(0),
                 names.fromString("handlerList"),
-                maker.TypeApply(maker.Ident(names.fromString("UniqueList")), List.of(maker.Wildcard(maker.TypeBoundKind(BoundKind.EXTENDS), maker.Ident(names.fromString("ChainHandler"))))),
+                maker.Ident(names.fromString("List")),
                 maker.Apply(
                         List.nil(),
                         maker.Select(maker.Ident(names.fromString("chain")), names.fromString("getHandlerList")),
@@ -376,7 +375,7 @@ public class ChainCacheGenTemplate extends AbstractGenCodeTemplate {
         JCTree.JCExpression addHandlerCall = maker.Apply(
                 List.nil(),
                 maker.Select(maker.Ident(names.fromString("newChain")), names.fromString("addHandler")),
-                List.of(maker.TypeCast(maker.TypeApply(maker.Ident(names.fromString("ChainHandler")), List.of(maker.Ident(names.fromString("T")))), maker.Ident(names.fromString("handlerList"))))
+                List.of(maker.Ident(names.fromString("handlerList")))
         );
         statements = statements.append(maker.Exec(addHandlerCall));
 
