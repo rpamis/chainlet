@@ -1,5 +1,8 @@
 package com.rpamis.chain.test;
 
+import com.rpamis.chain.core.definition.ChainFallBack;
+import com.rpamis.chain.core.definition.ChainStrategy;
+import com.rpamis.chain.core.strategy.FullExecutionStrategy;
 import com.rpamis.chain.test.handler.*;
 import com.rpamis.chain.core.builder.ChainPipelineDirector;
 import com.rpamis.chain.core.builder.ChainPipelineFactory;
@@ -334,5 +337,92 @@ public class DemoChainPipelineTest {
         Assert.assertTrue(loginResult);
         stopWatch.stop();
         System.out.println(stopWatch.prettyPrint());
+    }
+
+    @Test
+    public void should_copyChainStruct_when_have_a_chain_given_getChainWithChainId() {
+        ChainTypeReference<DemoUser> reference = new ChainTypeReference<DemoUser>() {};
+        // given
+        ChainPipeline<DemoUser> demoChain = ChainPipelineFactory.createChain(reference)
+                .chain("Test")
+                .addHandler(new AuthHandler())
+                .addHandler(new ValidateHandler())
+                .addHandler(new LoginHandler())
+                .strategy(Strategy.FULL)
+                .build();
+        // when
+        ChainPipeline<DemoUser> copyChain = ChainPipelineFactory.getChain("Test", reference)
+                .build();
+        List<Class<?>> handlerClasses = copyChain.getHandlerClasses();
+        Class<?> aClass = handlerClasses.get(0);
+        Assert.assertTrue(aClass.isAssignableFrom(AuthHandler.class));
+        Class<?> bClass = handlerClasses.get(1);
+        Assert.assertTrue(bClass.isAssignableFrom(ValidateHandler.class));
+        Class<?> cClass = handlerClasses.get(2);
+        Assert.assertTrue(cClass.isAssignableFrom(LoginHandler.class));
+        ChainStrategy<DemoUser> chainStrategy = copyChain.getStrategyByKey(Strategy.FULL);
+        Assert.assertTrue(chainStrategy instanceof FullExecutionStrategy);
+        ChainTypeReference<DemoUser> chainTypeReference = copyChain.getChainTypeReference();
+        Assert.assertEquals(chainTypeReference, reference);
+        ChainFallBack<DemoUser> chainFallBack = copyChain.getGlobalChainFallBack();
+        Assert.assertNull(chainFallBack);
+    }
+
+    @Test
+    public void should_copyChainStruct_when_have_a_ParallelChain_given_getParallelChainWithChainId() {
+        ChainTypeReference<DemoUser> reference = new ChainTypeReference<DemoUser>() {};
+        // given
+        ChainPipeline<DemoUser> demoChain = ChainPipelineFactory.createChain(reference)
+                .parallelChain("Test")
+                .addHandler(new AuthHandler())
+                .addHandler(new ValidateHandler())
+                .addHandler(new LoginHandler())
+                .strategy(Strategy.FULL)
+                .build();
+        // when
+        ChainPipeline<DemoUser> copyChain = ChainPipelineFactory.getParallelChain("Test", reference)
+                .build();
+        List<Class<?>> handlerClasses = copyChain.getHandlerClasses();
+        Class<?> aClass = handlerClasses.get(0);
+        Assert.assertTrue(aClass.isAssignableFrom(AuthHandler.class));
+        Class<?> bClass = handlerClasses.get(1);
+        Assert.assertTrue(bClass.isAssignableFrom(ValidateHandler.class));
+        Class<?> cClass = handlerClasses.get(2);
+        Assert.assertTrue(cClass.isAssignableFrom(LoginHandler.class));
+        ChainStrategy<DemoUser> chainStrategy = copyChain.getStrategyByKey(Strategy.FULL);
+        Assert.assertTrue(chainStrategy instanceof FullExecutionStrategy);
+        ChainTypeReference<DemoUser> chainTypeReference = copyChain.getChainTypeReference();
+        Assert.assertEquals(chainTypeReference, reference);
+        ChainFallBack<DemoUser> chainFallBack = copyChain.getGlobalChainFallBack();
+        Assert.assertNull(chainFallBack);
+    }
+
+    @Test
+    public void should_copyChainStruct_when_have_a_VariableChain_given_getVariableChainWithChainId() {
+        ChainTypeReference<DemoUser> reference = new ChainTypeReference<DemoUser>() {};
+        // given
+        ChainPipeline<DemoUser> demoChain = ChainPipelineFactory.createChain(reference)
+                .variableChain("Test")
+                .addHandler(new AuthHandler())
+                .addHandler(new ValidateHandler())
+                .addHandler(new LoginHandler())
+                .strategy(Strategy.FULL)
+                .build();
+        // when
+        ChainPipeline<DemoUser> copyChain = ChainPipelineFactory.getVariableChain("Test", reference)
+                .build();
+        List<Class<?>> handlerClasses = copyChain.getHandlerClasses();
+        Class<?> aClass = handlerClasses.get(0);
+        Assert.assertTrue(aClass.isAssignableFrom(AuthHandler.class));
+        Class<?> bClass = handlerClasses.get(1);
+        Assert.assertTrue(bClass.isAssignableFrom(ValidateHandler.class));
+        Class<?> cClass = handlerClasses.get(2);
+        Assert.assertTrue(cClass.isAssignableFrom(LoginHandler.class));
+        ChainStrategy<DemoUser> chainStrategy = copyChain.getStrategyByKey(Strategy.FULL);
+        Assert.assertTrue(chainStrategy instanceof FullExecutionStrategy);
+        ChainTypeReference<DemoUser> chainTypeReference = copyChain.getChainTypeReference();
+        Assert.assertEquals(chainTypeReference, reference);
+        ChainFallBack<DemoUser> chainFallBack = copyChain.getGlobalChainFallBack();
+        Assert.assertNull(chainFallBack);
     }
 }

@@ -298,19 +298,33 @@ public abstract class AbstractChainPipeline<T> implements ChainInnerPipeline<T>,
         return this;
     }
 
+    @Override
+    public List<Class<?>> getHandlerClasses() {
+        return this.handlerList.stream().map(ChainHandler::getClass).collect(Collectors.toList());
+    }
+
+    @Override
     public ChainTypeReference<T> getChainTypeReference() {
         return chainTypeReference;
     }
 
+    @Override
     public ChainStrategy<T> getChainStrategy() {
         return chainStrategy;
     }
 
-    public ChainFallBack<T> getChainFallBack() {
+    @Override
+    public GlobalChainFallBack<T> getGlobalChainFallBack() {
         return chainFallBack;
     }
 
-    public UniqueList<ChainHandler<T>> getHandlerList() {
+    @Override
+    @SuppressWarnings("unchecked")
+    public ChainStrategy<T> getStrategyByKey(StrategyKey strategyKey) {
+        return SpiLoader.getSpiLoader(ChainStrategy.class).getSpiImpl(strategyKey.getImplCode());
+    }
+
+    public List<ChainHandler<T>> getHandlerList() {
         return handlerList;
     }
 }
