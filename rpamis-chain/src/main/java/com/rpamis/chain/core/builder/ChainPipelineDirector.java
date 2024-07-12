@@ -41,19 +41,4 @@ public interface ChainPipelineDirector<T> {
      * @return ParallelChainPipelineBuilder
      */
     ParallelChainPipelineBuilder<T> parallelChain(String chainId);
-
-    /**
-     * 构建可变责任链
-     *
-     * @return VariableChainPipelineBuilder
-     */
-    VariableChainPipelineBuilder<T> variableChain();
-
-    /**
-     * 构建可变责任链, 并指定chainId
-     *
-     * @param chainId chainId
-     * @return VariableChainPipelineBuilder
-     */
-    VariableChainPipelineBuilder<T> variableChain(String chainId);
 }

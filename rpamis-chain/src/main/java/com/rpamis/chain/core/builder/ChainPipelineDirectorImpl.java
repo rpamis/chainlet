@@ -2,7 +2,6 @@ package com.rpamis.chain.core.builder;
 
 import com.rpamis.chain.core.ParallelChainPipelineImpl;
 import com.rpamis.chain.core.SerialChainPipelineImpl;
-import com.rpamis.chain.core.VariableChainPipelineImpl;
 import com.rpamis.chain.core.support.ChainTypeReference;
 import com.rpamis.chain.plugin.annotations.ChainDirectorService;
 
@@ -43,17 +42,5 @@ public class ChainPipelineDirectorImpl<T> implements ChainPipelineDirector<T> {
         ParallelChainPipelineImpl<T> parallelChainPipeline = new ParallelChainPipelineImpl<>(chainTypeReference);
         ChainPipelineCache.registerParallelChain(parallelChainPipeline, chainId);
         return parallelChainPipeline;
-    }
-
-    @Override
-    public VariableChainPipelineBuilder<T> variableChain() {
-        return new VariableChainPipelineImpl<>(chainTypeReference);
-    }
-
-    @Override
-    public VariableChainPipelineBuilder<T> variableChain(String chainId) {
-        VariableChainPipelineImpl<T> variableChainPipeline = new VariableChainPipelineImpl<>(chainTypeReference);
-        ChainPipelineCache.registerVariableChain(variableChainPipeline, chainId);
-        return variableChainPipeline;
     }
 }

@@ -51,17 +51,4 @@ public class ChainPipelineFactory {
         return ChainPipelineCache.getParallelChain(chainId, chainTypeReference);
     }
 
-    /**
-     * 根据chainId获取可变责任链实例
-     *
-     * @param chainId            chainId
-     * @param chainTypeReference chainTypeReference
-     * @param <T>                <T>
-     * @return <T>
-     */
-    public static <T> VariableChainPipelineBuilder<T> getVariableChain(String chainId, ChainTypeReference<T> chainTypeReference) {
-        return ChainPipelineCache.getVariableChain(chainId, chainTypeReference);
-    }
-
-
 }

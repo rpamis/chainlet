@@ -212,11 +212,13 @@ public abstract class AbstractChainPipeline<T> implements ChainInnerPipeline<T>,
     protected Boolean concreteHandlerProcess(ChainContext<T> chainContext, ChainHandlerContext<T> handlerContext) {
         T handlerData = chainContext.getHandlerData();
         ChainHandler<T> chainHandler = chainContext.getChainHandler();
+        Object processedData = handlerContext.getProcessedData();
         try {
             boolean processResult = chainHandler.process(handlerData, handlerContext);
             // 如果处理不成功则调用降级方法，具体是否调用需查看降级注解中enabled值
             if (!processResult) {
                 LocalFallBackContext<T> localFallBackContext = new LocalFallBackContext<>(handlerData, false);
+                localFallBackContext.setProcessedData(processedData);
                 fallBackResolver.handleLocalFallBack(chainHandler, localFallBackContext, chainTypeReference);
             }
             return processResult;
@@ -224,6 +226,7 @@ public abstract class AbstractChainPipeline<T> implements ChainInnerPipeline<T>,
             throw e;
         } catch (Exception e) {
             LocalFallBackContext<T> localFallBackContext = new LocalFallBackContext<>(handlerData, true);
+            localFallBackContext.setProcessedData(processedData);
             fallBackResolver.handleLocalFallBack(chainHandler, localFallBackContext, chainTypeReference);
             throw e;
         }

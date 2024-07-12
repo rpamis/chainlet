@@ -2,7 +2,6 @@ package com.rpamis.chain.core.builder;
 
 import com.rpamis.chain.core.ParallelChainPipelineImpl;
 import com.rpamis.chain.core.SerialChainPipelineImpl;
-import com.rpamis.chain.core.VariableChainPipelineImpl;
 import com.rpamis.chain.core.entities.ChainException;
 import com.rpamis.chain.plugin.annotations.ChainCache;
 import com.rpamis.chain.core.definition.ChainFallBack;
@@ -30,8 +29,6 @@ public class ChainPipelineCache {
     private static final Map<String, SerialChainPipelineImpl<?>> CHAIN_MAP = new ConcurrentHashMap<>();
 
     private static final Map<String, ParallelChainPipelineImpl<?>> PARALLEL_CHAIN_MAP = new ConcurrentHashMap<>();
-
-    private static final Map<String, VariableChainPipelineImpl<?>> VARIABLE_CHAIN_MAP = new ConcurrentHashMap<>();
 
     /**
      * 注册一个串行责任链
@@ -64,21 +61,6 @@ public class ChainPipelineCache {
     }
 
     /**
-     * 注册一个可变责任链
-     *
-     * @param chain   要注册的可变责任链
-     * @param chainId 唯一标识
-     * @param <T>     责任链数据类型
-     */
-    public static <T> void registerVariableChain(VariableChainPipelineImpl<T> chain, String chainId) {
-        if (VARIABLE_CHAIN_MAP.containsKey(chainId)) {
-            throw new ChainException("There is already a variable chain with chainId [" + chainId + "], please change your chainId, " +
-                    "or use com.rpamis.chain.core.builder.ChainPipelineFactory.getVariableChain method to obtain the existing chain");
-        }
-        VARIABLE_CHAIN_MAP.put(chainId, chain);
-    }
-
-    /**
      * 根据chainId获取串行责任链
      *
      * @param chainId            唯一标识
@@ -104,22 +86,6 @@ public class ChainPipelineCache {
      */
     public static <T> ParallelChainPipelineBuilder<T> getParallelChain(String chainId, ChainTypeReference<T> chainTypeReference) {
         ParallelChainPipelineImpl<?> chain = PARALLEL_CHAIN_MAP.get(chainId);
-        if (chain == null) {
-            throw new ChainException("There is no chain instance for " + chainId + ", please create chain with chainId");
-        }
-        return copyChain(chainId, chain, chainTypeReference);
-    }
-
-    /**
-     * 根据chainId获取可变责任链
-     *
-     * @param chainId            唯一标识
-     * @param chainTypeReference chainTypeReference
-     * @param <T>                <T>
-     * @return <T>
-     */
-    public static <T> VariableChainPipelineBuilder<T> getVariableChain(String chainId, ChainTypeReference<T> chainTypeReference) {
-        VariableChainPipelineImpl<?> chain = VARIABLE_CHAIN_MAP.get(chainId);
         if (chain == null) {
             throw new ChainException("There is no chain instance for " + chainId + ", please create chain with chainId");
         }
@@ -164,28 +130,6 @@ public class ChainPipelineCache {
         ChainFallBack<?> chainFallBack = chain.getGlobalChainFallBack();
         List handlerList = chain.getHandlerList();
         ParallelChainPipelineBuilder<T> newChain = ChainPipelineFactory.createChain(chainTypeReference).parallelChain();
-        newChain.addHandler(handlerList);
-        newChain.globalFallback((GlobalChainFallBack<T>) chainFallBack);
-        newChain.strategy((ChainStrategy<T>) chainStrategy);
-        return newChain;
-    }
-
-    /**
-     * 复制可变责任链属性到新可变责任链
-     *
-     * @param chainId            chainId
-     * @param chain              chain
-     * @param chainTypeReference chainTypeReference
-     * @param <T>                <T>
-     * @return VariableChainPipelineBuilder<T>
-     */
-    @SuppressWarnings({"unchecked", "rawtypes"})
-    public static <T> VariableChainPipelineBuilder<T> copyChain(String chainId, VariableChainPipelineImpl<?> chain, ChainTypeReference<T> chainTypeReference) {
-        verifyChainTypeReference(chainId, chain.getChainTypeReference(), chainTypeReference);
-        ChainStrategy<?> chainStrategy = chain.getChainStrategy();
-        ChainFallBack<?> chainFallBack = chain.getGlobalChainFallBack();
-        List handlerList = chain.getHandlerList();
-        VariableChainPipelineBuilder<T> newChain = ChainPipelineFactory.createChain(chainTypeReference).variableChain();
         newChain.addHandler(handlerList);
         newChain.globalFallback((GlobalChainFallBack<T>) chainFallBack);
         newChain.strategy((ChainStrategy<T>) chainStrategy);
