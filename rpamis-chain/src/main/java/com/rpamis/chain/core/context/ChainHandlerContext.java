@@ -73,14 +73,4 @@ public class ChainHandlerContext<T> implements Serializable {
     public void setLocalMessage(String localMessage) {
         this.localMessage = localMessage;
     }
-
-    @Override
-    public String toString() {
-        return "ChainHandlerContext{" +
-                "handlerData=" + handlerData +
-                ", processedData=" + processedData +
-                ", extendData=" + extendData +
-                ", localMessage='" + localMessage + '\'' +
-                '}';
-    }
 }

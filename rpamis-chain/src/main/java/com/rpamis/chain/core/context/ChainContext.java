@@ -90,15 +90,4 @@ public class ChainContext<T> implements Serializable {
     public void setCheckResults(List<ChainResult> checkResults) {
         this.checkResults = checkResults;
     }
-
-    @Override
-    public String toString() {
-        return "ChainContext{" +
-                "handlerData=" + handlerData +
-                ", chain=" + chain +
-                ", strategy=" + strategy +
-                ", chainHandler=" + chainHandler +
-                ", checkResults=" + checkResults +
-                '}';
-    }
 }

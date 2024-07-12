@@ -31,14 +31,4 @@ public class GlobalFallBackContext<T> extends FallBackContext<T> {
     public void setCompleteChainResult(CompleteChainResult completeChainResult) {
         this.completeChainResult = completeChainResult;
     }
-
-    @Override
-    public String toString() {
-        return "GlobalFallBackContext{" +
-                "completeChainResult=" + completeChainResult +
-                ", handlerData=" + handlerData +
-                ", processedData=" + processedData +
-                ", exceptionOccurred=" + exceptionOccurred +
-                '}';
-    }
 }

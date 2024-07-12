@@ -72,12 +72,8 @@ public class ParallelChainPipelineImpl<T> extends AbstractChainPipeline<T> imple
     @Override
     public Add<T> pool(ForkJoinPool forkJoinPool) {
         if (forkJoinPool != null) {
-            setForkJoinPool(forkJoinPool);
+            this.forkJoinPool = forkJoinPool;
         }
         return this;
-    }
-
-    public void setForkJoinPool(ForkJoinPool forkJoinPool) {
-        this.forkJoinPool = forkJoinPool;
     }
 }

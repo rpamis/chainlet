@@ -70,14 +70,4 @@ public class ChainResult implements Serializable {
     public void setProcessedData(Object processedData) {
         this.processedData = processedData;
     }
-
-    @Override
-    public String toString() {
-        return "ChainResult{" +
-                "handlerClass=" + handlerClass +
-                ", processResult=" + processResult +
-                ", processedData=" + processedData +
-                ", globalMessage='" + message + '\'' +
-                '}';
-    }
 }

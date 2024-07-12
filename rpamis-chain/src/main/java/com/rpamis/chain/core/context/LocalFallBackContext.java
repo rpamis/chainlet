@@ -14,13 +14,4 @@ public class LocalFallBackContext<T> extends FallBackContext<T> {
         this.handlerData = handlerData;
         this.exceptionOccurred = exceptionOccurred;
     }
-
-    @Override
-    public String toString() {
-        return "LocalFallBackContext{" +
-                "handlerData=" + handlerData +
-                ", processedData=" + processedData +
-                ", exceptionOccurred=" + exceptionOccurred +
-                '}';
-    }
 }

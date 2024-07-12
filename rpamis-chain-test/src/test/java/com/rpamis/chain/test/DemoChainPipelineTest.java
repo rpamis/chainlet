@@ -3,6 +3,7 @@ package com.rpamis.chain.test;
 import com.rpamis.chain.core.definition.ChainFallBack;
 import com.rpamis.chain.core.definition.ChainStrategy;
 import com.rpamis.chain.core.strategy.FullExecutionStrategy;
+import com.rpamis.chain.test.exception.CustomException;
 import com.rpamis.chain.test.handler.*;
 import com.rpamis.chain.core.builder.ChainPipelineDirector;
 import com.rpamis.chain.core.builder.ChainPipelineFactory;
@@ -23,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ForkJoinPool;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -398,31 +400,66 @@ public class DemoChainPipelineTest {
     }
 
     @Test
-    public void should_copyChainStruct_when_have_a_VariableChain_given_getVariableChainWithChainId() {
+    public void should_replaceForkJoinPool_when_hava_a_ParallelChain_given_setForkJoinPool(){
+        StopWatch stopWatch = new StopWatch();
+        stopWatch.start();
         ChainTypeReference<DemoUser> reference = new ChainTypeReference<DemoUser>() {};
         // given
         ChainPipeline<DemoUser> demoChain = ChainPipelineFactory.createChain(reference)
-                .variableChain("Test")
+                .parallelChain()
+                .pool(new ForkJoinPool(10))
                 .addHandler(new AuthHandler())
                 .addHandler(new ValidateHandler())
                 .addHandler(new LoginHandler())
                 .strategy(Strategy.FULL)
                 .build();
         // when
-        ChainPipeline<DemoUser> copyChain = ChainPipelineFactory.getVariableChain("Test", reference)
+        when(demoUser.getName()).thenReturn("test");
+        when(demoUser.getPwd()).thenReturn("123");
+        when(demoUser.getRole()).thenReturn("normal");
+
+        // then
+        CompleteChainResult chainResult = demoChain.apply(demoUser);
+        boolean allow = chainResult.isAllow();
+        Assert.assertFalse(allow);
+        Boolean authResult = chainResult.get(AuthHandler.class);
+        Assert.assertFalse(authResult);
+        Boolean validResult = chainResult.get(ValidateHandler.class);
+        Assert.assertTrue(validResult);
+        Boolean loginResult = chainResult.get(LoginHandler.class);
+        Assert.assertTrue(loginResult);
+        stopWatch.stop();
+        System.out.println(stopWatch.prettyPrint());
+    }
+
+    @Test
+    public void should_throwCustomException_when_apply_allow_false_given_any_chain() {
+        ChainTypeReference<DemoUser> reference = new ChainTypeReference<DemoUser>() {};
+        // given
+        ChainPipeline<DemoUser> demoChain = ChainPipelineFactory.createChain(reference)
+                .chain()
+                .addHandler(new AuthHandler())
+                .addHandler(new ValidateHandler())
+                .addHandler(new LoginHandler())
+                .strategy(Strategy.FULL)
                 .build();
-        List<Class<?>> handlerClasses = copyChain.getHandlerClasses();
-        Class<?> aClass = handlerClasses.get(0);
-        Assert.assertTrue(aClass.isAssignableFrom(AuthHandler.class));
-        Class<?> bClass = handlerClasses.get(1);
-        Assert.assertTrue(bClass.isAssignableFrom(ValidateHandler.class));
-        Class<?> cClass = handlerClasses.get(2);
-        Assert.assertTrue(cClass.isAssignableFrom(LoginHandler.class));
-        ChainStrategy<DemoUser> chainStrategy = copyChain.getStrategyByKey(Strategy.FULL);
-        Assert.assertTrue(chainStrategy instanceof FullExecutionStrategy);
-        ChainTypeReference<DemoUser> chainTypeReference = copyChain.getChainTypeReference();
-        Assert.assertEquals(chainTypeReference, reference);
-        ChainFallBack<DemoUser> chainFallBack = copyChain.getGlobalChainFallBack();
-        Assert.assertNull(chainFallBack);
+        // when
+        when(demoUser.getName()).thenReturn("test");
+        when(demoUser.getPwd()).thenReturn("123");
+        when(demoUser.getRole()).thenReturn("normal");
+
+        // then
+        CompleteChainResult chainResult = demoChain.apply(demoUser);
+        boolean allow = chainResult.isAllow();
+        Assert.assertFalse(allow);
+        Boolean authResult = chainResult.verifyIfSuccess(ValidateHandler.class);
+        Assert.assertTrue(authResult);
+        Assert.assertThrows(CustomException.class, () -> chainResult.verifyAllAndThrow(CustomException.class));
+        Assert.assertThrows(CustomException.class, () -> chainResult.verifyAndThrow(CustomException.class, AuthHandler.class));
+        List<Class<?>> handlerClasses = chainResult.getHandlerClasses();
+        Assert.assertEquals(handlerClasses.size(), 3);
+        Assert.assertTrue(handlerClasses.contains(AuthHandler.class));
+        Assert.assertTrue(handlerClasses.contains(ValidateHandler.class));
+        Assert.assertTrue(handlerClasses.contains(LoginHandler.class));
     }
 }

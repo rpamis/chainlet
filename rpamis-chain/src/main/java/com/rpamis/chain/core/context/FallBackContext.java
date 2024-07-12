@@ -50,13 +50,4 @@ public abstract class FallBackContext<T> implements Serializable {
     public void setProcessedData(Object processedData) {
         this.processedData = processedData;
     }
-
-    @Override
-    public String toString() {
-        return "FallBackContext{" +
-                "handlerData=" + handlerData +
-                ", processedData=" + processedData +
-                ", exceptionOccurred=" + exceptionOccurred +
-                '}';
-    }
 }
