@@ -462,4 +462,121 @@ public class DemoChainPipelineTest {
         Assert.assertTrue(handlerClasses.contains(ValidateHandler.class));
         Assert.assertTrue(handlerClasses.contains(LoginHandler.class));
     }
+
+    @Test
+    public void should_throwChainException_when_fallback_given_any_chain_without_fallbackMethodName() {
+        ChainTypeReference<DemoUser> reference = new ChainTypeReference<DemoUser>() {};
+        // given
+        ChainPipeline<DemoUser> demoChain = ChainPipelineFactory.createChain(reference)
+                .chain()
+                .addHandler(new TestFallBackHandler())
+                .strategy(Strategy.FULL)
+                .build();
+        // when
+        when(demoUser.getName()).thenReturn("test");
+        when(demoUser.getPwd()).thenReturn("123");
+        when(demoUser.getRole()).thenReturn("normal");
+
+        // then
+        Assert.assertThrows(ChainException.class, () -> demoChain.apply(demoUser));
+    }
+
+    @Test
+    public void should_throwChainException_when_fallback_given_any_chain_with_not_exist_fallbackMethodName_and_fallbackMethod() {
+        ChainTypeReference<DemoUser> reference = new ChainTypeReference<DemoUser>() {};
+        // given
+        ChainPipeline<DemoUser> demoChain = ChainPipelineFactory.createChain(reference)
+                .chain()
+                .addHandler(new TestFallBackHandlerTwo())
+                .strategy(Strategy.FULL)
+                .build();
+        // when
+        when(demoUser.getName()).thenReturn("test");
+        when(demoUser.getPwd()).thenReturn("123");
+        when(demoUser.getRole()).thenReturn("normal");
+
+        // then
+        Assert.assertThrows(ChainException.class, () -> demoChain.apply(demoUser));
+    }
+
+    @Test
+    public void should_throwChainException_when_fallback_given_any_chain_with_un_correct_fallback_return_type() {
+        ChainTypeReference<DemoUser> reference = new ChainTypeReference<DemoUser>() {};
+        // given
+        ChainPipeline<DemoUser> demoChain = ChainPipelineFactory.createChain(reference)
+                .chain()
+                .addHandler(new TestFallBackHandlerThree())
+                .strategy(Strategy.FULL)
+                .build();
+        // when
+        when(demoUser.getName()).thenReturn("test");
+        when(demoUser.getPwd()).thenReturn("123");
+        when(demoUser.getRole()).thenReturn("normal");
+
+        // then
+        Assert.assertThrows(ChainException.class, () -> demoChain.apply(demoUser));
+    }
+
+    @Test
+    public void should_invokeFallback_when_handler_false_given_any_chain_with_correct_fallback_return_type() {
+        ChainTypeReference<DemoUser> reference = new ChainTypeReference<DemoUser>() {};
+        // given
+        ChainPipeline<DemoUser> demoChain = ChainPipelineFactory.createChain(reference)
+                .chain()
+                .addHandler(new TestFallBackHandlerFour())
+                .strategy(Strategy.FULL)
+                .build();
+        // when
+        when(demoUser.getName()).thenReturn("test");
+        when(demoUser.getPwd()).thenReturn("123");
+        when(demoUser.getRole()).thenReturn("normal");
+
+        // then
+        CompleteChainResult chainResult = demoChain.apply(demoUser);
+        boolean allow = chainResult.isAllow();
+        Assert.assertFalse(allow);
+        CompleteChainResult chainResult2 = demoChain.apply(demoUser);
+        boolean allow2 = chainResult2.isAllow();
+        Assert.assertFalse(allow2);
+    }
+
+    @Test
+    public void should_invokeFallback_when_handler_false_given_any_chain_with_correct_fallback_in_private() {
+        ChainTypeReference<DemoUser> reference = new ChainTypeReference<DemoUser>() {};
+        // given
+        ChainPipeline<DemoUser> demoChain = ChainPipelineFactory.createChain(reference)
+                .chain()
+                .addHandler(new TestFallBackHandlerFive())
+                .strategy(Strategy.FULL)
+                .build();
+        // when
+        when(demoUser.getName()).thenReturn("test");
+        when(demoUser.getPwd()).thenReturn("123");
+        when(demoUser.getRole()).thenReturn("normal");
+
+        // then
+        CompleteChainResult chainResult = demoChain.apply(demoUser);
+        boolean allow = chainResult.isAllow();
+        Assert.assertFalse(allow);
+    }
+
+    @Test
+    public void should_invokeFallback_when_handler_false_given_any_chain_with_correct_fallback_in_private_static() {
+        ChainTypeReference<DemoUser> reference = new ChainTypeReference<DemoUser>() {};
+        // given
+        ChainPipeline<DemoUser> demoChain = ChainPipelineFactory.createChain(reference)
+                .chain()
+                .addHandler(new TestFallBackHandlerSix())
+                .strategy(Strategy.FULL)
+                .build();
+        // when
+        when(demoUser.getName()).thenReturn("test");
+        when(demoUser.getPwd()).thenReturn("123");
+        when(demoUser.getRole()).thenReturn("normal");
+
+        // then
+        CompleteChainResult chainResult = demoChain.apply(demoUser);
+        boolean allow = chainResult.isAllow();
+        Assert.assertFalse(allow);
+    }
 }
