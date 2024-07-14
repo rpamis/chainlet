@@ -33,7 +33,7 @@ public class FallBackResolver<T> extends AbstractFallBackResolverSupport {
         }
         // 获取process接口Method
         Method processMethod = findHandlerProcessMethod(chainHandler.getClass(), actualGenericClass);
-        checkMethod(processMethod, "the process method is null, ignore fallback execute");
+        checkMethod(processMethod, chainHandler.getClass() + " process method is null, ignore fallback execute");
         if (processMethod.isAnnotationPresent(Fallback.class)) {
             Fallback fallbackAnnotation = processMethod.getAnnotation(Fallback.class);
             String fallbackMethodName = fallbackAnnotation.fallbackMethod();
@@ -44,7 +44,7 @@ public class FallBackResolver<T> extends AbstractFallBackResolverSupport {
             }
             // 获取fallback接口Method
             Method method = findLocalFallBackMethod(chainHandler, fallbackMethodName, fallbackClass);
-            checkMethod(method, "the fallback method is null, ignore fallback execute");
+            checkMethod(method, chainHandler.getClass() + " fallback method is null, ignore fallback execute");
             // 执行fallback
             invokeActual(chainHandler, method, localFallBackContext);
         }
