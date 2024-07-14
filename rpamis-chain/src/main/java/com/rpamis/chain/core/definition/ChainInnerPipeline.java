@@ -21,17 +21,6 @@ public interface ChainInnerPipeline<T> {
     void doHandler(T handlerData, List<ChainResult> checkResults);
 
     /**
-     * 流水线执行Handler处理
-     *
-     * @param handlerData  需要处理的数据
-     * @param processedData 返回的处理数据
-     * @param checkResults 责任链结果存储list
-     */
-    default void doHandler(T handlerData, Object processedData, List<ChainResult> checkResults) {
-
-    }
-
-    /**
      * 流水线执行Handler后的处理
      */
     void afterHandler();
