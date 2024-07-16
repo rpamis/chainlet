@@ -1,3 +1,0 @@
-fastFailedStrategy=com.rpamis.chain.core.strategy.FastFailedStrategy
-fastReturnStrategy=com.rpamis.chain.core.strategy.FastReturnStrategy
-fullExecutionStrategy=com.rpamis.chain.core.strategy.FullExecutionStrategy
