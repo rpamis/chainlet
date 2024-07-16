@@ -3,16 +3,16 @@
 🌱Chainlet project is a lightweight and highly scalable responsibility chain model framework with a variety of built-in responsibility chain forms and execution strategies
 
 <p align="center">
-  <a href="https://central.sonatype.com/artifact/com.rpamis/rpamis-chain/1.0.0">
-    <img alt="maven" src="https://img.shields.io/maven-central/v/com.rpamis/rpamis-chain?style=flat-square">
+  <a href="https://central.sonatype.com/artifact/com.rpamis/chainlet/1.0.0">
+    <img alt="maven" src="https://img.shields.io/maven-central/v/com.rpamis/chainlet?style=flat-square">
   </a>
 
   <a href="https://www.apache.org/licenses/LICENSE-2.0">
     <img alt="license" src="https://img.shields.io/badge/license-Apache%202-4EB1BA.svg?style=flat-square">
   </a>
 
-  <a href="https://codecov.io/gh/benym/rpamis-chain" > 
-    <img alt="codecov" src="https://img.shields.io/codecov/c/gh/rpamis/rpamis-chain?color=%23&style=flat-square"/> 
+  <a href="https://codecov.io/gh/benym/chainlet" > 
+    <img alt="codecov" src="https://img.shields.io/codecov/c/gh/rpamis/chainlet?color=%23&style=flat-square"/> 
   </a>
 </p>
 
