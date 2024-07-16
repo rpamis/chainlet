@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.rpamis</groupId>
+        <artifactId>chainlet-parent</artifactId>
+        <version>1.0.4-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+    <version>${chainlet.version}</version>
+    <artifactId>chainlet</artifactId>
+    <description>chainlet</description>
+
+    <properties>
+        <java.version>1.8</java.version>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.rpamis</groupId>
+            <artifactId>rpamis-extension-spi</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.rpamis</groupId>
+            <artifactId>chainlet-processor-annotation</artifactId>
+        </dependency>
+    </dependencies>
+
+</project>

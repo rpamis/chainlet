@@ -1,6 +1,6 @@
-## Rpamis-chain
+## Chainlet
 
-🌱Rpamis-chain项目是一款轻量、高扩展性的责任链模式框架，内置多种责任链形态及执行策略
+🌱Chainlet项目是一款轻量、高扩展性的责任链模式框架，内置多种责任链形态及执行策略
 
 <p align="center">
   <a href="https://central.sonatype.com/artifact/com.rpamis/rpamis-chain/1.0.0">
@@ -29,7 +29,7 @@
 ```xml
 <dependency>
     <groupId>com.rpamis</groupId>
-    <artifactId>rpamis-chain</artifactId>
+    <artifactId>chainlet</artifactId>
     <version>1.0.0</version>
 </dependency>
 ```

@@ -5,17 +5,17 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.rpamis</groupId>
-    <artifactId>rpamis-chain-parent</artifactId>
+    <artifactId>chainlet-parent</artifactId>
     <packaging>pom</packaging>
     <version>1.0.4-SNAPSHOT</version>
-    <name>rpamis-chain-parent</name>
-    <description>rpamis-chain-parent</description>
-    <url>https://github.com/benym/rpamis-chain</url>
+    <name>chainlet-parent</name>
+    <description>chainlet-parent</description>
+    <url>https://github.com/rpamis/chainlet</url>
     <modules>
-        <module>rpamis-chain</module>
-        <module>rpamis-chain-test</module>
-        <module>rpamis-chain-processor</module>
-        <module>rpamis-chain-processor-annotation</module>
+        <module>chainlet</module>
+        <module>chainlet-test</module>
+        <module>chainlet-processor</module>
+        <module>chainlet-processor-annotation</module>
     </modules>
 
     <licenses>
@@ -52,10 +52,10 @@
             <id>release</id>
             <properties>
                 <rpamis-extension-spi.version>1.0.1</rpamis-extension-spi.version>
-                <rpamis-chain.version>1.0.1</rpamis-chain.version>
-                <rpamis-chain-test.version>1.0.1</rpamis-chain-test.version>
-                <rpamis-chain-processor.version>1.0.0</rpamis-chain-processor.version>
-                <rpamis-chain-processor-annotation.version>1.0.0</rpamis-chain-processor-annotation.version>
+                <chainlet.version>1.0.0</chainlet.version>
+                <chainlet-test.version>1.0.0</chainlet-test.version>
+                <chainlet-processor.version>1.0.0</chainlet-processor.version>
+                <chainlet-processor-annotation.version>1.0.0</chainlet-processor-annotation.version>
             </properties>
             <distributionManagement>
                 <!--这两个id需要和setting.xml文件中的server字段的id进行对应-->
@@ -87,10 +87,10 @@
             </activation>
             <properties>
                 <rpamis-extension-spi.version>1.0.0-SNAPSHOT</rpamis-extension-spi.version>
-                <rpamis-chain.version>1.0.4-SNAPSHOT</rpamis-chain.version>
-                <rpamis-chain-test.version>1.0.4-SNAPSHOT</rpamis-chain-test.version>
-                <rpamis-chain-processor.version>1.0.4-SNAPSHOT</rpamis-chain-processor.version>
-                <rpamis-chain-processor-annotation.version>1.0.4-SNAPSHOT</rpamis-chain-processor-annotation.version>
+                <chainlet.version>1.0.4-SNAPSHOT</chainlet.version>
+                <chainlet-test.version>1.0.4-SNAPSHOT</chainlet-test.version>
+                <chainlet-processor.version>1.0.4-SNAPSHOT</chainlet-processor.version>
+                <chainlet-processor-annotation.version>1.0.4-SNAPSHOT</chainlet-processor-annotation.version>
             </properties>
             <distributionManagement>
                 <!--这两个id需要和setting.xml文件中的server字段的id进行对应-->
@@ -137,8 +137,8 @@
             </dependency>
             <dependency>
                 <groupId>com.rpamis</groupId>
-                <artifactId>rpamis-chain</artifactId>
-                <version>${rpamis-chain.version}</version>
+                <artifactId>chainlet</artifactId>
+                <version>${chainlet.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.rpamis</groupId>
@@ -147,13 +147,13 @@
             </dependency>
             <dependency>
                 <groupId>com.rpamis</groupId>
-                <artifactId>rpamis-chain-processor-annotation</artifactId>
-                <version>${rpamis-chain-processor-annotation.version}</version>
+                <artifactId>chainlet-processor-annotation</artifactId>
+                <version>${chainlet-processor-annotation.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.rpamis</groupId>
-                <artifactId>rpamis-chain-processor</artifactId>
-                <version>${rpamis-chain-processor.version}</version>
+                <artifactId>chainlet-processor</artifactId>
+                <version>${chainlet-processor.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework.boot</groupId>
@@ -282,14 +282,14 @@
 
     <!--url中配自己的项目地址,connection配自己项目地址加git,最后配自己对应账号主页-->
     <scm>
-        <url>git@github.com:rpamis/rpamis-chain.git</url>
-        <connection>scm:git@github.com:rpamis/rpamis-chain.git</connection>
+        <url>git@github.com:rpamis/chainlet.git</url>
+        <connection>scm:git@github.com:rpamis/chainlet.git</connection>
         <developerConnection>scm:https://github.com/rpamis</developerConnection>
     </scm>
 
     <issueManagement>
         <system>Github Issue</system>
-        <url>https://github.com/rpamis/rpamis-chain/issues</url>
+        <url>https://github.com/rpamis/chainlet/issues</url>
     </issueManagement>
 
     <!--开发者信息-->

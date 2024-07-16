@@ -1,6 +1,6 @@
-## Rpamis-chain
+## Chainlet
 
-🌱Rpamis-chain project is a lightweight and highly scalable responsibility chain model framework with a variety of built-in responsibility chain forms and execution strategies
+🌱Chainlet project is a lightweight and highly scalable responsibility chain model framework with a variety of built-in responsibility chain forms and execution strategies
 
 <p align="center">
   <a href="https://central.sonatype.com/artifact/com.rpamis/rpamis-chain/1.0.0">
@@ -26,7 +26,7 @@
 ```xml
 <dependency>
     <groupId>com.rpamis</groupId>
-    <artifactId>rpamis-chain</artifactId>
+    <artifactId>chainlet</artifactId>
     <version>1.0.0</version>
 </dependency>
 ```
