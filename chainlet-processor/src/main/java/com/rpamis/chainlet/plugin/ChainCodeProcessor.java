@@ -1,7 +1,7 @@
 package com.rpamis.chainlet.plugin;
 
 import com.google.auto.service.AutoService;
-import com.rpamis.chain.plugin.annotations.*;
+import com.rpamis.chainlet.plugin.annotations.*;
 import com.rpamis.chainlet.plugin.factory.GenCodeTemplateFactory;
 import com.rpamis.chainlet.plugin.annotations.*;
 import com.sun.source.util.TreePath;
@@ -38,12 +38,12 @@ import static com.rpamis.chainlet.plugin.ChainCodeProcessor.VERBOSE;
 @AutoService(Processor.class)
 @SupportedSourceVersion(SourceVersion.RELEASE_8)
 @SupportedAnnotationTypes(value = {
-        "com.rpamis.chain.plugin.annotations.ChainDirector",
-        "com.rpamis.chain.plugin.annotations.ChainDirectorService",
-        "com.rpamis.chain.plugin.annotations.ChainBuilder",
-        "com.rpamis.chain.plugin.annotations.ChainBuilderService",
-        "com.rpamis.chain.plugin.annotations.ChainCache",
-        "com.rpamis.chain.plugin.annotations.ChainFactory"
+        "com.rpamis.chainlet.plugin.annotations.ChainDirector",
+        "com.rpamis.chainlet.plugin.annotations.ChainDirectorService",
+        "com.rpamis.chainlet.plugin.annotations.ChainBuilder",
+        "com.rpamis.chainlet.plugin.annotations.ChainBuilderService",
+        "com.rpamis.chainlet.plugin.annotations.ChainCache",
+        "com.rpamis.chainlet.plugin.annotations.ChainFactory"
 })
 @SupportedOptions({VERBOSE})
 public class ChainCodeProcessor extends AbstractProcessor {
@@ -94,7 +94,7 @@ public class ChainCodeProcessor extends AbstractProcessor {
     /**
      * 读取内部待生成类默认包名
      */
-    private static final String INNER_PACKAGE_NAME = "com.rpamis.chain.core.builder";
+    private static final String INNER_PACKAGE_NAME = "com.rpamis.chainlet.core.builder";
 
     @Override
     public synchronized void init(ProcessingEnvironment processingEnv) {

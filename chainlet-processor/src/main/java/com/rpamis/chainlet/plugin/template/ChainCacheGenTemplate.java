@@ -47,11 +47,11 @@ public class ChainCacheGenTemplate extends AbstractGenCodeTemplate {
             ChainCodeProcessor.importNeedClass(treePath, builderServiceToPackageNameMap.get(builderServiceName), builderServiceName);
         }
         // 导入内部包
-        ChainCodeProcessor.importNeedClass(treePath, "com.rpamis.chain.core.definition", "ChainFallBack");
-        ChainCodeProcessor.importNeedClass(treePath, "com.rpamis.chain.core.definition", "ChainStrategy");
-        ChainCodeProcessor.importNeedClass(treePath, "com.rpamis.chain.core.entities", "ChainException");
-        ChainCodeProcessor.importNeedClass(treePath, "com.rpamis.chain.core.fallback", "GlobalChainFallBack");
-        ChainCodeProcessor.importNeedClass(treePath, "com.rpamis.chain.core.support", "ChainTypeReference");
+        ChainCodeProcessor.importNeedClass(treePath, "com.rpamis.chainlet.core.definition", "ChainFallBack");
+        ChainCodeProcessor.importNeedClass(treePath, "com.rpamis.chainlet.core.definition", "ChainStrategy");
+        ChainCodeProcessor.importNeedClass(treePath, "com.rpamis.chainlet.core.entities", "ChainException");
+        ChainCodeProcessor.importNeedClass(treePath, "com.rpamis.chainlet.core.fallback", "GlobalChainFallBack");
+        ChainCodeProcessor.importNeedClass(treePath, "com.rpamis.chainlet.core.support", "ChainTypeReference");
         // 导入必要java包
         ChainCodeProcessor.importNeedClass(treePath, "java.util", "Map");
         ChainCodeProcessor.importNeedClass(treePath, "java.util", "List");

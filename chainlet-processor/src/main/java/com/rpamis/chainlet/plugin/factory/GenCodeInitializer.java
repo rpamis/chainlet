@@ -1,6 +1,5 @@
 package com.rpamis.chainlet.plugin.factory;
 
-import com.rpamis.chain.plugin.template.*;
 import com.rpamis.chainlet.plugin.template.*;
 
 import java.util.HashSet;

@@ -31,7 +31,7 @@ public class ChainFactoryGenTemplate extends AbstractGenCodeTemplate {
 
     @Override
     protected void importNeedPackage(GenContext genContext, TreePath treePath) {
-        ChainCodeProcessor.importNeedClass(treePath, "com.rpamis.chain.core.builder", "ChainPipelineCache");
+        ChainCodeProcessor.importNeedClass(treePath, "com.rpamis.chainlet.core.builder", "ChainPipelineCache");
     }
 
     @Override
