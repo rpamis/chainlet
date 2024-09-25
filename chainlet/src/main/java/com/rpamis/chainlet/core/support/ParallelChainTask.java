@@ -36,7 +36,10 @@ public class ParallelChainTask<T> extends RecursiveAction {
 
     @Override
     protected void compute() {
-        if (handlerList.size() <= THRESHOLD && !handlerList.isEmpty()) {
+        if (handlerList.isEmpty()) {
+            return;
+        }
+        if (handlerList.size() == THRESHOLD) {
             parallelChainPipeline.assembleAndExecute(handlerData, parallelChainPipeline, handlerList.get(0), checkResults);
             return;
         }
