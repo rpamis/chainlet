@@ -12,7 +12,7 @@
   </a>
 
   <a href="https://codecov.io/gh/benym/rpamis-chain" > 
-    <img alt="codecov" src="https://img.shields.io/codecov/c/gh/rpamis/rpamis-chain?color=%23&style=flat-square"/> 
+    <img alt="codecov" src="https://img.shields.io/codecov/c/gh/rpamis/chainlet?color=%23&style=flat-square"/> 
   </a>
 </p>
 
