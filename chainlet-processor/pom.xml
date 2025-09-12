@@ -6,12 +6,19 @@
     <parent>
         <groupId>com.rpamis</groupId>
         <artifactId>chainlet-parent</artifactId>
-        <version>1.0.4-SNAPSHOT</version>
+        <version>${revision}</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <version>${chainlet-processor.version}</version>
     <artifactId>chainlet-processor</artifactId>
+    <name>chainlet-processor</name>
+    <url>https://github.com/rpamis/chainlet</url>
+
+    <scm>
+        <url>git@github.com:rpamis/chainlet.git</url>
+        <connection>scm:git@github.com:rpamis/chainlet.git</connection>
+        <developerConnection>scm:https://github.com/rpamis</developerConnection>
+    </scm>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
@@ -23,6 +30,7 @@
         <dependency>
             <groupId>com.sun</groupId>
             <artifactId>tools</artifactId>
+            <version>1.8</version>
             <scope>system</scope>
             <systemPath>${java.home}/../lib/tools.jar</systemPath>
         </dependency>

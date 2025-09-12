@@ -6,12 +6,19 @@
     <parent>
         <groupId>com.rpamis</groupId>
         <artifactId>chainlet-parent</artifactId>
-        <version>1.0.4-SNAPSHOT</version>
+        <version>${revision}</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <version>${chainlet-processor-annotation.version}</version>
     <artifactId>chainlet-processor-annotation</artifactId>
+    <name>chainlet-processor-annotation</name>
+    <url>https://github.com/rpamis/chainlet</url>
+
+    <scm>
+        <url>git@github.com:rpamis/chainlet.git</url>
+        <connection>scm:git@github.com:rpamis/chainlet.git</connection>
+        <developerConnection>scm:https://github.com/rpamis</developerConnection>
+    </scm>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
