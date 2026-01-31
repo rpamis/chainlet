@@ -19,6 +19,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.util.StopWatch;
+import org.junit.jupiter.api.DisplayName;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,8 +42,12 @@ public class DemoChainPipelineTest {
     @Mock(lenient = true)
     DemoUser demoUser;
 
+    /**
+     * 在全执行策略下链式处理返回false的场景测试
+     */
     @Test
-    public void should_returnFalse_when_isAllow_given_chainInFullExecutionStrategy() throws ChainException {
+    @DisplayName("全执行策略下链式处理返回false")
+    public void fullExecutionStrategyReturnsFalse() throws ChainException {
         ChainTypeReference<DemoUser> reference = new ChainTypeReference<DemoUser>() {};
         // given
         ChainPipeline<DemoUser> demoChain = ChainPipelineFactory.createChain(reference)
@@ -69,8 +74,12 @@ public class DemoChainPipelineTest {
         Assert.assertTrue(loginResult);
     }
 
+    /**
+     * 在全执行策略下链式处理返回true的场景测试
+     */
     @Test
-    public void should_returnTrue_when_isAllow_given_chainInFullExecutionStrategy() throws ChainException {
+    @DisplayName("全执行策略下链式处理返回true")
+    public void fullExecutionStrategyReturnsTrue() throws ChainException {
         ChainTypeReference<DemoUser> reference = new ChainTypeReference<DemoUser>() {};
         // given
         ChainPipeline<DemoUser> demoChain = ChainPipelineFactory.createChain(reference)
@@ -97,8 +106,12 @@ public class DemoChainPipelineTest {
         Assert.assertTrue(loginResult);
     }
 
+    /**
+     * 在快速失败策略下链式处理返回false的场景测试
+     */
     @Test
-    public void should_returnFalse_when_isAllow_given_chainInFastFailedStrategy() throws ChainException {
+    @DisplayName("快速失败策略下链式处理返回false")
+    public void fastFailedStrategyReturnsFalse() throws ChainException {
         ChainTypeReference<DemoUser> reference = new ChainTypeReference<DemoUser>() {};
         // given
         ChainPipeline<DemoUser> demoChain = ChainPipelineFactory.createChain(reference)
@@ -125,8 +138,12 @@ public class DemoChainPipelineTest {
         Assert.assertNull(loginResult);
     }
 
+    /**
+     * 在快速失败策略下交换处理器顺序后链式处理返回false的场景测试
+     */
     @Test
-    public void should_returnFalse_when_isAllow_given_chainInFastFailedStrategySwitch() throws ChainException {
+    @DisplayName("快速失败策略交换顺序后链式处理返回false")
+    public void fastFailedStrategySwitchReturnsFalse() throws ChainException {
         ChainTypeReference<DemoUser> reference = new ChainTypeReference<DemoUser>() {};
         // given
         ChainPipeline<DemoUser> demoChain = ChainPipelineFactory.createChain(reference)
@@ -153,8 +170,12 @@ public class DemoChainPipelineTest {
         Assert.assertNull(loginResult);
     }
 
+    /**
+     * 在快速返回策略下链式处理返回true的场景测试
+     */
     @Test
-    public void should_returnTrue_when_isAllow_given_chainInFastReturnStrategy() throws ChainException {
+    @DisplayName("快速返回策略下链式处理返回true")
+    public void fastReturnStrategyReturnsTrue() throws ChainException {
         ChainTypeReference<DemoUser> reference = new ChainTypeReference<DemoUser>() {};
         // given
         ChainPipeline<DemoUser> demoChain = ChainPipelineFactory.createChain(reference)
@@ -181,8 +202,12 @@ public class DemoChainPipelineTest {
         Assert.assertNull(loginResult);
     }
 
+    /**
+     * 在快速返回策略下交换处理器顺序后链式处理返回true的场景测试
+     */
     @Test
-    public void should_returnTrue_when_isAllow_given_chainInFastReturnStrategySwitch() throws ChainException {
+    @DisplayName("快速返回策略交换顺序后链式处理返回预期结果")
+    public void fastReturnStrategySwitchReturnsExpected() throws ChainException {
         ChainTypeReference<DemoUser> reference = new ChainTypeReference<DemoUser>() {};
         // given
         ChainPipeline<DemoUser> demoChain = ChainPipelineFactory.createChain(reference)
@@ -209,8 +234,12 @@ public class DemoChainPipelineTest {
         Assert.assertNull(loginResult);
     }
 
+    /**
+     * 添加相同处理器时抛出异常的场景测试
+     */
     @Test
-    public void should_throwException_when_addSameHandler_given_anyChain() {
+    @DisplayName("添加相同处理器时应抛出异常")
+    public void addSameHandlerShouldThrowException() {
         ChainTypeReference<DemoUser> reference = new ChainTypeReference<DemoUser>() {};
         // given
         ChainPipelineDirector<DemoUser> chainPipelineDirector = ChainPipelineFactory.createChain(reference);
@@ -222,8 +251,12 @@ public class DemoChainPipelineTest {
         Assert.assertThrows(ChainException.class, () -> demoChain.addHandler(mock(ValidateHandler.class)));
     }
 
+    /**
+     * 多线程执行下链式处理结果不相等的场景测试
+     */
     @Test
-    public void should_notEquals_when_isAllow_given_multithreadedExecution() throws ExecutionException, InterruptedException {
+    @DisplayName("多线程执行下链式处理结果不相等")
+    public void multithreadedExecutionNotEqual() throws ExecutionException, InterruptedException {
         CompletableFuture<Boolean> failedFuture = CompletableFuture.supplyAsync(() -> {
             try {
                 DemoUser demoUser = mock(DemoUser.class);
@@ -271,8 +304,12 @@ public class DemoChainPipelineTest {
         return chainResult.isAllow();
     }
 
+    /**
+     * 当链中包含模拟异常处理器时应用链应抛出链异常的场景测试
+     */
     @Test
-    public void should_throwChainException_when_apply_given_MockExceptionHandlerInChain() throws ChainException {
+    @DisplayName("链中包含模拟异常处理器时应抛出异常")
+    public void mockExceptionHandlerShouldThrowChainException() throws ChainException {
         ChainTypeReference<DemoUser> reference = new ChainTypeReference<DemoUser>() {};
         // given
         ChainPipeline<DemoUser> demoChain = ChainPipelineFactory.createChain(reference)
@@ -287,8 +324,12 @@ public class DemoChainPipelineTest {
         Assert.assertThrows(ArithmeticException.class, () -> demoChain.apply(demoUser));
     }
 
+    /**
+     * 列表处理器下链式处理返回false的场景测试
+     */
     @Test
-    public void should_returnFalse_when_isAllow_given_chainInListHandler() throws ChainException {
+    @DisplayName("列表处理器下链式处理返回false")
+    public void listHandlerReturnsFalse() throws ChainException {
         ChainTypeReference<List<DemoUser>> reference = new ChainTypeReference<List<DemoUser>>() {};
         // given
         ChainPipeline<List<DemoUser>> demoChain = ChainPipelineFactory.createChain(reference)
@@ -309,8 +350,12 @@ public class DemoChainPipelineTest {
         Assert.assertFalse(authResult);
     }
 
+    /**
+     * 并行链在全执行策略下返回false的场景测试
+     */
     @Test
-    public void should_returnFalse_when_isAllow_given_parallelChainInFullExecutionStrategy() {
+    @DisplayName("并行链全执行策略下返回false")
+    public void parallelChainFullExecutionReturnsFalse() {
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();
         ChainTypeReference<DemoUser> reference = new ChainTypeReference<DemoUser>() {};
@@ -341,8 +386,12 @@ public class DemoChainPipelineTest {
         System.out.println(stopWatch.prettyPrint());
     }
 
+    /**
+     * 根据链ID获取链结构的场景测试
+     */
     @Test
-    public void should_copyChainStruct_when_have_a_chain_given_getChainWithChainId() {
+    @DisplayName("根据链ID复制链结构")
+    public void copyChainStructById() {
         ChainTypeReference<DemoUser> reference = new ChainTypeReference<DemoUser>() {};
         // given
         ChainPipeline<DemoUser> demoChain = ChainPipelineFactory.createChain(reference)
@@ -370,8 +419,12 @@ public class DemoChainPipelineTest {
         Assert.assertNull(chainFallBack);
     }
 
+    /**
+     * 根据链ID获取并行链结构的场景测试
+     */
     @Test
-    public void should_copyChainStruct_when_have_a_ParallelChain_given_getParallelChainWithChainId() {
+    @DisplayName("根据链ID复制并行链结构")
+    public void copyParallelChainStructById() {
         ChainTypeReference<DemoUser> reference = new ChainTypeReference<DemoUser>() {};
         // given
         ChainPipeline<DemoUser> demoChain = ChainPipelineFactory.createChain(reference)
@@ -399,8 +452,12 @@ public class DemoChainPipelineTest {
         Assert.assertNull(chainFallBack);
     }
 
+    /**
+     * 设置并行链的ForkJoinPool的场景测试
+     */
     @Test
-    public void should_replaceForkJoinPool_when_hava_a_ParallelChain_given_setForkJoinPool(){
+    @DisplayName("设置并行链的ForkJoinPool")
+    public void setParallelChainForkJoinPool() {
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();
         ChainTypeReference<DemoUser> reference = new ChainTypeReference<DemoUser>() {};
@@ -432,8 +489,12 @@ public class DemoChainPipelineTest {
         System.out.println(stopWatch.prettyPrint());
     }
 
+    /**
+     * 链处理后允许为false时抛出自定义异常的场景测试
+     */
     @Test
-    public void should_throwCustomException_when_apply_allow_false_given_any_chain() {
+    @DisplayName("链处理失败时抛出自定义异常")
+    public void throwCustomExceptionWhenApplyAllowFalse() {
         ChainTypeReference<DemoUser> reference = new ChainTypeReference<DemoUser>() {};
         // given
         ChainPipeline<DemoUser> demoChain = ChainPipelineFactory.createChain(reference)
@@ -463,8 +524,12 @@ public class DemoChainPipelineTest {
         Assert.assertTrue(handlerClasses.contains(LoginHandler.class));
     }
 
+    /**
+     * fallback处理时链中没有fallback方法名时抛出链异常的场景测试
+     */
     @Test
-    public void should_throwChainException_when_fallback_given_any_chain_without_fallbackMethodName() {
+    @DisplayName("fallback处理无方法名时抛出链异常")
+    public void fallbackWithoutMethodNameShouldThrowChainException() {
         ChainTypeReference<DemoUser> reference = new ChainTypeReference<DemoUser>() {};
         // given
         ChainPipeline<DemoUser> demoChain = ChainPipelineFactory.createChain(reference)
@@ -481,8 +546,12 @@ public class DemoChainPipelineTest {
         Assert.assertThrows(ChainException.class, () -> demoChain.apply(demoUser));
     }
 
+    /**
+     * fallback处理时链中存在不存在的fallback方法名和fallback方法时抛出链异常的场景测试
+     */
     @Test
-    public void should_throwChainException_when_fallback_given_any_chain_with_not_exist_fallbackMethodName_and_fallbackMethod() {
+    @DisplayName("fallback处理方法不存在时抛出链异常")
+    public void fallbackNonExistMethodShouldThrowChainException() {
         ChainTypeReference<DemoUser> reference = new ChainTypeReference<DemoUser>() {};
         // given
         ChainPipeline<DemoUser> demoChain = ChainPipelineFactory.createChain(reference)
@@ -499,8 +568,12 @@ public class DemoChainPipelineTest {
         Assert.assertThrows(ChainException.class, () -> demoChain.apply(demoUser));
     }
 
+    /**
+     * fallback处理时链中fallback返回类型不正确时抛出链异常的场景测试
+     */
     @Test
-    public void should_throwChainException_when_fallback_given_any_chain_with_un_correct_fallback_return_type() {
+    @DisplayName("fallback处理返回类型错误时抛出链异常")
+    public void fallbackIncorrectReturnTypeShouldThrowChainException() {
         ChainTypeReference<DemoUser> reference = new ChainTypeReference<DemoUser>() {};
         // given
         ChainPipeline<DemoUser> demoChain = ChainPipelineFactory.createChain(reference)
@@ -517,8 +590,12 @@ public class DemoChainPipelineTest {
         Assert.assertThrows(ChainException.class, () -> demoChain.apply(demoUser));
     }
 
+    /**
+     * 处理器为false时调用fallback处理且具有正确的fallback返回类型的场景测试
+     */
     @Test
-    public void should_invokeFallback_when_handler_false_given_any_chain_with_correct_fallback_return_type() {
+    @DisplayName("处理器失败时调用正确类型的fallback方法")
+    public void invokeFallbackWithCorrectReturnType() {
         ChainTypeReference<DemoUser> reference = new ChainTypeReference<DemoUser>() {};
         // given
         ChainPipeline<DemoUser> demoChain = ChainPipelineFactory.createChain(reference)
@@ -540,8 +617,12 @@ public class DemoChainPipelineTest {
         Assert.assertFalse(allow2);
     }
 
+    /**
+     * 处理器为false时调用私有fallback方法的场景测试
+     */
     @Test
-    public void should_invokeFallback_when_handler_false_given_any_chain_with_correct_fallback_in_private() {
+    @DisplayName("处理器失败时调用私有fallback方法")
+    public void invokePrivateFallback() {
         ChainTypeReference<DemoUser> reference = new ChainTypeReference<DemoUser>() {};
         // given
         ChainPipeline<DemoUser> demoChain = ChainPipelineFactory.createChain(reference)
@@ -560,8 +641,12 @@ public class DemoChainPipelineTest {
         Assert.assertFalse(allow);
     }
 
+    /**
+     * 处理器为false时调用私有静态fallback方法的场景测试
+     */
     @Test
-    public void should_invokeFallback_when_handler_false_given_any_chain_with_correct_fallback_in_private_static() {
+    @DisplayName("处理器失败时调用私有静态fallback方法")
+    public void invokePrivateStaticFallback() {
         ChainTypeReference<DemoUser> reference = new ChainTypeReference<DemoUser>() {};
         // given
         ChainPipeline<DemoUser> demoChain = ChainPipelineFactory.createChain(reference)
