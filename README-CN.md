@@ -1,6 +1,18 @@
-## Chainlet
+<p align="center">
+  <img
+    src="img/logo.png"
+    alt="Logo"
+    width="200"
+  />
+</p>
 
-🌱Chainlet项目是一款轻量、高扩展性的责任链模式框架，内置多种责任链形态及执行策略
+<h3 align="center">轻量、高扩展性的责任链模式框架</h3>
+
+<p align="center">
+  <a href="README-CN.md">中文</a>
+  &nbsp;|&nbsp;
+  <a href="README.md">English</a>
+</p>
 
 <p align="center">
   <a href="https://central.sonatype.com/artifact/com.rpamis/chainlet/1.0.0">
@@ -8,7 +20,11 @@
   </a>
 
   <a href="https://www.apache.org/licenses/LICENSE-2.0">
-    <img alt="code style" src="https://img.shields.io/badge/license-Apache%202-4EB1BA.svg?style=flat-square">
+    <img alt="license" src="https://img.shields.io/badge/license-Apache%202-4EB1BA.svg?style=flat-square">
+  </a>
+
+  <a href="">
+    <img alt="code style" src="https://img.shields.io/badge/JDK-8%2B-orange.svg?style=flat-square">
   </a>
 
   <a href="https://codecov.io/gh/benym/chainlet" > 
@@ -16,11 +32,9 @@
   </a>
 </p>
 
--------------------------------------------------------------------------------
+---
 
-[**中文**](README-CN.md)|[**English**](README.md)
-
--------------------------------------------------------------------------------
+🌱Chainlet项目是一款轻量、高扩展性的责任链模式框架，内置多种责任链形态及执行策略
 
 ### 快速开始
 
