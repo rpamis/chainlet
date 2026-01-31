@@ -1,24 +1,41 @@
-## Rpamis-chain
+<p align="center">
+  <img
+    src="img/logo.png"
+    alt="Logo"
+    width="200"
+  />
+</p>
 
-🌱Rpamis-chain project is a lightweight and highly scalable responsibility chain model framework with a variety of built-in responsibility chain forms and execution strategies
+<h3 align="center">a lightweight and highly scalable responsibility chain model framework</h3>
 
 <p align="center">
-  <a href="https://central.sonatype.com/artifact/com.rpamis/rpamis-chain/1.0.0">
-    <img alt="maven" src="https://img.shields.io/maven-central/v/com.rpamis/rpamis-chain?style=flat-square">
+  <a href="README-CN.md">中文</a>
+  &nbsp;|&nbsp;
+  <a href="README.md">English</a>
+</p>
+
+<p align="center">
+  <a href="https://central.sonatype.com/artifact/com.rpamis/chainlet/1.0.0">
+    <img alt="maven" src="https://img.shields.io/maven-central/v/com.rpamis/chainlet?style=flat-square">
   </a>
 
   <a href="https://www.apache.org/licenses/LICENSE-2.0">
     <img alt="license" src="https://img.shields.io/badge/license-Apache%202-4EB1BA.svg?style=flat-square">
   </a>
 
-  <a href="https://codecov.io/gh/benym/rpamis-chain" > 
+  <a href="">
+    <img alt="code style" src="https://img.shields.io/badge/JDK-8%2B-orange.svg?style=flat-square">
+  </a>
+
+  <a href="https://codecov.io/gh/benym/chainlet" > 
     <img alt="codecov" src="https://img.shields.io/codecov/c/gh/rpamis/chainlet?color=%23&style=flat-square"/> 
   </a>
 </p>
 
--------------------------------------------------------------------------------
-[**中文**](README-CN.md)|[**English**](README.md)
--------------------------------------------------------------------------------
+---
+
+🌱Chainlet project is a lightweight and highly scalable responsibility chain model framework with a variety of built-in responsibility chain forms and execution strategies
+
 ### Usage
 
 - Import dependence
@@ -26,7 +43,7 @@
 ```xml
 <dependency>
     <groupId>com.rpamis</groupId>
-    <artifactId>rpamis-chain</artifactId>
+    <artifactId>chainlet</artifactId>
     <version>1.0.0</version>
 </dependency>
 ```

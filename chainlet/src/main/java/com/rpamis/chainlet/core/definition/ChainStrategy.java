@@ -1,0 +1,22 @@
+package com.rpamis.chainlet.core.definition;
+
+
+import com.rpamis.chainlet.core.context.ChainStrategyContext;
+import com.rpamis.extension.spi.RpamisSpi;
+
+/**
+ * 责任链策略接口
+ *
+ * @author benym
+ * @since 2023/3/7 18:10
+ */
+@RpamisSpi
+public interface ChainStrategy<T> {
+
+    /**
+     * 执行对应返回策略
+     *
+     * @param chainStrategyContext 责任链执行策略上下文
+     */
+    void doStrategy(ChainStrategyContext<T> chainStrategyContext);
+}
