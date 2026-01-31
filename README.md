@@ -27,7 +27,7 @@
     <img alt="code style" src="https://img.shields.io/badge/JDK-8%2B-orange.svg?style=flat-square">
   </a>
 
-  <a href="https://codecov.io/gh/benym/chainlet" > 
+  <a href="https://codecov.io/gh/rpamis/chainlet" > 
     <img alt="codecov" src="https://img.shields.io/codecov/c/gh/rpamis/chainlet?color=%23&style=flat-square"/> 
   </a>
 </p>
