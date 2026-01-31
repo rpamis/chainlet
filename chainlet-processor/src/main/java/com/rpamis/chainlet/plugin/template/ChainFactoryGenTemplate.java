@@ -20,7 +20,7 @@ import static javax.tools.Diagnostic.Kind.NOTE;
  * 责任链工厂注解生成模版
  *
  * @author benym
- * @date 2024/1/9 16:20
+ * @since 2024/1/9 16:20
  */
 public class ChainFactoryGenTemplate extends AbstractGenCodeTemplate {
 

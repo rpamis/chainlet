@@ -7,7 +7,7 @@ import java.util.WeakHashMap;
  * 用于减少instanceof的次数
  *
  * @author benym
- * @date 2023/12/29 17:43
+ * @since 2023/12/29 17:43
  */
 public class InstanceOfCache {
 

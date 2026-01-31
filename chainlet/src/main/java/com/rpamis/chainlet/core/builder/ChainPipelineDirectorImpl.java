@@ -9,7 +9,7 @@ import com.rpamis.chainlet.plugin.annotations.ChainDirectorService;
  * 责任链Director接口实现
  *
  * @author benym
- * @date 2023/8/21 17:10
+ * @since 2023/8/21 17:10
  */
 @ChainDirectorService
 public class ChainPipelineDirectorImpl<T> implements ChainPipelineDirector<T> {

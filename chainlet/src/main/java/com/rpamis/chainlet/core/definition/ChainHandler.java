@@ -8,7 +8,7 @@ import com.rpamis.chainlet.core.context.ChainHandlerContext;
  *
  * @param <T> <T>
  * @author benym
- * @date 2023/3/8 18:24
+ * @since 2023/3/8 18:24
  */
 public interface ChainHandler<T> {
 

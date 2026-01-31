@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
  * 用于标记需要生成责任链get方法的工厂类
  *
  * @author benym
- * @date 2024/1/3 23:35
+ * @since 2024/1/3 23:35
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.SOURCE)

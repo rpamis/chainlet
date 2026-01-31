@@ -13,7 +13,7 @@ import java.util.List;
  * 有一个成功，则责任链最终结果为成功
  *
  * @author benym
- * @date 2023/3/8 16:50
+ * @since 2023/3/8 16:50
  */
 public class FastReturnStrategy<T> implements ChainStrategy<T> {
 

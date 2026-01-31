@@ -8,7 +8,7 @@ import com.rpamis.chainlet.test.DemoUser;
  * AuthHandler
  *
  * @author benym
- * @date 2023/5/25 15:49
+ * @since 2023/5/25 15:49
  */
 public class AuthHandler implements ChainHandler<DemoUser> {
 

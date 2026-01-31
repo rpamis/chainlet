@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
  * 责任链builder注解
  *
  * @author benym
- * @date 2024/1/5 11:31
+ * @since 2024/1/5 11:31
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.SOURCE)

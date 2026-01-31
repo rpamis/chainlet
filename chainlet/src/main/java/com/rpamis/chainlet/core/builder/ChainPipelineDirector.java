@@ -7,7 +7,7 @@ import com.rpamis.chainlet.plugin.annotations.ChainDirector;
  * 责任链Director接口
  *
  * @author benym
- * @date 2023/8/21 16:55
+ * @since 2023/8/21 16:55
  */
 @ChainDirector
 public interface ChainPipelineDirector<T> {

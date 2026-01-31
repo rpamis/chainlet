@@ -23,7 +23,7 @@ import static javax.tools.Diagnostic.Kind.NOTE;
  * 责任链缓存生成模版
  *
  * @author benym
- * @date 2024/1/9 16:21
+ * @since 2024/1/9 16:21
  */
 public class ChainCacheGenTemplate extends AbstractGenCodeTemplate {
 

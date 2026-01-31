@@ -8,7 +8,7 @@ import com.rpamis.chainlet.test.DemoUser;
  * 全局降级demo类
  *
  * @author benym
- * @date 2023/8/18 15:49
+ * @since 2023/8/18 15:49
  */
 public class DemoChainGlobalFallBack implements GlobalChainFallBack<DemoUser> {
 

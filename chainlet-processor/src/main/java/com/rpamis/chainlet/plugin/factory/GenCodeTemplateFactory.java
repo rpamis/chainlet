@@ -8,7 +8,7 @@ import com.rpamis.chainlet.plugin.template.GenCodeTemplate;
  * 生成代码模版工厂
  *
  * @author benym
- * @date 2024/2/23 15:03
+ * @since 2024/2/23 15:03
  */
 public class GenCodeTemplateFactory extends GenCodeInitializer {
 

@@ -6,7 +6,7 @@ import java.lang.reflect.Method;
  * Method记录类
  *
  * @author benym
- * @date 2023/8/24 21:23
+ * @since 2023/8/24 21:23
  */
 public class MethodRecord {
 

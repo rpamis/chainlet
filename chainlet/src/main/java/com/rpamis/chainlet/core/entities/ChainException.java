@@ -4,7 +4,7 @@ package com.rpamis.chainlet.core.entities;
  * 责任链Handler处理异常
  *
  * @author benym
- * @date 2023/3/5 17:40
+ * @since 2023/3/5 17:40
  */
 public class ChainException extends RuntimeException {
 

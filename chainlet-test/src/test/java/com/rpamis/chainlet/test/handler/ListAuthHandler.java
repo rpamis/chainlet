@@ -12,7 +12,7 @@ import java.util.List;
  * ListAuthHandler
  *
  * @author benym
- * @date 2023/8/22 13:47
+ * @since 2023/8/22 13:47
  */
 public class ListAuthHandler implements ChainHandler<List<DemoUser>> {
     @Override

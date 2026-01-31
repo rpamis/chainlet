@@ -4,7 +4,7 @@ package com.rpamis.chainlet.test.exception;
  * 自定义异常
  *
  * @author benym
- * @date 2024/7/12 16:23
+ * @since 2024/7/12 16:23
  */
 public class CustomException extends RuntimeException {
     private static final long serialVersionUID = 6936050760890395523L;

@@ -10,7 +10,7 @@ import java.util.*;
  * 唯一List
  *
  * @author benym
- * @date 2023/3/30 22:39
+ * @since 2023/3/30 22:39
  */
 public class UniqueList<T> extends ArrayList<T> implements Serializable {
 

@@ -7,7 +7,7 @@ import com.rpamis.chainlet.plugin.ProcessorContext;
  * 生产代码模版接口
  *
  * @author benym
- * @date 2024/2/23 14:31
+ * @since 2024/2/23 14:31
  */
 public interface GenCodeTemplate {
 

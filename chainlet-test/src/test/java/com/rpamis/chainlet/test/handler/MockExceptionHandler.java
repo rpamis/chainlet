@@ -8,7 +8,7 @@ import com.rpamis.chainlet.test.DemoUser;
  * Handler异常模拟类
  *
  * @author benym
- * @date 2023/7/11 16:32
+ * @since 2023/7/11 16:32
  */
 public class MockExceptionHandler implements ChainHandler<DemoUser> {
 

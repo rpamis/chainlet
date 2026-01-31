@@ -7,7 +7,7 @@ import com.rpamis.chainlet.core.support.ChainTypeReference;
  * 责任链工厂
  *
  * @author benym
- * @date 2023/8/21 17:45
+ * @since 2023/8/21 17:45
  */
 @ChainFactory
 public class ChainPipelineFactory {

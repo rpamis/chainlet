@@ -10,7 +10,7 @@ import com.rpamis.chainlet.test.DemoUser;
  * LoginHandler
  *
  * @author benym
- * @date 2023/5/25 18:15
+ * @since 2023/5/25 18:15
  */
 public class LoginHandler implements ChainHandler<DemoUser> {
 

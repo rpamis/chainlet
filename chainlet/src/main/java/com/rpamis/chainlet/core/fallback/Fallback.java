@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
  * 责任链局部降级注解
  *
  * @author benym
- * @date 2023/8/17 14:59
+ * @since 2023/8/17 14:59
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)

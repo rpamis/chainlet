@@ -16,7 +16,7 @@ import static javax.tools.Diagnostic.Kind.NOTE;
  * 生成代码模版抽象类
  *
  * @author benym
- * @date 2024/1/9 16:14
+ * @since 2024/1/9 16:14
  */
 public abstract class AbstractGenCodeTemplate implements GenCodeTemplate {
 

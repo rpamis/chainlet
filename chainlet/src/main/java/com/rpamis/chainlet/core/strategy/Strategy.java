@@ -4,7 +4,7 @@ package com.rpamis.chainlet.core.strategy;
  * 责任链策略枚举
  *
  * @author benym
- * @date 2023/12/18 18:18
+ * @since 2023/12/18 18:18
  */
 public enum Strategy implements StrategyKey {
     /**

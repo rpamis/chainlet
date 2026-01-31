@@ -12,7 +12,7 @@ import java.util.List;
  * 有一个失败，则责任链最终结果为失败
  *
  * @author benym
- * @date 2023/3/8 16:45
+ * @since 2023/3/8 16:45
  */
 public class FastFailedStrategy<T> implements ChainStrategy<T> {
 

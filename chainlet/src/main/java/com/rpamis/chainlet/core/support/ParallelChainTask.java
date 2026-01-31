@@ -11,7 +11,7 @@ import java.util.concurrent.RecursiveAction;
  * 并行责任链子任务
  *
  * @author benym
- * @date 2023/12/20 17:44
+ * @since 2023/12/20 17:44
  */
 public class ParallelChainTask<T> extends RecursiveAction {
 

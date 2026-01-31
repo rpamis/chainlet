@@ -12,7 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * 存储所有责任链执行结果，以及整个链按照策略的计算结果
  *
  * @author benym
- * @date 2023/3/30 20:33
+ * @since 2023/3/30 20:33
  */
 public class CompleteChainResult implements Serializable {
 

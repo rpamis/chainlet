@@ -6,7 +6,7 @@ import com.rpamis.chainlet.core.entities.CompleteChainResult;
  * 责任链全局降级上下文
  *
  * @author benym
- * @date 2023/8/23 14:17
+ * @since 2023/8/23 14:17
  */
 public class GlobalFallBackContext<T> extends FallBackContext<T> {
 

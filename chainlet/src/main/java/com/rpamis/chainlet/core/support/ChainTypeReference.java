@@ -9,7 +9,7 @@ import java.lang.reflect.Type;
  * 责任链TypeReference
  *
  * @author benym
- * @date 2023/8/17 16:29
+ * @since 2023/8/17 16:29
  */
 public class ChainTypeReference<T> {
 

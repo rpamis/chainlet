@@ -23,7 +23,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * 并行责任链实现类
  *
  * @author benym
- * @date 2023/12/20 17:08
+ * @since 2023/12/20 17:08
  */
 @ChainBuilderService
 public class ParallelChainPipelineImpl<T> extends AbstractChainPipeline<T> implements ParallelChainPipelineBuilder<T> {

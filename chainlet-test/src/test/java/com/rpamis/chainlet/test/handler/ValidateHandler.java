@@ -9,7 +9,7 @@ import com.rpamis.chainlet.test.DemoUser;
  * ValidateHandler
  *
  * @author benym
- * @date 2023/5/25 15:49
+ * @since 2023/5/25 15:49
  */
 public class ValidateHandler implements ChainHandler<DemoUser> {
     @Override

@@ -42,7 +42,7 @@ import java.util.stream.Collectors;
  *
  * @param <T> <T>
  * @author benym
- * @date 2023/2/1 17:33
+ * @since 2023/2/1 17:33
  */
 public abstract class AbstractChainPipeline<T> implements ChainInnerPipeline<T>, ChainPipeline<T>, Add<T>, Apply<T>, With<T>, Builder<T> {
 

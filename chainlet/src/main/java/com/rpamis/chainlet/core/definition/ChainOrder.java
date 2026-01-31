@@ -6,7 +6,7 @@ import java.lang.annotation.*;
  * 责任链执行顺序注解
  *
  * @author benym
- * @date 2023/12/24 15:59
+ * @since 2023/12/24 15:59
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE, ElementType.METHOD, ElementType.FIELD})

@@ -8,7 +8,7 @@ import java.util.List;
  * 泛型责任链内部流水线接口
  *
  * @author benym
- * @date 2023/12/29 14:25
+ * @since 2023/12/29 14:25
  */
 public interface ChainInnerPipeline<T> {
 

@@ -6,7 +6,7 @@ import com.rpamis.chainlet.core.entities.CompleteChainResult;
  * Apply接口
  *
  * @author benym
- * @date 2023/8/21 16:54
+ * @since 2023/8/21 16:54
  */
 public interface Apply<T> {
 

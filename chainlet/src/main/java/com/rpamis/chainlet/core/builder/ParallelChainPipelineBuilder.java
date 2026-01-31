@@ -9,7 +9,7 @@ import java.util.concurrent.ForkJoinPool;
  * 并行责任链Builder
  *
  * @author benym
- * @date 2023/8/21 17:09
+ * @since 2023/8/21 17:09
  */
 @ChainBuilder
 public interface ParallelChainPipelineBuilder<T> extends ChainPipelineBuilder<T> {

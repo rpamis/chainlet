@@ -33,7 +33,7 @@ import static com.rpamis.chainlet.plugin.ChainCodeProcessor.VERBOSE;
  * 责任链工厂代码生成
  *
  * @author benym
- * @date 2024/1/3 23:54
+ * @since 2024/1/3 23:54
  */
 @AutoService(Processor.class)
 @SupportedSourceVersion(SourceVersion.RELEASE_8)

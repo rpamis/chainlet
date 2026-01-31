@@ -21,7 +21,7 @@ import static javax.tools.Diagnostic.Kind.NOTE;
  * 责任链指挥者实现类生成模板
  *
  * @author benym
- * @date 2024/1/9 17:27
+ * @since 2024/1/9 17:27
  */
 public class ChainDirectorServiceGenTemplate extends AbstractGenCodeTemplate {
     @Override

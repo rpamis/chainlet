@@ -12,7 +12,7 @@ import java.util.List;
  *
  * @param <T> <T>
  * @author benym
- * @date 2023/3/8 18:24
+ * @since 2023/3/8 18:24
  */
 public interface ChainPipeline<T> extends Apply<T> {
 
