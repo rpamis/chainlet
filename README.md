@@ -44,7 +44,7 @@
 <dependency>
     <groupId>com.rpamis</groupId>
     <artifactId>chainlet</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
 </dependency>
 ```
 
@@ -349,7 +349,7 @@ Import dependency
 <dependency>
     <groupId>com.rpamis</groupId>
     <artifactId>chainlet-processor</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.2</version>
 </dependency>
 ```
 
