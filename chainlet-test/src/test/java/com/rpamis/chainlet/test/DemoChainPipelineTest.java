@@ -780,7 +780,7 @@ public class DemoChainPipelineTest {
     public void registerDuplicateChainIdShouldThrowException() {
         ChainTypeReference<DemoUser> reference = new ChainTypeReference<DemoUser>() {};
         // given
-        ChainPipeline<DemoUser> demoChain = ChainPipelineFactory.createChain(reference)
+        ChainPipelineFactory.createChain(reference)
                 .chain("DuplicateTest")
                 .addHandler(new AuthHandler())
                 .strategy(Strategy.FULL)
@@ -992,8 +992,11 @@ public class DemoChainPipelineTest {
         
         // 测试其他setter方法
         context.setChain(null);
+        Assert.assertNull(context.getChain());
         context.setStrategy(null);
+        Assert.assertNull(context.getStrategy());
         context.setChainHandler(null);
+        Assert.assertNull(context.getChainHandler());
         List<ChainResult> newCheckResults = new ArrayList<>();
         context.setCheckResults(newCheckResults);
         Assert.assertEquals(newCheckResults, context.getCheckResults());
@@ -1024,6 +1027,7 @@ public class DemoChainPipelineTest {
         
         // 测试其他setter方法
         context.setChain(null);
+        Assert.assertNull(context.getChain());
         ChainResult newChainResult = new ChainResult(ValidateHandler.class, false, demoUser, "New test message");
         context.setChainResult(newChainResult);
         Assert.assertEquals(newChainResult, context.getChainResult());
@@ -1109,8 +1113,6 @@ public class DemoChainPipelineTest {
     @Test
     @DisplayName("测试MethodMetaDataRegistry的方法")
     public void testMethodMetaDataRegistry() {
-        // given
-        AuthHandler authHandler = new AuthHandler();
         // when & then
         // 测试getProcessKey方法
         String processKey = MethodMetaDataRegistry.getProcessKey(AuthHandler.class, DemoUser.class);
@@ -1141,8 +1143,6 @@ public class DemoChainPipelineTest {
     @Test
     @DisplayName("测试MethodRecord的方法")
     public void testMethodRecord() throws Exception {
-        // 测试构造函数和getter方法
-        AuthHandler authHandler = new AuthHandler();
         java.lang.reflect.Method method = AuthHandler.class.getMethod("process", DemoUser.class, ChainHandlerContext.class);
         MethodRecord record = new MethodRecord(method, true);
         Assert.assertEquals(method, record.getMethod());
@@ -1572,7 +1572,7 @@ public class DemoChainPipelineTest {
             Assert.assertTrue(record.isExist());
             Assert.assertEquals(method, record.getMethod());
         } catch (NoSuchMethodException e) {
-            e.printStackTrace();
+            throw new AssertionError("Failed to get process method", e);
         }
     }
 
@@ -1639,7 +1639,7 @@ public class DemoChainPipelineTest {
             Assert.assertNotNull(clazz2);
             Assert.assertEquals(DemoUser.class, clazz2);
         } catch (Exception e) {
-            e.printStackTrace();
+            Assert.fail("Unexpected exception: " + e.getMessage());
         }
         
         // 测试getGenericType方法
@@ -1770,13 +1770,11 @@ public class DemoChainPipelineTest {
         
         // 并发执行多次，验证不会抛出异常
         for (int i = 0; i < 10; i++) {
-            final int index = i;
             Thread thread = new Thread(() -> {
                 try {
                     CompleteChainResult chainResult = demoChain.apply(demoUser);
                     Assert.assertTrue(chainResult.isAllow());
                 } catch (Exception e) {
-                    e.printStackTrace();
                     Assert.fail("并发执行失败: " + e.getMessage());
                 }
             });
@@ -1784,7 +1782,8 @@ public class DemoChainPipelineTest {
             try {
                 thread.join();
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                Thread.currentThread().interrupt();
+                Assert.fail("Thread was interrupted: " + e.getMessage());
             }
         }
     }

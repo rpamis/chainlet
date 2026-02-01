@@ -16,7 +16,7 @@
 package com.rpamis.chainlet.core.support;
 
 import java.util.Map;
-import java.util.WeakHashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 用于减少instanceof的次数
@@ -30,7 +30,7 @@ public class InstanceOfCache {
         throw new IllegalStateException("InstanceOfCache class prohibited instantiation");
     }
 
-    private static final Map<String, Boolean> CLASS_CACHE = new WeakHashMap<>();
+    private static final Map<String, Boolean> CLASS_CACHE = new ConcurrentHashMap<>();
 
     /**
      * 判断一个类是否是另一个类或其子类的实例
