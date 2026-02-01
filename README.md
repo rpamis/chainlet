@@ -36,7 +36,7 @@
 
 🌱The Chainlet project is a lightweight, highly scalable responsibility chain pattern framework with built-in various responsibility chain forms and execution strategies
 
-# 🚀Quick Start
+## 🚀Quick Start
 
 - Import dependency
 
@@ -101,11 +101,11 @@ CompleteChainResult chainResult = demoChain.apply(demoUser);
 boolean allow = chainResult.isAllow();
 ```
 
-# 🎯Core Features
+## 🎯Core Features
 
-## ⭐Multiple Types of Responsibility Chains
+### ⭐Multiple Types of Responsibility Chains
 
-### Serial
+#### Serial
 
 ```java
 ChainTypeReference<DemoUser> reference = new ChainTypeReference<DemoUser>() {};
@@ -115,7 +115,7 @@ ChainPipeline<DemoUser> demoChain = ChainPipelineFactory.createChain(reference)
         .build();
 ```
 
-### Parallel
+#### Parallel
 
 ```java
 ChainTypeReference<DemoUser> reference = new ChainTypeReference<DemoUser>() {};
@@ -125,9 +125,9 @@ ChainPipeline<DemoUser> demoChain = ChainPipelineFactory.createChain(reference)
         .build();
 ```
 
-## ❄️Multiple Execution Strategies
+### ❄️Multiple Execution Strategies
 
-### Built-in Strategies
+#### Built-in Strategies
 
 - `FullExecutionStrategy`： Full execution strategy, the default strategy of the responsibility chain. Regardless of whether a `Handler` succeeds or fails, all handlers on the chain will be executed.
 - `FastReturnStrategy`： Fast return strategy. When there is a success in the `Handler`, the result is returned immediately and subsequent `Handler`s will not be executed.
@@ -146,9 +146,9 @@ ChainPipeline<DemoUser> demoChain = ChainPipelineFactory.createChain(reference)
         .build();
 ```
 
-## 📍Fallback Methods
+### 📍Fallback Methods
 
-### Interface Fallback
+#### Interface Fallback
 
 - `LocalChainFallBack`： Provides interface implementation for local fallback methods, suitable for individual Handler fallback processing
 
@@ -192,7 +192,7 @@ ChainPipeline<DemoUser> demoChain = ChainPipelineFactory.createChain(reference)
         .build();
 ```
 
-### Annotation Fallback
+#### Annotation Fallback
 
 - `@Fallback`： Marks local fallback methods
   - `fallbackMethod`： Specifies the fallback method
@@ -214,7 +214,7 @@ public class TestFallBackHandlerFour implements ChainHandler<DemoUser> {
 }
 ```
 
-## ⛓️Method Chain
+### ⛓️Method Chain
 
 `chainlet` uses the `fluent interface` pattern to build the responsibility chain template. The API can only be declared along a fixed path, preventing the responsibility chain from being built before adding `handler`s.
 
@@ -222,7 +222,7 @@ The declaration path is
 
 `createChain->chain/parallelChain->addHandler->strategy/globalFallback->build`
 
-## ❤️Core Entities
+### ❤️Core Entities
 
 **Execution Result `CompleteChainResult`**
 
@@ -257,9 +257,9 @@ The declaration path is
 - `chainResult`： Execution result of a single responsibility chain Handler
 - `checkResults`： List storing responsibility chain results
 
-## ✨Advanced Features
+### ✨Advanced Features
 
-### 🔥Custom Strategy
+#### 🔥Custom Strategy
 
 Implement the `ChainStrategy` interface
 
@@ -273,7 +273,7 @@ public class CustomStrategy<T> implements ChainStrategy<T>{
 }
 ```
 
-### 🔌Strategy SPI Extension
+#### 🔌Strategy SPI Extension
 
 The `ChainStrategy` interface is marked as `@RpamisSpi` extension. The three built-in strategies are all SPI implementations. You can use the built-in strategies for `setter` injection in custom extensions in Spring/Java environments, such as:
 
@@ -341,7 +341,7 @@ ChainPipeline<DemoUser> demoChain = ChainPipelineFactory.createChain(reference)
         .build();
 ```
 
-## 🧪Compile-time Generation (Experimental) - Extend More Types of Responsibility Chains
+### 🧪Compile-time Generation (Experimental) - Extend More Types of Responsibility Chains
 
 Import dependency
 
@@ -424,6 +424,6 @@ ChainPipeline<DemoUser> demoChain = ChainPipelineFactory.createChain(reference)
         .build();
 ```
 
-## 🐕‍🦺Companion Idea Plugin chainlet-idea-plugin
+### 🐕‍🦺Companion Idea Plugin chainlet-idea-plugin
 
 Supports dynamic compilation API prompts in IDEA. After adding the plugin, methods can be identified without manual compilation, similar to `lombok`

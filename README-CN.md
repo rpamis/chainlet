@@ -36,7 +36,7 @@
 
 🌱Chainlet项目是一款轻量、高扩展性的责任链模式框架，内置多种责任链形态及执行策略
 
-# 🚀快速开始
+## 🚀快速开始
 
 - 引入依赖
 
@@ -101,11 +101,11 @@ CompleteChainResult chainResult = demoChain.apply(demoUser);
 boolean allow = chainResult.isAllow();
 ```
 
-# 🎯核心特性
+## 🎯核心特性
 
-## ⭐多种类型责任链
+### ⭐多种类型责任链
 
-### 串行
+#### 串行
 
 ```java
 ChainTypeReference<DemoUser> reference = new ChainTypeReference<DemoUser>() {};
@@ -115,7 +115,7 @@ ChainPipeline<DemoUser> demoChain = ChainPipelineFactory.createChain(reference)
         .build();
 ```
 
-### 并行
+#### 并行
 
 ```java
 ChainTypeReference<DemoUser> reference = new ChainTypeReference<DemoUser>() {};
@@ -125,9 +125,9 @@ ChainPipeline<DemoUser> demoChain = ChainPipelineFactory.createChain(reference)
         .build();
 ```
 
-## ❄️多种执行策略
+### ❄️多种执行策略
 
-### 内置策略
+#### 内置策略
 
 - `FullExecutionStrategy`： 全执行策略，责任链默认策略，无论某个`Handler`是否成功，都会执行完所有链上的处理
 - `FastReturnStrategy`：快速返回策略，当`Handler`中有一个成功就立即返回结果，后续`Handler`不再执行
@@ -146,9 +146,9 @@ ChainPipeline<DemoUser> demoChain = ChainPipelineFactory.createChain(reference)
         .build();
 ```
 
-## 📍降级方法
+### 📍降级方法
 
-### 接口降级
+#### 接口降级
 
 - `LocalChainFallBack`：提供接口实现局部降级方法，适用于单个Handler降级处理
 
@@ -192,7 +192,7 @@ ChainPipeline<DemoUser> demoChain = ChainPipelineFactory.createChain(reference)
         .build();
 ```
 
-### 注解降级
+#### 注解降级
 
 - `@Fallback`：标记局部降级方法
   - `fallbackMethod`：指定降级方法
@@ -214,7 +214,7 @@ public class TestFallBackHandlerFour implements ChainHandler<DemoUser> {
 }
 ```
 
-## ⛓️方法链
+### ⛓️方法链
 
 `chainlet`采用了`fluent interface`模式构建责任链模版，api只能够按照固定路径申明，避免未加入`handler`之前就进行了责任链构建
 
@@ -222,7 +222,7 @@ public class TestFallBackHandlerFour implements ChainHandler<DemoUser> {
 
 `createChain->chain/parallelChain->addHandler->strategy/globalFallback->build`
 
-## ❤️核心实体
+### ❤️核心实体
 
 **执行结果`CompleteChainResult`**
 
@@ -257,9 +257,9 @@ public class TestFallBackHandlerFour implements ChainHandler<DemoUser> {
 - `chainResult`：单个责任链Handler执行结果
 - `checkResults`：责任链存储结果list
 
-## ✨高级特性
+### ✨高级特性
 
-### 🔥自定义策略
+#### 🔥自定义策略
 
 实现`ChainStrategy`接口
 
@@ -273,7 +273,7 @@ public class CustomStrategy<T> implements ChainStrategy<T>{
 }
 ```
 
-### 🔌策略SPI扩展
+#### 🔌策略SPI扩展
 
 `ChainStrategy`接口被标记为`@RpamisSpi`扩展，内置实现的3种策略均为SPI实现，你可以在`Spring/Java`环境下在自定义扩展中使用内置策略进行`setter`注入，如
 
@@ -341,7 +341,7 @@ ChainPipeline<DemoUser> demoChain = ChainPipelineFactory.createChain(reference)
         .build();
 ```
 
-## 🧪编译时生成(实验性)-扩展更多种类责任链
+### 🧪编译时生成(实验性)-扩展更多种类责任链
 
 引入依赖
 
@@ -424,7 +424,7 @@ ChainPipeline<DemoUser> demoChain = ChainPipelineFactory.createChain(reference)
         .build();
 ```
 
-## 🐕‍🦺配套Idea插件chainlet-idea-plugin
+### 🐕‍🦺配套Idea插件chainlet-idea-plugin
 
 支持在idea中提示动态编译的api，加入插件后无需手动编译就能够识别方法，如`lombok`
 
