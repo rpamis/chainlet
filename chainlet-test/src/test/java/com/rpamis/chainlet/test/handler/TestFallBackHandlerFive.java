@@ -35,6 +35,6 @@ public class TestFallBackHandlerFive implements ChainHandler<DemoUser> {
     }
 
     private void test(LocalFallBackContext<DemoUser> localFallBackContext) {
-        System.out.print("success");
+        System.out.println("success");
     }
 }

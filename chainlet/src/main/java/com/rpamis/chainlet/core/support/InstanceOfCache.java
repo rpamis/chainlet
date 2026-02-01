@@ -30,7 +30,7 @@ public class InstanceOfCache {
         throw new IllegalStateException("InstanceOfCache class prohibited instantiation");
     }
 
-    private static final Map<Class<?>, Boolean> CLASS_CACHE = new WeakHashMap<>();
+    private static final Map<String, Boolean> CLASS_CACHE = new WeakHashMap<>();
 
     /**
      * 判断一个类是否是另一个类或其子类的实例
@@ -40,18 +40,20 @@ public class InstanceOfCache {
      * @return 若sourceClass是targetClass或其子类的实例，则返回true；否则返回false
      */
     public static boolean instanceofCheck(Class<?> sourceClass, Class<?> targetClass) {
-        Boolean isInstanceOfTarget = CLASS_CACHE.get(sourceClass);
+        // 使用sourceClass和targetClass的组合作为缓存的key
+        String cacheKey = sourceClass.getName() + ":" + targetClass.getName();
+        Boolean isInstanceOfTarget = CLASS_CACHE.get(cacheKey);
         if (isInstanceOfTarget != null) {
             return isInstanceOfTarget;
         }
         // 判断sourceClass是否是targetClass或者其子类的实例
         if (targetClass.isAssignableFrom(sourceClass)) {
             // 将结果存入缓存中
-            CLASS_CACHE.put(targetClass, true);
+            CLASS_CACHE.put(cacheKey, true);
             return true;
         } else {
             // 将结果存入缓存中
-            CLASS_CACHE.put(targetClass, false);
+            CLASS_CACHE.put(cacheKey, false);
             return false;
         }
     }
