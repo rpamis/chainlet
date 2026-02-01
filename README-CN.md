@@ -220,7 +220,7 @@ public class TestFallBackHandlerFour implements ChainHandler<DemoUser> {
 
 申明路径为
 
-`createChain->chain/parallelChain->addHandler->strategy/globalFallback->build`
+`createChain -> chain/parallelChain -> addHandler -> strategy/globalFallback -> build`
 
 ### ❤️核心实体
 

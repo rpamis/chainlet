@@ -220,7 +220,7 @@ public class TestFallBackHandlerFour implements ChainHandler<DemoUser> {
 
 The declaration path is
 
-`createChain->chain/parallelChain->addHandler->strategy/globalFallback->build`
+`createChain -> chain/parallelChain -> addHandler -> strategy/globalFallback -> build`
 
 ### ❤️Core Entities
 
