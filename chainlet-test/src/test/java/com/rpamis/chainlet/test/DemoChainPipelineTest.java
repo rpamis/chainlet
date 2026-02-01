@@ -4,6 +4,7 @@ import com.rpamis.chainlet.core.definition.ChainFallBack;
 import com.rpamis.chainlet.core.definition.ChainStrategy;
 import com.rpamis.chainlet.core.strategy.FullExecutionStrategy;
 import com.rpamis.chainlet.test.exception.CustomException;
+import com.rpamis.chainlet.test.fallback.DemoChainGlobalFallBack;
 import com.rpamis.chainlet.test.handler.*;
 import com.rpamis.chainlet.core.builder.ChainPipelineDirector;
 import com.rpamis.chainlet.core.builder.ChainPipelineFactory;
@@ -659,6 +660,48 @@ public class DemoChainPipelineTest {
         when(demoUser.getPwd()).thenReturn("123");
         when(demoUser.getRole()).thenReturn("normal");
 
+        // then
+        CompleteChainResult chainResult = demoChain.apply(demoUser);
+        boolean allow = chainResult.isAllow();
+        Assert.assertFalse(allow);
+    }
+
+    @Test
+    @DisplayName("测试本地fallback接口")
+    public void testLocalFallbackInterface() {
+        ChainTypeReference<DemoUser> reference = new ChainTypeReference<DemoUser>() {};
+        // given
+        ChainPipeline<DemoUser> demoChain = ChainPipelineFactory.createChain(reference)
+                .chain()
+                .addHandler(new TestLocalFallBackHandler())
+                .strategy(Strategy.FULL)
+                .build();
+        // when
+        when(demoUser.getName()).thenReturn("test");
+        when(demoUser.getPwd()).thenReturn("123");
+        when(demoUser.getRole()).thenReturn("normal");
+
+        // then
+        CompleteChainResult chainResult = demoChain.apply(demoUser);
+        boolean allow = chainResult.isAllow();
+        Assert.assertFalse(allow);
+    }
+
+    @Test
+    @DisplayName("测试全局fallback接口")
+    public void testGlobalFallbackInterface() {
+        ChainTypeReference<DemoUser> reference = new ChainTypeReference<DemoUser>() {};
+        // given
+        ChainPipeline<DemoUser> demoChain = ChainPipelineFactory.createChain(reference)
+                .chain()
+                .addHandler(new AuthHandler())
+                .globalFallback(new DemoChainGlobalFallBack())
+                .strategy(Strategy.FULL)
+                .build();
+        // when
+        when(demoUser.getName()).thenReturn("test");
+        when(demoUser.getPwd()).thenReturn("123");
+        when(demoUser.getRole()).thenReturn("normal");
         // then
         CompleteChainResult chainResult = demoChain.apply(demoUser);
         boolean allow = chainResult.isAllow();

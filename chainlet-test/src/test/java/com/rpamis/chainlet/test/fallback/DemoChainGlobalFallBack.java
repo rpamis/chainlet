@@ -15,6 +15,6 @@ public class DemoChainGlobalFallBack implements GlobalChainFallBack<DemoUser> {
     @Override
     public void fallBack(GlobalFallBackContext<DemoUser> fallBackContext) {
         Boolean exceptionOccurred = fallBackContext.getExceptionOccurred();
-        System.out.println(1);
+        System.out.println("global fall back success");
     }
 }
