@@ -21,6 +21,7 @@ import com.rpamis.chainlet.core.context.LocalFallBackContext;
 import com.rpamis.chainlet.core.support.ChainTypeReference;
 import com.rpamis.chainlet.core.support.InstanceOfCache;
 import com.rpamis.chainlet.core.definition.ChainHandler;
+import com.rpamis.chainlet.core.entities.ChainException;
 
 import java.lang.reflect.Method;
 
@@ -48,7 +49,9 @@ public class FallBackResolver<T> extends AbstractFallBackResolverSupport {
         }
         // 获取process接口Method
         Method processMethod = findHandlerProcessMethod(chainHandler.getClass(), actualGenericClass);
-        checkMethod(processMethod, chainHandler.getClass() + " process method is null, ignore fallback execute");
+        if (processMethod == null) {
+            return;
+        }
         if (processMethod.isAnnotationPresent(Fallback.class)) {
             Fallback fallbackAnnotation = processMethod.getAnnotation(Fallback.class);
             String fallbackMethodName = fallbackAnnotation.fallbackMethod();
@@ -56,6 +59,10 @@ public class FallBackResolver<T> extends AbstractFallBackResolverSupport {
             boolean enabled = fallbackAnnotation.enable();
             if (!enabled) {
                 return;
+            }
+            // 检查fallbackMethodName是否为空
+            if (fallbackMethodName == null || fallbackMethodName.trim().isEmpty()) {
+                throw new ChainException(chainHandler.getClass() + " fallback method name is empty, ignore fallback execute");
             }
             // 获取fallback接口Method
             Method method = findLocalFallBackMethod(chainHandler, fallbackMethodName, fallbackClass);
