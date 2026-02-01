@@ -15,9 +15,6 @@
  */
 package com.rpamis.chainlet.test;
 
-import lombok.Builder;
-import lombok.Data;
-
 import java.io.Serializable;
 
 /**
@@ -26,8 +23,6 @@ import java.io.Serializable;
  * @author benym
  * @since 2023/5/25 15:49
  */
-@Data
-@Builder
 public class DemoUser implements Serializable {
 
     private static final long serialVersionUID = 6545355455196518822L;
@@ -43,4 +38,66 @@ public class DemoUser implements Serializable {
      * role
      */
     private String role;
+    
+    public DemoUser() {
+    }
+    
+    public DemoUser(String name, String pwd, String role) {
+        this.name = name;
+        this.pwd = pwd;
+        this.role = role;
+    }
+    
+    public String getName() {
+        return name;
+    }
+    
+    public void setName(String name) {
+        this.name = name;
+    }
+    
+    public String getPwd() {
+        return pwd;
+    }
+    
+    public void setPwd(String pwd) {
+        this.pwd = pwd;
+    }
+    
+    public String getRole() {
+        return role;
+    }
+    
+    public void setRole(String role) {
+        this.role = role;
+    }
+    
+    public static Builder builder() {
+        return new Builder();
+    }
+    
+    public static class Builder {
+        private String name;
+        private String pwd;
+        private String role;
+        
+        public Builder name(String name) {
+            this.name = name;
+            return this;
+        }
+        
+        public Builder pwd(String pwd) {
+            this.pwd = pwd;
+            return this;
+        }
+        
+        public Builder role(String role) {
+            this.role = role;
+            return this;
+        }
+        
+        public DemoUser build() {
+            return new DemoUser(name, pwd, role);
+        }
+    }
 }

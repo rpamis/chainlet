@@ -44,7 +44,7 @@
 <dependency>
     <groupId>com.rpamis</groupId>
     <artifactId>chainlet</artifactId>
-    <version>1.0.2</version>
+    <version>1.0.3</version>
 </dependency>
 ```
 
@@ -209,7 +209,7 @@ public class TestFallBackHandlerFour implements ChainHandler<DemoUser> {
     }
 
     public void test(LocalFallBackContext<DemoUser> localFallBackContext) {
-        System.out.print("success");
+        System.out.println("success");
     }
 }
 ```
@@ -349,7 +349,7 @@ ChainPipeline<DemoUser> demoChain = ChainPipelineFactory.createChain(reference)
 <dependency>
     <groupId>com.rpamis</groupId>
     <artifactId>chainlet-processor</artifactId>
-    <version>1.0.2</version>
+    <version>1.0.3</version>
 </dependency>
 ```
 
