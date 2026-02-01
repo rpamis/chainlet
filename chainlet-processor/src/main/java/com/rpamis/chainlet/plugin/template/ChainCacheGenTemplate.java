@@ -328,7 +328,7 @@ public class ChainCacheGenTemplate extends AbstractGenCodeTemplate {
                 maker.TypeApply(maker.Ident(names.fromString("ChainFallBack")), List.of(maker.Wildcard(maker.TypeBoundKind(BoundKind.UNBOUND), null))),
                 maker.Apply(
                         List.nil(),
-                        maker.Select(maker.Ident(names.fromString("chain")), names.fromString("getChainFallBack")),
+                        maker.Select(maker.Ident(names.fromString("chain")), names.fromString("getGlobalChainFallBack")),
                         List.nil()
                 )
         );
