@@ -15,7 +15,7 @@
 </p>
 
 <p align="center">
-  <a href="https://central.sonatype.com/artifact/com.rpamis/chainlet/1.0.0">
+  <a href="https://central.sonatype.com/artifact/com.rpamis/chainlet/1.0.2">
     <img alt="maven" src="https://img.shields.io/maven-central/v/com.rpamis/chainlet?style=flat-square">
   </a>
 

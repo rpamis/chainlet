@@ -54,7 +54,7 @@
             <id>release</id>
             <properties>
                 <rpamis-extension-spi.version>1.0.1</rpamis-extension-spi.version>
-                <revision>1.0.1</revision>
+                <revision>1.0.2</revision>
             </properties>
             <build>
                 <plugins>
@@ -80,7 +80,7 @@
             </activation>
             <properties>
                 <rpamis-extension-spi.version>1.0.1</rpamis-extension-spi.version>
-                <revision>1.0.1-SNAPSHOT</revision>
+                <revision>1.0.2-SNAPSHOT</revision>
             </properties>
             <build>
                 <plugins>
